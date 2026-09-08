@@ -25,6 +25,18 @@ cd team5-study-mate
 cd team5-study-mate
 ```
 
+### VS Code에서 열기
+
+프로젝트 폴더 안에서 다음 명령어를 실행합니다.
+
+```bash
+code .
+```
+
+`code: command not found`가 나오면 VS Code를 직접 열고 `File` → `Open Folder`를 선택한 뒤 `team5-study-mate` 폴더를 엽니다.
+
+처음 열 때 아래쪽에 `Restricted Mode`가 표시되면, 본인이 clone한 저장소가 맞는지 확인한 뒤 `Trust`를 선택합니다. 신뢰하지 않아도 파일 편집은 가능하지만 일부 VS Code 기능이 제한됩니다.
+
 ## 2. 내 작업 브랜치 만들기
 
 `your-name`을 자신의 이름이나 GitHub 아이디로 바꿉니다.
