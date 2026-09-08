@@ -25,6 +25,7 @@
 5. 팀원 확인 후 내용을 README와 홈페이지에 반영합니다.
 
 자세한 실습 순서는 [팀원용 Git 실습 가이드](./GIT_GUIDE.md)에서 확인합니다.
+화면 캡처와 최소 실행 흐름은 [팀원 실행 및 Git 최소 흐름 안내](./RUN_GUIDE.md)에서 확인합니다.
 
 ```bash
 git clone https://github.com/beyejin/team5-study-mate.git
@@ -41,6 +42,7 @@ cp team/TEMPLATE.md team/<이름>.md
 - [홈페이지 소스](./index.html)
 - [자기소개 템플릿](./team/TEMPLATE.md)
 - [팀원용 Git 실습 가이드](./GIT_GUIDE.md)
+- [팀원 실행 및 Git 최소 흐름 안내](./RUN_GUIDE.md)
 
 ## 과제 보드
 
@@ -67,6 +69,9 @@ python3 -m http.server 8000
 ├── styles.css
 ├── script.js
 ├── GIT_GUIDE.md
+├── RUN_GUIDE.md
+├── docs/
+│   └── screenshots/
 ├── team/
 │   └── TEMPLATE.md
 └── .github/
