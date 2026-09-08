@@ -24,6 +24,8 @@
 4. 자신의 브랜치에 commit하고 Pull Request를 올립니다.
 5. 팀원 확인 후 내용을 README와 홈페이지에 반영합니다.
 
+자세한 실습 순서는 [팀원용 Git 실습 가이드](./GIT_GUIDE.md)에서 확인합니다.
+
 ```bash
 git clone https://github.com/beyejin/team5-study-mate.git
 cd team5-study-mate
@@ -38,6 +40,7 @@ cp team/TEMPLATE.md team/<이름>.md
 - [Team 5 팀원 소개 홈페이지](https://beyejin.github.io/team5-study-mate/)
 - [홈페이지 소스](./index.html)
 - [자기소개 템플릿](./team/TEMPLATE.md)
+- [팀원용 Git 실습 가이드](./GIT_GUIDE.md)
 
 ## 과제 보드
 
@@ -63,6 +66,7 @@ python3 -m http.server 8000
 ├── index.html
 ├── styles.css
 ├── script.js
+├── GIT_GUIDE.md
 ├── team/
 │   └── TEMPLATE.md
 └── .github/
