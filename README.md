@@ -1,76 +1,60 @@
-# Team 5 | Study Mate
+# Team 5 팀원 소개
 
-> 팀원 소개와 학교 주변 스터디 모임 매칭 프로젝트
+> Team 5의 팀원과 각자의 이야기를 소개하는 README입니다.
 
-## 팀 소개
+## 페이지 소개
 
-Team 5는 대학생이 함께 공부할 사람을 더 쉽게 찾을 수 있도록 Study Mate를 만들고 있습니다.
+이번 과제에서는 별도의 서비스 아이디어를 구현하지 않고, 팀원 소개를 중심으로 README와 홈페이지를 구성합니다.
 
-### 팀원
+각 팀원은 같은 템플릿으로 자기소개를 작성하고, 최종 내용을 이 README와 홈페이지에 함께 반영합니다.
 
-| 이름 | 함께하는 일 |
+## 팀원
+
+| 이름 | 소개 상태 |
 | --- | --- |
-| 김영광 | Study Mate의 문제와 사용자 흐름을 함께 구체화합니다. |
-| 엄태웅 | 스터디를 찾고 참여하는 경험을 함께 설계합니다. |
-| 한예진 | 프로젝트 문서와 landing page를 함께 정리합니다. |
+| 김영광 | 자기소개 작성 예정 |
+| 엄태웅 | 자기소개 작성 예정 |
+| 한예진 | 자기소개 작성 예정 |
 
-팀원별 세부 역할은 프로젝트를 진행하며 계속 정리합니다.
+## 자기소개 작성 방법
 
-## 프로젝트 소개
+1. 저장소를 clone합니다.
+2. `team/TEMPLATE.md`를 복사해 자신의 이름으로 파일을 만듭니다.
+3. 한 줄 소개, 관심 분야, 요즘 배우는 것, 프로젝트에서 하고 싶은 일을 작성합니다.
+4. 자신의 브랜치에 commit하고 Pull Request를 올립니다.
+5. 팀원 확인 후 내용을 README와 홈페이지에 반영합니다.
 
-Study Mate는 대학생이 관심 분야, 가능한 시간, 활동 지역에 맞는 스터디를 찾고 참여할 수 있도록 돕는 팀 프로젝트입니다.
-
-기존에는 스터디 정보가 여러 채널에 흩어져 있어 원하는 모임을 찾기 어렵습니다. Study Mate는 필요한 조건을 한곳에서 확인하고, 모임을 직접 만들거나 참여 신청까지 이어지도록 구성합니다.
-
-이 저장소의 landing page는 과제 #3 시연을 위한 프론트엔드 프로토타입이며, 화면의 스터디 정보는 예시 데이터입니다.
-
-## 문제 정의
-
-- 관심 분야에 맞는 스터디 정보를 찾기 어렵습니다.
-- 시간과 장소가 맞는 모임을 비교하기 어렵습니다.
-- 모집 중인 모임과 진행 중인 모임을 한눈에 구분하기 어렵습니다.
-
-## 해결 방향
-
-- 분야, 요일, 지역을 기준으로 스터디를 탐색합니다.
-- 모임 개설자가 목표와 일정을 정리해 등록합니다.
-- 참여자는 모임 상세 정보를 확인하고 신청합니다.
-- 모집 상태를 기준으로 모임을 관리합니다.
-
-## 주요 기능
-
-1. 스터디 탐색
-   - 분야별 필터
-   - 모임 일정과 활동 지역 확인
-   - 모집 상태 확인
-2. 스터디 개설
-   - 모임 이름, 목표, 일정, 장소 등록
-   - 모집 인원과 진행 방식 안내
-3. 참여 신청
-   - 모임 상세 내용 확인
-   - 참여 신청 버튼으로 관심 표시
-4. 진행 상태 관리
-   - 모집 중, 모집 마감 상태 구분
-   - 팀 프로젝트 이슈를 Kanban 상태와 연결
-
-## 이용 흐름
-
-```text
-스터디 조건 선택 -> 모임 확인 -> 상세 내용 확인 -> 참여 신청
+```bash
+git clone https://github.com/beyejin/team5-study-mate.git
+cd team5-study-mate
+git switch -c intro/<이름>
+cp team/TEMPLATE.md team/<이름>.md
 ```
 
-## Landing page
+작성할 때 전화번호, 개인 이메일과 같은 공개하지 않을 정보는 넣지 않습니다.
 
-- [Study Mate landing page](https://beyejin.github.io/team5-study-mate/)
-- [landing page 소스](./index.html)
-- landing page의 `팀 소개` 섹션에서 Team 5 구성원을 확인할 수 있습니다.
+## 홈페이지
 
-## 기술 스택
+- [Team 5 팀원 소개 홈페이지](https://beyejin.github.io/team5-study-mate/)
+- [홈페이지 소스](./index.html)
+- [자기소개 템플릿](./team/TEMPLATE.md)
 
-- HTML
-- CSS
-- JavaScript
-- GitHub Pages
+## 과제 보드
+
+- [Team 5 과제 보드](https://github.com/users/beyejin/projects/1)
+- [과제 #3 결과물 준비 마일스톤](https://github.com/beyejin/team5-study-mate/milestone/1)
+
+보드의 상태는 `Backlog`, `Ready`, `In Progress`, `Done`으로 관리합니다.
+
+## 실행 방법
+
+정적 페이지이므로 `index.html`을 브라우저에서 열거나 간단한 서버로 실행합니다.
+
+```bash
+python3 -m http.server 8000
+```
+
+브라우저에서 `http://localhost:8000`을 엽니다.
 
 ## 프로젝트 구성
 
@@ -79,41 +63,9 @@ Study Mate는 대학생이 관심 분야, 가능한 시간, 활동 지역에 맞
 ├── index.html
 ├── styles.css
 ├── script.js
+├── team/
+│   └── TEMPLATE.md
 └── .github/
     └── workflows/
         └── deploy-pages.yml
 ```
-
-## 실행 방법
-
-저장소를 내려받은 뒤 `index.html`을 브라우저에서 열거나 간단한 정적 서버로 실행합니다.
-
-```bash
-python3 -m http.server 8000
-```
-
-브라우저에서 `http://localhost:8000`을 엽니다.
-
-## Kanban 운영 기준
-
-| 상태 | 의미 |
-| --- | --- |
-| Backlog | 아직 시작하지 않은 작업 |
-| Ready | 바로 시작할 수 있도록 정리된 작업 |
-| In Progress | 현재 진행 중인 작업 |
-| Done | 완료하고 확인한 작업 |
-
-## Milestone
-
-### 과제 #3 결과물 준비
-
-- README 프로젝트 개요 작성
-- landing page 구현
-- Kanban 이슈 등록과 상태 배치
-- 팀 발표용 링크 정리
-
-## 다음 작업
-
-- 사용자 인증과 팀원 초대
-- 스터디 생성 및 참여 API 연결
-- 실제 데이터 기반 검색 기능 추가
