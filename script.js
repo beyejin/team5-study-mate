@@ -28,19 +28,20 @@ const playerCard = revealDialog?.querySelector('.player-card');
 const orcaCompanion = revealDialog?.querySelector('.orca-companion-wrap');
 const finalCopyItems = [...(revealDialog?.querySelectorAll('.final-copy > *') ?? [])];
 const revealProgress = revealDialog?.querySelector('.reveal-progress span');
-const tunnelFrames = [...(revealDialog?.querySelectorAll('.tunnel-frame') ?? [])];
+const tunnelFrames = [...(revealDialog?.querySelectorAll('.corridor-gate') ?? [])];
+const tunnelLights = [...(revealDialog?.querySelectorAll('.corridor-light') ?? [])];
 const mysteryPackVisual = document.querySelector('.mystery-pack-visual');
 
 const revealThemes = [
-  { accent: '#65e7ff', secondary: '#856cff' },
-  { accent: '#86ffd0', secondary: '#4b86ff' },
-  { accent: '#c38cff', secondary: '#42dbff' },
+  { accent: '#f8d878', secondary: '#fff3b0' },
+  { accent: '#d7a743', secondary: '#f5e4a0' },
+  { accent: '#ffed9a', secondary: '#c69236' },
 ];
 
 const packBackgrounds = [
-  'linear-gradient(145deg, #171a42 0%, #244e82 50%, #4a1d78 100%)',
-  'linear-gradient(155deg, #081c2c 0%, #146070 48%, #263270 100%)',
-  'linear-gradient(135deg, #22113c 0%, #68417e 48%, #123f5f 100%)',
+  'linear-gradient(145deg, #19150c 0%, #76551c 50%, #d2ae4e 100%)',
+  'linear-gradient(155deg, #0d1217 0%, #4f4a31 48%, #c29838 100%)',
+  'linear-gradient(135deg, #241b0c 0%, #9b7427 48%, #f1d87e 100%)',
 ];
 
 const clueData = infoGates.map((gate) => ({
@@ -90,7 +91,7 @@ const showFinalRevealWithoutMotion = () => {
   finalReveal.style.visibility = 'visible';
   finalReveal.style.opacity = '1';
   if (revealProgress) revealProgress.style.transform = 'scaleX(1)';
-  if (revealStatus) revealStatus.textContent = '한예진의 범고래 카드가 공개되었습니다.';
+  if (revealStatus) revealStatus.textContent = '한예진의 Team 5 스페셜 카드가 공개되었습니다.';
 };
 
 const runReveal = () => {
@@ -105,7 +106,7 @@ const runReveal = () => {
   }
 
   const { gsap } = window;
-  const packRotation = gsap.utils.random(-24, 24, 1);
+  const packRotation = gsap.utils.random(-12, 12, 1);
 
   revealTimeline?.kill();
   tunnelTimeline?.kill();
@@ -122,24 +123,34 @@ const runReveal = () => {
 
   tunnelTimeline = gsap.timeline({ repeat: -1 });
   tunnelTimeline
-    .to(tunnelFrames, { opacity: 0.9, filter: 'brightness(1.8)', duration: 0.62, stagger: 0.12, ease: 'sine.inOut' })
-    .to(tunnelFrames, { opacity: 0.32, filter: 'brightness(1)', duration: 0.62, stagger: 0.12, ease: 'sine.inOut' });
+    .fromTo(
+      tunnelFrames,
+      { autoAlpha: 0.1, scale: 0.16 },
+      { autoAlpha: 0.78, scale: 1.16, duration: 2.7, stagger: 0.36, ease: 'power1.in' },
+      0,
+    )
+    .fromTo(
+      tunnelLights,
+      { autoAlpha: 0.22, filter: 'brightness(1)' },
+      { autoAlpha: 0.9, filter: 'brightness(1.85)', duration: 0.72, stagger: 0.16, repeat: 3, yoyo: true, ease: 'sine.inOut' },
+      0.12,
+    );
 
   revealTimeline = gsap.timeline({ defaults: { ease: 'power2.inOut' } });
   revealTimeline
     .call(() => {
-      if (revealStatus) revealStatus.textContent = '미스터리 팩이 복도 끝에서 열리고 있습니다.';
+      if (revealStatus) revealStatus.textContent = '플레이어 워크아웃이 시작됩니다.';
     })
-    .to(revealProgress, { scaleX: 1, duration: 8.3, ease: 'none' }, 0)
+    .to(revealProgress, { scaleX: 1, duration: 8.6, ease: 'none' }, 0)
     .to(revealPack, { autoAlpha: 1, scale: 0.38, filter: 'blur(0px)', duration: 0.75, ease: 'power2.out' }, 0.1)
-    .to(revealPack, { scale: 0.95, rotationY: -packRotation * 0.25, duration: 0.9, ease: 'power2.inOut' }, 0.82)
-    .to(revealPackSheen, { xPercent: 90, duration: 0.75, ease: 'power2.inOut' }, 0.9)
-    .to(revealPack, { scale: 3.1, autoAlpha: 0, filter: 'blur(18px)', duration: 0.55, ease: 'power4.in' }, 1.72)
-    .to(revealFlash, { autoAlpha: 1, duration: 0.1 }, 2.12)
-    .to(revealFlash, { autoAlpha: 0, duration: 0.25 }, 2.22);
+    .to(revealPack, { scale: 0.95, rotationY: -packRotation * 0.25, duration: 1.05, ease: 'power2.inOut' }, 0.85)
+    .to(revealPackSheen, { xPercent: 90, duration: 0.85, ease: 'power2.inOut' }, 1.35)
+    .to(revealPack, { scale: 3.5, autoAlpha: 0, filter: 'blur(18px)', duration: 0.58, ease: 'power4.in' }, 2.18)
+    .to(revealFlash, { autoAlpha: 1, duration: 0.1 }, 2.78)
+    .to(revealFlash, { autoAlpha: 0, duration: 0.25 }, 2.88);
 
   infoGates.forEach((gate, index) => {
-    const gateStart = 2.42 + index * 1.22;
+    const gateStart = 3.05 + index * 1.02;
     const label = gate.querySelector('.gate-label')?.textContent ?? '팀원 정보';
     const value = gate.querySelector('.gate-value')?.textContent ?? '';
 
@@ -150,22 +161,22 @@ const runReveal = () => {
       .fromTo(
         gate,
         { autoAlpha: 0, scale: 0.12, filter: 'blur(4px)' },
-        { autoAlpha: 1, scale: 0.3, filter: 'blur(0px)', duration: 0.22, ease: 'power2.out' },
+        { autoAlpha: 1, scale: 0.32, filter: 'blur(0px)', duration: 0.2, ease: 'power2.out' },
         gateStart,
       )
-      .to(gate, { scale: 4.4, autoAlpha: 0, filter: 'blur(10px)', duration: 1.02, ease: 'power3.in' }, gateStart + 0.22);
+      .to(gate, { scale: 4.2, autoAlpha: 0, filter: 'blur(10px)', duration: 0.34, ease: 'power3.in' }, gateStart + 0.66);
   });
 
   revealTimeline
-    .to(revealFlash, { autoAlpha: 1, duration: 0.12 }, 6.15)
+    .to(revealFlash, { autoAlpha: 1, duration: 0.12 }, 6.2)
     .call(() => {
-      if (revealStatus) revealStatus.textContent = '한예진의 범고래 카드가 공개되었습니다.';
-    }, [], 6.2)
-    .set(finalReveal, { autoAlpha: 1 }, 6.27)
-    .to(revealFlash, { autoAlpha: 0, duration: 0.3 }, 6.28)
-    .to(playerCard, { autoAlpha: 1, scale: 1, y: 0, rotationY: 0, duration: 1.05, ease: 'back.out(1.35)' }, 6.32)
-    .to(orcaCompanion, { autoAlpha: 1, x: 0, y: 0, rotation: 0, duration: 1.08, ease: 'power3.out' }, 6.42)
-    .to(finalCopyItems, { autoAlpha: 1, x: 0, duration: 0.68, stagger: 0.11, ease: 'power3.out' }, 6.58);
+      if (revealStatus) revealStatus.textContent = '한예진의 Team 5 스페셜 카드가 공개되었습니다.';
+    }, [], 6.3)
+    .set(finalReveal, { autoAlpha: 1 }, 6.38)
+    .to(revealFlash, { autoAlpha: 0, duration: 0.3 }, 6.4)
+    .to(playerCard, { autoAlpha: 1, scale: 1, y: 0, rotationY: 0, duration: 1.05, ease: 'back.out(1.35)' }, 6.45)
+    .to(orcaCompanion, { autoAlpha: 1, x: 0, y: 0, rotation: 0, duration: 1.08, ease: 'power3.out' }, 6.56)
+    .to(finalCopyItems, { autoAlpha: 1, x: 0, duration: 0.68, stagger: 0.11, ease: 'power3.out' }, 6.72);
 };
 
 const openReveal = () => {

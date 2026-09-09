@@ -125,18 +125,20 @@
               aria-haspopup="dialog"
               aria-controls="member-reveal"
             >
-              <span class="member-topline"><span>?</span><span>RANDOM DROP</span></span>
+              <span class="member-topline"><span>?</span><span>PLAYER PICK</span></span>
               <span class="mystery-pack-visual" aria-hidden="true">
                 <span class="pack-sheen"></span>
                 <span class="pack-orbit pack-orbit-one"></span>
                 <span class="pack-orbit pack-orbit-two"></span>
+                <span class="pack-rating">105</span>
+                <span class="pack-position">CAM</span>
                 <span class="pack-core">5</span>
-                <span class="pack-title">MYSTERY<br />PLAYER</span>
+                <span class="pack-title">TEAM 5<br />SPECIAL</span>
               </span>
               <span class="member-label">팀원 카드 공개</span>
-              <strong class="mystery-pack-heading">누가 등장할까요?</strong>
-              <span class="mystery-pack-copy">팩을 눌러 빛나는 문을 통과해 보세요.</span>
-              <span class="mystery-pack-cta">팩 열기 <span aria-hidden="true">→</span></span>
+              <strong class="mystery-pack-heading">선수 카드를 공개하세요.</strong>
+              <span class="mystery-pack-copy">불이 꺼지면 Team 5의 새로운 선수가 등장합니다.</span>
+              <span class="mystery-pack-cta">카드 오픈 <span aria-hidden="true">↗</span></span>
             </button>
           </article>
         </div>
@@ -162,32 +164,40 @@
     <dialog id="member-reveal" class="member-reveal" aria-labelledby="reveal-title">
       <div class="reveal-shell">
         <header class="reveal-controls">
-          <div class="reveal-brand"><span>5</span><strong>TEAM 5 PLAYER REVEAL</strong></div>
-          <p id="reveal-status" class="reveal-status" aria-live="polite">미스터리 팩을 여는 중입니다.</p>
+          <div class="reveal-brand"><span>5</span><strong>TEAM 5 / PLAYER PICK</strong></div>
+          <p id="reveal-status" class="reveal-status" aria-live="polite">플레이어 워크아웃을 준비하는 중입니다.</p>
           <button id="close-reveal" class="reveal-control-button" type="button">닫기</button>
         </header>
 
-        <div class="reveal-stage">
-          <div class="tunnel" aria-hidden="true">
-            <div class="tunnel-wall tunnel-wall-left"></div>
-            <div class="tunnel-wall tunnel-wall-right"></div>
-            <div class="tunnel-ceiling"></div>
-            <div class="tunnel-floor"></div>
-            <div class="tunnel-frame tunnel-frame-one"></div>
-            <div class="tunnel-frame tunnel-frame-two"></div>
-            <div class="tunnel-frame tunnel-frame-three"></div>
-            <div class="tunnel-frame tunnel-frame-four"></div>
-          </div>
+          <div class="reveal-stage">
+            <div class="tunnel" aria-hidden="true">
+              <div class="corridor-ceiling"></div>
+              <div class="corridor-wall corridor-wall-left"></div>
+              <div class="corridor-wall corridor-wall-right"></div>
+              <div class="corridor-exit"></div>
+              <div class="corridor-gate corridor-gate-one"></div>
+              <div class="corridor-gate corridor-gate-two"></div>
+              <div class="corridor-gate corridor-gate-three"></div>
+              <div class="corridor-gate corridor-gate-four"></div>
+              <div class="corridor-light corridor-light-one"></div>
+              <div class="corridor-light corridor-light-two"></div>
+              <div class="corridor-light corridor-light-three"></div>
+              <div class="corridor-light corridor-light-four"></div>
+              <div class="corridor-carpet"></div>
+              <div class="corridor-carpet-edge corridor-carpet-edge-left"></div>
+              <div class="corridor-carpet-edge corridor-carpet-edge-right"></div>
+            </div>
 
           <div class="reveal-pack" aria-hidden="true">
-            <div class="reveal-pack-face">
-              <span class="reveal-pack-sheen"></span>
-              <span class="reveal-pack-kicker">TEAM 5</span>
-              <strong>MYSTERY<br />PLAYER</strong>
-              <span class="reveal-pack-mark">5</span>
-              <span class="reveal-pack-foot">RANDOM DROP</span>
+              <div class="reveal-pack-face">
+                <span class="reveal-pack-sheen"></span>
+                <span class="reveal-pack-kicker">TEAM 5 / SPECIAL</span>
+                <strong>PLAYER<br />PICK</strong>
+                <span class="reveal-pack-mark">105</span>
+                <span class="reveal-pack-position">CAM</span>
+                <span class="reveal-pack-foot">WALKOUT CARD</span>
+              </div>
             </div>
-          </div>
 
           <div class="info-gates">
             <div class="info-gate">
@@ -218,23 +228,33 @@
                 <div class="player-card-grain"></div>
                 <div class="player-card-frame">
                   <div class="player-card-topline">
-                    <span><strong>05</strong><small>TEAM</small></span>
-                    <span class="player-card-class">ORCA</span>
+                    <span><strong>105</strong><small>KAI</small></span>
+                    <span class="player-card-position">CAM</span>
+                  </div>
+                  <div class="player-card-club">
+                    <span class="player-card-flag" role="img" aria-label="대한민국 국기">🇰🇷</span>
+                    <span class="player-card-cocone">1000</span>
+                    <strong>TEAM 5</strong>
                   </div>
                   <img src="assets/yejin-orca.png" alt="범고래로 표현한 한예진" />
                   <div class="player-card-name">
-                    <span>PROBLEM HUNTER</span>
+                    <span>TEAM 5 SPECIAL</span>
                     <h2 id="reveal-title">한예진</h2>
                   </div>
-                  <div class="player-card-keywords">
-                    <span>문제 관찰</span><span>실행력</span><span>감응력</span>
+                  <div class="player-card-stats" aria-label="한예진 플레이어 카드 능력치">
+                    <div><span>PAC</span><strong>91</strong></div>
+                    <div><span>SHO</span><strong>86</strong></div>
+                    <div><span>PAS</span><strong>94</strong></div>
+                    <div><span>DRI</span><strong>90</strong></div>
+                    <div><span>DEF</span><strong>78</strong></div>
+                    <div><span>PHY</span><strong>88</strong></div>
                   </div>
                 </div>
               </article>
             </div>
 
             <div class="final-copy">
-              <p class="final-kicker">THE ORCA HAS ARRIVED</p>
+              <p class="final-kicker">THE WALKOUT IS HERE</p>
               <h3>불편을 발견하면<br />끝까지 추적합니다.</h3>
               <p>페인포인트를 분석하고 기록한 뒤, 작은 실행으로 직접 검증하는 한예진입니다.</p>
               <div class="final-tags"><span>AI SERVICE</span><span>STARTUP</span><span>SPRING</span></div>
