@@ -1,6 +1,6 @@
 # 팀원 실행 및 Git 최소 흐름 안내
 
-이 문서는 Team 5 저장소를 VS Code에서 열고 홈페이지를 실행한 뒤, 자기소개를 GitHub에 올리는 과정을 화면과 함께 안내합니다.
+이 문서는 Team 5 저장소를 VS Code 또는 IntelliJ IDEA에서 열고 홈페이지를 실행한 뒤, 자기소개를 GitHub에 올리는 과정을 안내합니다.
 
 ## 1. 처음 한 번만 설정하기
 
@@ -20,17 +20,30 @@ gh auth login
 
 메뉴 번호는 버전에 따라 달라질 수 있으므로 `Login with a web browser`라는 문구를 확인합니다. 토큰, 비밀번호, 인증 코드는 팀원이나 AI에게 공유하지 않습니다.
 
-### 저장소를 VS Code에서 열기
+### 저장소를 편집기에서 열기
 
 ```bash
 git clone https://github.com/beyejin/team5-study-mate.git
 cd team5-study-mate
+```
+
+#### VS Code를 사용하는 경우
+
+```bash
 code .
 ```
 
-![VS Code에서 team5-study-mate 폴더를 연 화면](./docs/screenshots/01-vscode-open.png)
-
 `code .`가 작동하지 않으면 VS Code에서 `File` → `Open Folder`를 선택하고 `team5-study-mate` 폴더를 엽니다.
+
+![VS Code에서 team5-study-mate 폴더를 연 예시 화면](./docs/screenshots/01-vscode-open.png)
+
+#### IntelliJ IDEA를 사용하는 경우
+
+```bash
+idea .
+```
+
+`idea .`가 작동하지 않으면 IntelliJ IDEA에서 `Open`을 선택하고 `team5-study-mate` 폴더를 엽니다.
 
 ## 2. 홈페이지 실행하기
 
@@ -39,6 +52,8 @@ code .
 ```bash
 python3 -m http.server 8000
 ```
+
+VS Code는 `Terminal` → `New Terminal`, IntelliJ IDEA는 `View` → `Tool Windows` → `Terminal`에서 터미널을 열 수 있습니다.
 
 ![터미널에서 로컬 서버를 실행한 화면](./docs/screenshots/03-run-server.png)
 
@@ -60,7 +75,7 @@ cp team/TEMPLATE.md team/your-name.md
 code team/your-name.md
 ```
 
-`your-name`은 자신의 이름이나 GitHub 아이디로 바꿉니다. VS Code에서 자기소개를 작성하고 저장합니다.
+`your-name`은 자신의 이름이나 GitHub 아이디로 바꿉니다. VS Code의 파일 탐색기나 IntelliJ IDEA의 `Project` 창에서 자기소개 파일을 열고 저장합니다.
 
 ### 작성이 끝났을 때
 
@@ -88,7 +103,7 @@ git pull origin main
 정리하면 흐름은 다음과 같습니다.
 
 ```text
-처음 설정: clone → VS Code 열기 → 브랜치 만들기
+처음 설정: clone → 편집기 열기 → 브랜치 만들기
 작성 후: git add → git commit → git push
 PR 반영 후: git pull
 ```
@@ -115,7 +130,7 @@ git branch --show-current
 ## 체크리스트
 
 - [ ] 브라우저 방식으로 GitHub 로그인을 완료했습니다.
-- [ ] 저장소를 VS Code에서 열었습니다.
+- [ ] 저장소를 VS Code 또는 IntelliJ IDEA에서 열었습니다.
 - [ ] 홈페이지를 로컬에서 실행했습니다.
 - [ ] 자기소개 파일을 작성했습니다.
 - [ ] `git add`를 실행했습니다.
@@ -123,4 +138,3 @@ git branch --show-current
 - [ ] `git push`를 실행했습니다.
 - [ ] Pull Request를 올렸습니다.
 - [ ] 반영 후 `git pull`을 실행했습니다.
-

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Team 5 팀원 소개 홈페이지" />
     <title>Team 5 | 팀원 소개</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%237358f6'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Georgia' font-style='italic' font-weight='700' font-size='38' fill='white'%3E5%3C/text%3E%3C/svg%3E" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -116,14 +117,27 @@
             <div class="member-detail"><span>요즘 배우는 것</span><strong>작성 예정</strong></div>
           </article>
 
-          <article class="member-card">
-            <div class="member-topline"><span>03</span><span>MEMBER</span></div>
-            <div class="member-avatar member-avatar-lilac">한</div>
-            <p class="member-label">TEAM MEMBER 03</p>
-            <h3>한예진</h3>
-            <p class="member-copy">자기소개를 작성해주세요.</p>
-            <div class="member-detail"><span>관심 분야</span><strong>작성 예정</strong></div>
-            <div class="member-detail"><span>요즘 배우는 것</span><strong>작성 예정</strong></div>
+          <article class="member-card member-reveal-entry">
+            <button
+              id="open-yejin-reveal"
+              class="mystery-pack-button"
+              type="button"
+              aria-haspopup="dialog"
+              aria-controls="member-reveal"
+            >
+              <span class="member-topline"><span>?</span><span>RANDOM DROP</span></span>
+              <span class="mystery-pack-visual" aria-hidden="true">
+                <span class="pack-sheen"></span>
+                <span class="pack-orbit pack-orbit-one"></span>
+                <span class="pack-orbit pack-orbit-two"></span>
+                <span class="pack-core">5</span>
+                <span class="pack-title">MYSTERY<br />PLAYER</span>
+              </span>
+              <span class="member-label">팀원 카드 공개</span>
+              <strong class="mystery-pack-heading">누가 등장할까요?</strong>
+              <span class="mystery-pack-copy">팩을 눌러 빛나는 문을 통과해 보세요.</span>
+              <span class="mystery-pack-cta">팩 열기 <span aria-hidden="true">→</span></span>
+            </button>
           </article>
         </div>
       </section>
@@ -145,6 +159,96 @@
       </section>
     </main>
 
+    <dialog id="member-reveal" class="member-reveal" aria-labelledby="reveal-title">
+      <div class="reveal-shell">
+        <header class="reveal-controls">
+          <div class="reveal-brand"><span>5</span><strong>TEAM 5 PLAYER REVEAL</strong></div>
+          <p id="reveal-status" class="reveal-status" aria-live="polite">미스터리 팩을 여는 중입니다.</p>
+          <button id="close-reveal" class="reveal-control-button" type="button">닫기</button>
+        </header>
+
+        <div class="reveal-stage">
+          <div class="tunnel" aria-hidden="true">
+            <div class="tunnel-wall tunnel-wall-left"></div>
+            <div class="tunnel-wall tunnel-wall-right"></div>
+            <div class="tunnel-ceiling"></div>
+            <div class="tunnel-floor"></div>
+            <div class="tunnel-frame tunnel-frame-one"></div>
+            <div class="tunnel-frame tunnel-frame-two"></div>
+            <div class="tunnel-frame tunnel-frame-three"></div>
+            <div class="tunnel-frame tunnel-frame-four"></div>
+          </div>
+
+          <div class="reveal-pack" aria-hidden="true">
+            <div class="reveal-pack-face">
+              <span class="reveal-pack-sheen"></span>
+              <span class="reveal-pack-kicker">TEAM 5</span>
+              <strong>MYSTERY<br />PLAYER</strong>
+              <span class="reveal-pack-mark">5</span>
+              <span class="reveal-pack-foot">RANDOM DROP</span>
+            </div>
+          </div>
+
+          <div class="info-gates">
+            <div class="info-gate">
+              <span class="gate-label">관심 분야</span>
+              <strong class="gate-value">AI 서비스 / 창업</strong>
+            </div>
+            <div class="info-gate">
+              <span class="gate-label">요즘 배우는 것</span>
+              <strong class="gate-value">Spring / AI 협업</strong>
+            </div>
+            <div class="info-gate">
+              <span class="gate-label">나의 방식</span>
+              <strong class="gate-value">관찰 → 기록 → 실행</strong>
+            </div>
+          </div>
+
+          <div class="reveal-flash" aria-hidden="true"></div>
+
+          <section class="final-reveal" aria-labelledby="reveal-title">
+            <div class="orca-companion-wrap" aria-hidden="true">
+              <div class="orca-halo"></div>
+              <img class="orca-companion" src="assets/yejin-orca.png" alt="" />
+            </div>
+
+            <div class="player-card-wrap">
+              <article class="player-card" tabindex="0" aria-label="한예진 범고래 플레이어 카드">
+                <div class="player-card-holo"></div>
+                <div class="player-card-grain"></div>
+                <div class="player-card-frame">
+                  <div class="player-card-topline">
+                    <span><strong>05</strong><small>TEAM</small></span>
+                    <span class="player-card-class">ORCA</span>
+                  </div>
+                  <img src="assets/yejin-orca.png" alt="범고래로 표현한 한예진" />
+                  <div class="player-card-name">
+                    <span>PROBLEM HUNTER</span>
+                    <h2 id="reveal-title">한예진</h2>
+                  </div>
+                  <div class="player-card-keywords">
+                    <span>문제 관찰</span><span>실행력</span><span>감응력</span>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="final-copy">
+              <p class="final-kicker">THE ORCA HAS ARRIVED</p>
+              <h3>불편을 발견하면<br />끝까지 추적합니다.</h3>
+              <p>페인포인트를 분석하고 기록한 뒤, 작은 실행으로 직접 검증하는 한예진입니다.</p>
+              <div class="final-tags"><span>AI SERVICE</span><span>STARTUP</span><span>SPRING</span></div>
+            </div>
+          </section>
+        </div>
+
+        <footer class="reveal-footer">
+          <div class="reveal-progress" aria-hidden="true"><span></span></div>
+          <button id="replay-reveal" class="reveal-control-button" type="button">다시 보기</button>
+        </footer>
+      </div>
+    </dialog>
+
     <footer class="site-footer">
       <div class="container footer-wrap">
         <div><a class="brand" href="#top"><span class="brand-mark">5</span><span>TEAM 5</span></a><p>팀원 소개 페이지</p></div>
@@ -152,6 +256,7 @@
       </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

@@ -1,6 +1,6 @@
 # 팀원용 Git 실습 가이드
 
-이 문서는 Git을 처음 사용하는 팀원이 자기소개를 작성하고 Pull Request를 올리는 과정을 직접 연습하도록 만든 가이드입니다.
+이 문서는 Git을 처음 사용하는 팀원이 VS Code 또는 IntelliJ IDEA에서 자기소개를 작성하고 Pull Request를 올리는 과정을 직접 연습하도록 만든 가이드입니다.
 
 화면 캡처와 최소 명령어 흐름은 [팀원 실행 및 Git 최소 흐름 안내](./RUN_GUIDE.md)를 함께 봅니다.
 
@@ -27,9 +27,11 @@ cd team5-study-mate
 cd team5-study-mate
 ```
 
-### VS Code에서 열기
+### 편집기에서 열기
 
-프로젝트 폴더 안에서 다음 명령어를 실행합니다.
+원하는 편집기로 프로젝트 폴더를 엽니다. Git 명령어와 GitHub 작업은 어떤 편집기를 사용해도 같습니다.
+
+#### VS Code
 
 ```bash
 code .
@@ -38,6 +40,16 @@ code .
 `code: command not found`가 나오면 VS Code를 직접 열고 `File` → `Open Folder`를 선택한 뒤 `team5-study-mate` 폴더를 엽니다.
 
 처음 열 때 아래쪽에 `Restricted Mode`가 표시되면, 본인이 clone한 저장소가 맞는지 확인한 뒤 `Trust`를 선택합니다. 신뢰하지 않아도 파일 편집은 가능하지만 일부 VS Code 기능이 제한됩니다.
+
+#### IntelliJ IDEA
+
+터미널에서 다음 명령어를 실행합니다.
+
+```bash
+idea .
+```
+
+`idea: command not found`가 나오면 IntelliJ IDEA를 직접 열고 `Open`을 선택한 뒤 `team5-study-mate` 폴더를 엽니다.
 
 ## 2. 내 작업 브랜치 만들기
 
@@ -55,7 +67,9 @@ git switch -c intro/your-name
 cp team/TEMPLATE.md team/your-name.md
 ```
 
-`team/your-name.md`를 열고 다음 내용을 작성합니다.
+편집기에서 `team/your-name.md`를 열고 다음 내용을 작성합니다.
+
+VS Code는 왼쪽 파일 탐색기에서 파일을 열고, IntelliJ IDEA는 왼쪽 `Project` 창에서 `team` 폴더와 파일을 선택합니다.
 
 - 한 줄 소개
 - 관심 분야
