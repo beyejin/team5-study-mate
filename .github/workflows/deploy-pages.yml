@@ -27,6 +27,9 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      - name: Check member data and draw behavior
+        run: node --test tests/profiles.test.mjs
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

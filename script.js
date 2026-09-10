@@ -1,232 +1,177 @@
-const menuToggle = document.querySelector('.menu-toggle');
-const siteNav = document.querySelector('#site-nav');
+import { parseProfile, getHints, drawMember } from './profiles.mjs';
 
-menuToggle?.addEventListener('click', () => {
-  const isOpen = siteNav.classList.toggle('is-open');
-  menuToggle.setAttribute('aria-expanded', String(isOpen));
-});
+const screen = document.querySelector('#game-screen');
+const views = [...document.querySelectorAll('.view')];
+const progress = document.querySelector('#progress');
+const packRow = document.querySelector('#pack-row');
+const nextButton = document.querySelector('#next-pack');
+const dialog = document.querySelector('#profile-dialog');
+const announcement = document.querySelector('#announcement');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const names = ['엄태웅', '김영광', '한예진'];
+let members = [];
+let remaining = [];
+let revealed = [];
 
-siteNav?.querySelectorAll('a').forEach((link) => {
-  link.addEventListener('click', () => {
-    siteNav.classList.remove('is-open');
-    menuToggle?.setAttribute('aria-expanded', 'false');
+const pause = (duration) => new Promise((resolve) => window.setTimeout(resolve, duration));
+const textElement = (tag, text, className) => {
+  const element = document.createElement(tag);
+  element.textContent = text;
+  if (className) element.className = className;
+  return element;
+};
+
+function showView(scene) {
+  screen.dataset.scene = scene;
+  views.forEach((view) => { view.hidden = view.id !== `${scene}-view`; });
+}
+
+function showSelection(moveFocus = true) {
+  packRow.replaceChildren();
+  document.querySelector('#selection-description').textContent = revealed.length
+    ? `아직 만나지 않은 ${remaining.length}명의 팀원이 기다리고 있어요.`
+    : '세 명의 팀원을 만나보세요.';
+  remaining.forEach((_, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'pack-button';
+    button.setAttribute('aria-label', `팩 ${index + 1} 열기`);
+    const image = document.createElement('img');
+    image.src = 'assets/game/member-pack-v1.png';
+    image.alt = '';
+    image.draggable = false;
+    button.append(image);
+    button.addEventListener('click', openPack);
+    packRow.append(button);
   });
-});
+  showView('selection');
+  if (moveFocus) packRow.querySelector('button').focus({ preventScroll: true });
+}
 
-const revealDialog = document.querySelector('#member-reveal');
-const revealShell = revealDialog?.querySelector('.reveal-shell');
-const openRevealButton = document.querySelector('#open-yejin-reveal');
-const closeRevealButton = document.querySelector('#close-reveal');
-const replayRevealButton = document.querySelector('#replay-reveal');
-const revealStatus = document.querySelector('#reveal-status');
-const revealPack = revealDialog?.querySelector('.reveal-pack');
-const revealPackSheen = revealDialog?.querySelector('.reveal-pack-sheen');
-const infoGates = [...(revealDialog?.querySelectorAll('.info-gate') ?? [])];
-const revealFlash = revealDialog?.querySelector('.reveal-flash');
-const finalReveal = revealDialog?.querySelector('.final-reveal');
-const playerCard = revealDialog?.querySelector('.player-card');
-const orcaCompanion = revealDialog?.querySelector('.orca-companion-wrap');
-const finalCopyItems = [...(revealDialog?.querySelectorAll('.final-copy > *') ?? [])];
-const revealProgress = revealDialog?.querySelector('.reveal-progress span');
-const tunnelFrames = [...(revealDialog?.querySelectorAll('.corridor-gate') ?? [])];
-const tunnelLights = [...(revealDialog?.querySelectorAll('.corridor-light') ?? [])];
-const mysteryPackVisual = document.querySelector('.mystery-pack-visual');
+async function openPack() {
+  if (screen.dataset.scene !== 'selection') return;
+  const member = drawMember(remaining);
+  showView('opening');
+  announcement.textContent = '팩을 열고 있어요.';
+  await pause(reducedMotion.matches ? 250 : 3000);
 
-const revealThemes = [
-  { accent: '#f8d878', secondary: '#fff3b0' },
-  { accent: '#d7a743', secondary: '#f5e4a0' },
-  { accent: '#ffed9a', secondary: '#c69236' },
-];
-
-const packBackgrounds = [
-  'linear-gradient(145deg, #19150c 0%, #76551c 50%, #d2ae4e 100%)',
-  'linear-gradient(155deg, #0d1217 0%, #4f4a31 48%, #c29838 100%)',
-  'linear-gradient(135deg, #241b0c 0%, #9b7427 48%, #f1d87e 100%)',
-];
-
-const clueData = infoGates.map((gate) => ({
-  label: gate.querySelector('.gate-label')?.textContent ?? '',
-  value: gate.querySelector('.gate-value')?.textContent ?? '',
-}));
-
-let revealTimeline;
-let tunnelTimeline;
-let lastFocusedElement;
-
-const shuffled = (items) => {
-  const result = [...items];
-
-  for (let index = result.length - 1; index > 0; index -= 1) {
-    const randomIndex = Math.floor(Math.random() * (index + 1));
-    [result[index], result[randomIndex]] = [result[randomIndex], result[index]];
+  for (const hint of getHints(member)) {
+    const panel = document.createElement('article');
+    panel.className = `hint-panel hint-${hint.kind}`;
+    if (hint.image) {
+      const image = document.createElement('img');
+      image.src = hint.image;
+      image.alt = hint.text;
+      panel.append(image);
+    }
+    panel.append(textElement('h2', hint.text));
+    document.querySelector('#hint-view').replaceChildren(panel);
+    showView('hint');
+    announcement.textContent = hint.text;
+    await pause(1500);
   }
 
-  return result;
-};
+  revealed.push(member);
+  progress.textContent = revealed.length;
+  document.querySelector('#revealed-card').replaceChildren(createCard(member));
+  nextButton.querySelector('span').textContent = remaining.length ? '다음 팩 고르기' : '우리 팀 만나보기';
+  showView('reveal');
+  announcement.textContent = `${member.name}님을 만났어요. KAI ${member.kai}, ${member.mbti}.`;
+  nextButton.focus({ preventScroll: true });
+}
 
-const randomItem = (items) => items[Math.floor(Math.random() * items.length)];
+function createCard(member) {
+  const card = document.querySelector('#member-card-template').content.firstElementChild.cloneNode(true);
+  card.setAttribute('aria-label', `${member.name} 상세 소개`);
+  card.querySelector('.card-kai').textContent = member.kai || '—';
+  card.querySelector('.card-mbti').textContent = member.mbti || '—';
+  card.querySelector('.card-name').textContent = member.name;
+  card.querySelector('.card-intro').textContent = member.intro;
+  const image = card.querySelector('.card-art img');
+  image.src = member.image;
+  image.alt = member.keyword ? `${member.name}님의 ${member.keyword} 캐릭터` : `${member.name}님의 프로필`;
+  member.tags.forEach((tag) => card.querySelector('.card-tags').append(textElement('span', tag)));
+  card.addEventListener('click', () => showProfile(member));
+  return card;
+}
 
-const randomizeMysteryPack = () => {
-  if (!mysteryPackVisual) return;
-  mysteryPackVisual.style.background = randomItem(packBackgrounds);
-};
-
-const prepareRandomReveal = () => {
-  const theme = randomItem(revealThemes);
-  revealShell?.style.setProperty('--reveal-accent', theme.accent);
-  revealShell?.style.setProperty('--reveal-accent-secondary', theme.secondary);
-
-  shuffled(clueData).forEach((clue, index) => {
-    const label = infoGates[index]?.querySelector('.gate-label');
-    const value = infoGates[index]?.querySelector('.gate-value');
-    if (label) label.textContent = clue.label;
-    if (value) value.textContent = clue.value;
-  });
-};
-
-const showFinalRevealWithoutMotion = () => {
-  if (!finalReveal) return;
-  revealPack?.setAttribute('hidden', '');
-  infoGates.forEach((gate) => gate.setAttribute('hidden', ''));
-  finalReveal.style.visibility = 'visible';
-  finalReveal.style.opacity = '1';
-  if (revealProgress) revealProgress.style.transform = 'scaleX(1)';
-  if (revealStatus) revealStatus.textContent = '한예진의 Team 5 스페셜 카드가 공개되었습니다.';
-};
-
-const runReveal = () => {
-  prepareRandomReveal();
-
-  revealPack?.removeAttribute('hidden');
-  infoGates.forEach((gate) => gate.removeAttribute('hidden'));
-
-  if (!window.gsap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    showFinalRevealWithoutMotion();
-    return;
+function showProfile(member) {
+  document.querySelector('#profile-title').textContent = member.name;
+  document.querySelector('#profile-facts').textContent = `KAI ${member.kai || '—'} / ${member.mbti || '—'}`;
+  const content = document.querySelector('#profile-content');
+  content.replaceChildren();
+  const titles = ['한 줄 소개', '관심 분야', '요즘 배우는 것', '팀원들에게 보여주고 싶은 모습', '나를 표현하는 키워드'];
+  for (const title of titles) {
+    const lines = member.sections[title];
+    if (!lines?.length) continue;
+    const section = document.createElement('section');
+    section.append(textElement('h3', title), textElement('p', lines.join('\n')));
+    content.append(section);
   }
+  if (!content.children.length) content.append(textElement('p', '자세한 자기소개는 곧 만나볼 수 있어요.'));
+  const github = member.sections.GitHub?.find((line) => /^https:\/\/github\.com\/[\w-]+\/?$/.test(line));
+  if (github) {
+    const link = textElement('a', 'GitHub에서 만나기 ↗');
+    link.href = github;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    content.append(link);
+  }
+  dialog.showModal();
+}
 
-  const { gsap } = window;
-  const packRotation = gsap.utils.random(-12, 12, 1);
+function resetDeck(moveFocus = true) {
+  remaining = [...members];
+  revealed = [];
+  progress.textContent = '0';
+  document.querySelector('#revealed-card').replaceChildren();
+  document.querySelector('#collection-row').replaceChildren();
+  document.querySelector('#hint-view').replaceChildren();
+  announcement.textContent = '';
+  showSelection(moveFocus);
+}
 
-  revealTimeline?.kill();
-  tunnelTimeline?.kill();
-
-  gsap.set(revealPack, { autoAlpha: 0, scale: 0.16, rotationY: packRotation, filter: 'blur(2px)' });
-  gsap.set(revealPackSheen, { xPercent: -85 });
-  gsap.set(infoGates, { autoAlpha: 0, scale: 0.12, filter: 'blur(4px)' });
-  gsap.set(revealFlash, { autoAlpha: 0 });
-  gsap.set(finalReveal, { autoAlpha: 0 });
-  gsap.set(playerCard, { autoAlpha: 0, scale: 0.28, y: 120, rotationY: -25 });
-  gsap.set(orcaCompanion, { autoAlpha: 0, x: -180, y: 80, rotation: -12 });
-  gsap.set(finalCopyItems, { autoAlpha: 0, x: 72 });
-  gsap.set(revealProgress, { scaleX: 0 });
-
-  tunnelTimeline = gsap.timeline({ repeat: -1 });
-  tunnelTimeline
-    .fromTo(
-      tunnelFrames,
-      { autoAlpha: 0.1, scale: 0.16 },
-      { autoAlpha: 0.78, scale: 1.16, duration: 2.7, stagger: 0.36, ease: 'power1.in' },
-      0,
-    )
-    .fromTo(
-      tunnelLights,
-      { autoAlpha: 0.22, filter: 'brightness(1)' },
-      { autoAlpha: 0.9, filter: 'brightness(1.85)', duration: 0.72, stagger: 0.16, repeat: 3, yoyo: true, ease: 'sine.inOut' },
-      0.12,
-    );
-
-  revealTimeline = gsap.timeline({ defaults: { ease: 'power2.inOut' } });
-  revealTimeline
-    .call(() => {
-      if (revealStatus) revealStatus.textContent = '플레이어 워크아웃이 시작됩니다.';
-    })
-    .to(revealProgress, { scaleX: 1, duration: 8.6, ease: 'none' }, 0)
-    .to(revealPack, { autoAlpha: 1, scale: 0.38, filter: 'blur(0px)', duration: 0.75, ease: 'power2.out' }, 0.1)
-    .to(revealPack, { scale: 0.95, rotationY: -packRotation * 0.25, duration: 1.05, ease: 'power2.inOut' }, 0.85)
-    .to(revealPackSheen, { xPercent: 90, duration: 0.85, ease: 'power2.inOut' }, 1.35)
-    .to(revealPack, { scale: 3.5, autoAlpha: 0, filter: 'blur(18px)', duration: 0.58, ease: 'power4.in' }, 2.18)
-    .to(revealFlash, { autoAlpha: 1, duration: 0.1 }, 2.78)
-    .to(revealFlash, { autoAlpha: 0, duration: 0.25 }, 2.88);
-
-  infoGates.forEach((gate, index) => {
-    const gateStart = 3.05 + index * 1.02;
-    const label = gate.querySelector('.gate-label')?.textContent ?? '팀원 정보';
-    const value = gate.querySelector('.gate-value')?.textContent ?? '';
-
-    revealTimeline
-      .call(() => {
-        if (revealStatus) revealStatus.textContent = `${label}, ${value}`;
-      }, [], gateStart)
-      .fromTo(
-        gate,
-        { autoAlpha: 0, scale: 0.12, filter: 'blur(4px)' },
-        { autoAlpha: 1, scale: 0.32, filter: 'blur(0px)', duration: 0.2, ease: 'power2.out' },
-        gateStart,
-      )
-      .to(gate, { scale: 4.2, autoAlpha: 0, filter: 'blur(10px)', duration: 0.34, ease: 'power3.in' }, gateStart + 0.66);
-  });
-
-  revealTimeline
-    .to(revealFlash, { autoAlpha: 1, duration: 0.12 }, 6.2)
-    .call(() => {
-      if (revealStatus) revealStatus.textContent = '한예진의 Team 5 스페셜 카드가 공개되었습니다.';
-    }, [], 6.3)
-    .set(finalReveal, { autoAlpha: 1 }, 6.38)
-    .to(revealFlash, { autoAlpha: 0, duration: 0.3 }, 6.4)
-    .to(playerCard, { autoAlpha: 1, scale: 1, y: 0, rotationY: 0, duration: 1.05, ease: 'back.out(1.35)' }, 6.45)
-    .to(orcaCompanion, { autoAlpha: 1, x: 0, y: 0, rotation: 0, duration: 1.08, ease: 'power3.out' }, 6.56)
-    .to(finalCopyItems, { autoAlpha: 1, x: 0, duration: 0.68, stagger: 0.11, ease: 'power3.out' }, 6.72);
-};
-
-const openReveal = () => {
-  if (!revealDialog) return;
-  lastFocusedElement = document.activeElement;
-  document.body.classList.add('reveal-open');
-  revealDialog.showModal();
-  runReveal();
-};
-
-const closeReveal = () => {
-  revealTimeline?.kill();
-  tunnelTimeline?.kill();
-  revealDialog?.close();
-};
-
-openRevealButton?.addEventListener('click', openReveal);
-closeRevealButton?.addEventListener('click', closeReveal);
-replayRevealButton?.addEventListener('click', runReveal);
-
-revealDialog?.addEventListener('click', (event) => {
-  if (event.target === revealDialog) closeReveal();
+nextButton.addEventListener('click', () => {
+  if (screen.dataset.scene !== 'reveal') return;
+  if (remaining.length) return showSelection();
+  document.querySelector('#collection-row').replaceChildren(...revealed.map(createCard));
+  showView('collection');
+  announcement.textContent = '세 명의 팀원을 모두 만났어요. 카드를 눌러 자세한 소개를 확인하세요.';
+  document.querySelector('#collection-title').focus({ preventScroll: true });
 });
 
-revealDialog?.addEventListener('close', () => {
-  revealTimeline?.kill();
-  tunnelTimeline?.kill();
-  document.body.classList.remove('reveal-open');
-  lastFocusedElement?.focus();
+document.querySelector('#reset-deck').addEventListener('click', () => resetDeck());
+document.querySelector('#close-profile').addEventListener('click', () => dialog.close());
+dialog.addEventListener('click', (event) => {
+  const rect = dialog.getBoundingClientRect();
+  if (event.target === dialog && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) dialog.close();
 });
 
-playerCard?.addEventListener('pointermove', (event) => {
-  if (!window.gsap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const bounds = playerCard.getBoundingClientRect();
-  const pointerX = (event.clientX - bounds.left) / bounds.width;
-  const pointerY = (event.clientY - bounds.top) / bounds.height;
+async function loadMembers() {
+  const retry = document.querySelector('#retry-load');
+  const message = document.querySelector('#loading-message');
+  retry.hidden = true;
+  showView('loading');
+  message.textContent = '카드를 준비하고 있어요.';
+  try {
+    members = await Promise.all(names.map(async (name) => {
+      const response = await fetch(`team/${encodeURIComponent(name)}.md`);
+      if (!response.ok) throw new Error(`${name}: ${response.status}`);
+      return parseProfile(await response.text(), name);
+    }));
+    const imagePaths = new Set(members.flatMap((member) => [member.image, member.schoolLogo]).filter(Boolean));
+    await Promise.all([...imagePaths].map((path) => {
+      const image = new Image();
+      image.src = path;
+      return image.decode();
+    }));
+    resetDeck(false);
+  } catch (error) {
+    message.textContent = '카드를 불러오지 못했어요. 연결을 확인한 뒤 다시 시도해주세요.';
+    retry.hidden = false;
+    console.error('팀원 카드 불러오기 실패', error);
+  }
+}
 
-  playerCard.style.setProperty('--pointer-x', `${pointerX * 100}%`);
-  playerCard.style.setProperty('--pointer-y', `${pointerY * 100}%`);
-  window.gsap.to(playerCard, {
-    rotationY: (pointerX - 0.5) * 13,
-    rotationX: (0.5 - pointerY) * 13,
-    duration: 0.26,
-    ease: 'power2.out',
-  });
-});
-
-playerCard?.addEventListener('pointerleave', () => {
-  if (!window.gsap) return;
-  window.gsap.to(playerCard, { rotationY: 0, rotationX: 0, duration: 0.5, ease: 'power3.out' });
-});
-
-randomizeMysteryPack();
+document.querySelector('#retry-load').addEventListener('click', loadMembers);
+loadMembers();
