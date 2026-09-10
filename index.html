@@ -2,281 +2,64 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Team 5 팀원 소개 홈페이지" />
-    <title>Team 5 | 팀원 소개</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%237358f6'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Georgia' font-style='italic' font-weight='700' font-size='38' fill='white'%3E5%3C/text%3E%3C/svg%3E" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Team 5 FIFA 스타일 멤버 카드 팩" />
+    <title>TEAM 5 | MEMBER PACK</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header class="site-header">
-      <div class="container nav-wrap">
-        <a class="brand" href="#top" aria-label="Team 5 홈">
-          <span class="brand-mark">5</span>
-          <span>TEAM 5</span>
-        </a>
+    <main id="game-screen" class="game-shell" data-scene="lobby">
+      <div class="field" aria-hidden="true"></div>
 
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
-          메뉴
-        </button>
-
-        <nav id="site-nav" class="site-nav" aria-label="주요 메뉴">
-          <a href="#about">페이지 소개</a>
-          <a href="#members">팀원</a>
-          <a href="#guide">작성 방법</a>
-          <a class="nav-cta" href="https://github.com/beyejin/team5-study-mate/blob/main/README.md" target="_blank" rel="noreferrer">README 보기</a>
-        </nav>
-      </div>
-    </header>
-
-    <main id="top">
-      <section class="hero section container">
-        <div class="hero-copy">
-          <p class="eyebrow">TEAM 5 / MEMBER PAGE</p>
-          <h1>안녕하세요,<br /><span>Team 5</span>입니다.</h1>
-          <p class="hero-lead">
-            서로 다른 관심사와 이야기를 모아<br />
-            우리 팀을 한 페이지에 소개합니다.
-          </p>
-          <div class="hero-actions">
-            <a class="button button-primary" href="#members">팀원 소개 보기</a>
-            <a class="button button-ghost" href="#guide">작성 방법 보기</a>
-          </div>
-          <div class="hero-stats" aria-label="페이지 정보">
-            <div><strong>03</strong><span>members</span></div>
-            <div><strong>01</strong><span>shared page</span></div>
-            <div><strong>2026</strong><span>team project</span></div>
-          </div>
-        </div>
-
-        <div class="hero-visual" aria-label="Team 5 구성원 미리보기">
-          <div class="hero-glow"></div>
-          <div class="profile-board">
-            <div class="board-topline">
-              <span>MEET THE TEAM</span>
-              <span>2026</span>
-            </div>
-            <h2>우리 팀의<br /><em>첫인상</em></h2>
-            <div class="board-rule"></div>
-            <ul class="board-members">
-              <li><span class="board-number">01</span><span>김영광</span><span class="board-initial">김</span></li>
-              <li><span class="board-number">02</span><span>엄태웅</span><span class="board-initial">엄</span></li>
-              <li><span class="board-number">03</span><span>한예진</span><span class="board-initial">한</span></li>
-            </ul>
-            <p class="board-note">각자의 소개를 작성하고<br />같이 한 페이지를 완성합니다.</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="about" class="section section-dark">
-        <div class="container about-grid">
-          <div>
-            <p class="eyebrow">WHY THIS PAGE</p>
-            <h2>한 사람씩 알아가면<br />팀이 더 잘 보입니다.</h2>
-          </div>
-          <div class="about-copy">
-            <p>
-              이 페이지는 Team 5의 팀원과 각자의 관심사, 배우고 있는 것, 함께하고 싶은 일을 소개하기 위해 만들었습니다.
-            </p>
-            <div class="about-points">
-              <div><span>01</span><strong>각자의 이야기</strong><p>같은 형식 안에 각자의 목소리를 담습니다.</p></div>
-              <div><span>02</span><strong>함께 정리하기</strong><p>작성한 내용을 팀원들과 확인하고 다듬습니다.</p></div>
-              <div><span>03</span><strong>한 페이지로 연결하기</strong><p>README와 홈페이지에서 팀을 한눈에 보여줍니다.</p></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="members" class="section container">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">MEET THE TEAM</p>
-            <h2>우리 팀원들을<br />소개합니다.</h2>
-          </div>
-          <p>각자 자기소개를 작성한 뒤<br />최종 내용을 함께 반영합니다.</p>
-        </div>
-
-        <div class="member-grid">
-          <article class="member-card member-card-featured">
-            <div class="member-topline"><span>01</span><span>MEMBER</span></div>
-            <div class="member-avatar member-avatar-mint">김</div>
-            <p class="member-label">TEAM MEMBER 01</p>
-            <h3>김영광</h3>
-            <p class="member-copy">자기소개를 작성해주세요.</p>
-            <div class="member-detail"><span>관심 분야</span><strong>작성 예정</strong></div>
-            <div class="member-detail"><span>요즘 배우는 것</span><strong>작성 예정</strong></div>
-          </article>
-
-          <article class="member-card">
-            <div class="member-topline"><span>02</span><span>MEMBER</span></div>
-            <div class="member-avatar member-avatar-purple">엄</div>
-            <p class="member-label">TEAM MEMBER 02</p>
-            <h3>엄태웅</h3>
-            <p class="member-copy">자기소개를 작성해주세요.</p>
-            <div class="member-detail"><span>관심 분야</span><strong>작성 예정</strong></div>
-            <div class="member-detail"><span>요즘 배우는 것</span><strong>작성 예정</strong></div>
-          </article>
-
-          <article class="member-card member-reveal-entry">
-            <button
-              id="open-yejin-reveal"
-              class="mystery-pack-button"
-              type="button"
-              aria-haspopup="dialog"
-              aria-controls="member-reveal"
-            >
-              <span class="member-topline"><span>?</span><span>PLAYER PICK</span></span>
-              <span class="mystery-pack-visual" aria-hidden="true">
-                <span class="pack-sheen"></span>
-                <span class="pack-orbit pack-orbit-one"></span>
-                <span class="pack-orbit pack-orbit-two"></span>
-                <span class="pack-rating">105</span>
-                <span class="pack-position">CAM</span>
-                <span class="pack-core">5</span>
-                <span class="pack-title">TEAM 5<br />SPECIAL</span>
-              </span>
-              <span class="member-label">팀원 카드 공개</span>
-              <strong class="mystery-pack-heading">선수 카드를 공개하세요.</strong>
-              <span class="mystery-pack-copy">불이 꺼지면 Team 5의 새로운 선수가 등장합니다.</span>
-              <span class="mystery-pack-cta">카드 오픈 <span aria-hidden="true">↗</span></span>
-            </button>
-          </article>
-        </div>
-      </section>
-
-      <section id="guide" class="section section-soft">
-        <div class="container guide-grid">
-          <div>
-            <p class="eyebrow">WRITE YOUR STORY</p>
-            <h2>각자 작성하고,<br />마지막에 함께 다듬습니다.</h2>
-            <p class="guide-lead">README의 템플릿을 복사해 자기소개를 작성한 뒤 팀원들과 확인해주세요.</p>
-            <a class="button button-primary" href="https://github.com/beyejin/team5-study-mate/blob/main/team/TEMPLATE.md" target="_blank" rel="noreferrer">템플릿 열기</a>
-          </div>
-          <div class="step-list">
-            <div class="step"><span>01</span><div><h3>템플릿 복사</h3><p>team/TEMPLATE.md를 자신의 이름으로 복사합니다.</p></div></div>
-            <div class="step"><span>02</span><div><h3>자기소개 작성</h3><p>한 줄 소개, 관심 분야, 배우는 것을 적습니다.</p></div></div>
-            <div class="step"><span>03</span><div><h3>팀원 확인</h3><p>Pull Request로 공유하고 함께 내용을 다듬습니다.</p></div></div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <dialog id="member-reveal" class="member-reveal" aria-labelledby="reveal-title">
-      <div class="reveal-shell">
-        <header class="reveal-controls">
-          <div class="reveal-brand"><span>5</span><strong>TEAM 5 / PLAYER PICK</strong></div>
-          <p id="reveal-status" class="reveal-status" aria-live="polite">플레이어 워크아웃을 준비하는 중입니다.</p>
-          <button id="close-reveal" class="reveal-control-button" type="button">닫기</button>
+      <section id="lobby-view" class="view lobby-view" aria-labelledby="lobby-title">
+        <header class="topbar">
+          <a class="wordmark" href="#lobby-view" aria-label="TEAM 5 처음 화면"><span>5</span> TEAM 5</a>
+          <p>MEMBER PACK · 2026</p>
         </header>
-
-          <div class="reveal-stage">
-            <div class="tunnel" aria-hidden="true">
-              <div class="corridor-ceiling"></div>
-              <div class="corridor-wall corridor-wall-left"></div>
-              <div class="corridor-wall corridor-wall-right"></div>
-              <div class="corridor-exit"></div>
-              <div class="corridor-gate corridor-gate-one"></div>
-              <div class="corridor-gate corridor-gate-two"></div>
-              <div class="corridor-gate corridor-gate-three"></div>
-              <div class="corridor-gate corridor-gate-four"></div>
-              <div class="corridor-light corridor-light-one"></div>
-              <div class="corridor-light corridor-light-two"></div>
-              <div class="corridor-light corridor-light-three"></div>
-              <div class="corridor-light corridor-light-four"></div>
-              <div class="corridor-carpet"></div>
-              <div class="corridor-carpet-edge corridor-carpet-edge-left"></div>
-              <div class="corridor-carpet-edge corridor-carpet-edge-right"></div>
-            </div>
-
-          <div class="reveal-pack" aria-hidden="true">
-              <div class="reveal-pack-face">
-                <span class="reveal-pack-sheen"></span>
-                <span class="reveal-pack-kicker">TEAM 5 / SPECIAL</span>
-                <strong>PLAYER<br />PICK</strong>
-                <span class="reveal-pack-mark">105</span>
-                <span class="reveal-pack-position">CAM</span>
-                <span class="reveal-pack-foot">WALKOUT CARD</span>
-              </div>
-            </div>
-
-          <div class="info-gates">
-            <div class="info-gate">
-              <span class="gate-label">관심 분야</span>
-              <strong class="gate-value">AI 서비스 / 창업</strong>
-            </div>
-            <div class="info-gate">
-              <span class="gate-label">요즘 배우는 것</span>
-              <strong class="gate-value">Spring / AI 협업</strong>
-            </div>
-            <div class="info-gate">
-              <span class="gate-label">나의 방식</span>
-              <strong class="gate-value">관찰 → 기록 → 실행</strong>
-            </div>
-          </div>
-
-          <div class="reveal-flash" aria-hidden="true"></div>
-
-          <section class="final-reveal" aria-labelledby="reveal-title">
-            <div class="orca-companion-wrap" aria-hidden="true">
-              <div class="orca-halo"></div>
-              <img class="orca-companion" src="assets/yejin-orca.png" alt="" />
-            </div>
-
-            <div class="player-card-wrap">
-              <article class="player-card" tabindex="0" aria-label="한예진 범고래 플레이어 카드">
-                <div class="player-card-holo"></div>
-                <div class="player-card-grain"></div>
-                <div class="player-card-frame">
-                  <div class="player-card-topline">
-                    <span><strong>105</strong><small>KAI</small></span>
-                    <span class="player-card-position">CAM</span>
-                  </div>
-                  <div class="player-card-club">
-                    <span class="player-card-flag" role="img" aria-label="대한민국 국기">🇰🇷</span>
-                    <span class="player-card-cocone">1000</span>
-                    <strong>TEAM 5</strong>
-                  </div>
-                  <img src="assets/yejin-orca.png" alt="범고래로 표현한 한예진" />
-                  <div class="player-card-name">
-                    <span>TEAM 5 SPECIAL</span>
-                    <h2 id="reveal-title">한예진</h2>
-                  </div>
-                  <div class="player-card-stats" aria-label="한예진 플레이어 카드 능력치">
-                    <div><span>PAC</span><strong>91</strong></div>
-                    <div><span>SHO</span><strong>86</strong></div>
-                    <div><span>PAS</span><strong>94</strong></div>
-                    <div><span>DRI</span><strong>90</strong></div>
-                    <div><span>DEF</span><strong>78</strong></div>
-                    <div><span>PHY</span><strong>88</strong></div>
-                  </div>
-                </div>
-              </article>
-            </div>
-
-            <div class="final-copy">
-              <p class="final-kicker">THE WALKOUT IS HERE</p>
-              <h3>불편을 발견하면<br />끝까지 추적합니다.</h3>
-              <p>페인포인트를 분석하고 기록한 뒤, 작은 실행으로 직접 검증하는 한예진입니다.</p>
-              <div class="final-tags"><span>AI SERVICE</span><span>STARTUP</span><span>SPRING</span></div>
-            </div>
-          </section>
+        <div class="lobby-copy">
+          <p class="kicker">TEAM 5 PLAYER PICK</p>
+          <h1 id="lobby-title">오늘의 팀원을<br /><em>영입하세요.</em></h1>
+          <p>팩 하나에 담긴 세 명의 팀원.<br />누가 먼저 등장할지는 열어봐야 알 수 있어요.</p>
         </div>
+        <section class="pack-contents" aria-label="멤버 팩 구성">
+          <div class="silhouette-card one"><span>PLAYER 01</span><strong>COMING<br />SOON</strong></div>
+          <div class="silhouette-card two"><span>PLAYER 02</span><strong>COMING<br />SOON</strong></div>
+          <div class="silhouette-card three"><span>PLAYER 03</span><strong>COMING<br />SOON</strong></div>
+          <p>MEMBER PACK · 3 CARDS INSIDE</p>
+        </section>
+        <button id="open-pack" class="pack-button" type="button">
+          <span class="pack-glow" aria-hidden="true"></span>
+          <img src="assets/game/member-pack-v1.png" alt="TEAM 5 멤버 팩" />
+          <span><strong>팩 까기</strong><small>CLICK TO OPEN</small></span>
+        </button>
+        <p id="lobby-progress" class="progress" aria-live="polite">OPENED 0 / 3</p>
+      </section>
 
-        <footer class="reveal-footer">
-          <div class="reveal-progress" aria-hidden="true"><span></span></div>
-          <button id="replay-reveal" class="reveal-control-button" type="button">다시 보기</button>
-        </footer>
-      </div>
-    </dialog>
+      <section id="opening-view" class="view center-view opening-view" aria-live="polite" hidden>
+        <p class="kicker">TEAM 5 PLAYER PICK</p>
+        <div class="opening-pack"><img src="assets/game/member-pack-v1.png" alt="" /></div>
+        <h2>PACK OPENING</h2><p>새로운 팀원이 입장하고 있습니다.</p>
+      </section>
 
-    <footer class="site-footer">
-      <div class="container footer-wrap">
-        <div><a class="brand" href="#top"><span class="brand-mark">5</span><span>TEAM 5</span></a><p>팀원 소개 페이지</p></div>
-        <p>Team 5 - 2026</p>
-      </div>
-    </footer>
+      <section id="hint-view" class="view center-view hint-view" aria-live="polite" hidden>
+        <p id="hint-count" class="hint-count">HINT 01 / 03</p>
+        <div class="hint-panel"><span id="hint-label">SCHOOL</span><strong id="hint-value">TEAM 5</strong></div>
+        <p class="hint-foot">WHO IS JOINING THE TEAM?</p>
+      </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-    <script src="script.js"></script>
+      <section id="reveal-view" class="view center-view reveal-view" aria-labelledby="reveal-heading" hidden>
+        <p class="kicker">THE WALKOUT IS HERE</p><h2 id="reveal-heading">NEW TEAM MEMBER</h2>
+        <div id="reveal-card" class="card-stage"></div>
+        <button id="next-pack" class="action-button" type="button"><span>다음 팩 까기</span><small>OPEN THE SAME PACK AGAIN</small></button>
+      </section>
+
+      <section id="collection-view" class="view center-view collection-view" aria-labelledby="collection-heading" hidden>
+        <p class="kicker">TEAM 5 COMPLETE</p><h2 id="collection-heading">우리 팀을 소개합니다.</h2>
+        <p>세 장의 멤버 카드를 모두 공개했어요.</p>
+        <div id="collection-cards" class="collection-cards" aria-label="공개된 팀원 카드 세 장"></div>
+        <button id="restart-pack" class="action-button restart" type="button"><span>처음부터 다시</span><small>RESET MEMBER PACK</small></button>
+      </section>
+      <p id="announcement" class="sr-only" aria-live="polite"></p>
+    </main>
+    <script type="module" src="script.js"></script>
   </body>
 </html>
