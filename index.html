@@ -2,64 +2,81 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Team 5 FIFA 스타일 멤버 카드 팩" />
-    <title>TEAM 5 | MEMBER PACK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="팩을 열어 만나는 세 명의 팀원. Team 5를 소개합니다." />
+    <meta name="theme-color" content="#edeae3" />
+    <title>Team 5 | 우리 팀을 소개합니다</title>
+    <link rel="icon" href="assets/game/team5.svg" type="image/svg+xml" />
+    <link rel="preload" href="assets/game/stadium-day-v1.png" as="image" />
+    <link rel="preload" href="assets/game/member-pack-v1.png" as="image" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main id="game-screen" class="game-shell" data-scene="lobby">
-      <div class="field" aria-hidden="true"></div>
+    <main id="game-screen" class="game-screen" data-scene="loading">
+      <header class="game-hud">
+        <p class="hud-team"><img src="assets/game/team5.svg" alt="" width="38" height="38" /> TEAM 5</p>
+        <p class="hud-progress">팀원 <strong id="progress">0</strong><span> / 3</span></p>
+      </header>
 
-      <section id="lobby-view" class="view lobby-view" aria-labelledby="lobby-title">
-        <header class="topbar">
-          <a class="wordmark" href="#lobby-view" aria-label="TEAM 5 처음 화면"><span>5</span> TEAM 5</a>
-          <p>MEMBER PACK · 2026</p>
-        </header>
-        <div class="lobby-copy">
-          <p class="kicker">TEAM 5 PLAYER PICK</p>
-          <h1 id="lobby-title">오늘의 팀원을<br /><em>영입하세요.</em></h1>
-          <p>팩 하나에 담긴 세 명의 팀원.<br />누가 먼저 등장할지는 열어봐야 알 수 있어요.</p>
-        </div>
-        <section class="pack-contents" aria-label="멤버 팩 구성">
-          <div class="silhouette-card one"><span>PLAYER 01</span><strong>COMING<br />SOON</strong></div>
-          <div class="silhouette-card two"><span>PLAYER 02</span><strong>COMING<br />SOON</strong></div>
-          <div class="silhouette-card three"><span>PLAYER 03</span><strong>COMING<br />SOON</strong></div>
-          <p>MEMBER PACK · 3 CARDS INSIDE</p>
-        </section>
-        <button id="open-pack" class="pack-button" type="button">
-          <span class="pack-glow" aria-hidden="true"></span>
-          <img src="assets/game/member-pack-v1.png" alt="TEAM 5 멤버 팩" />
-          <span><strong>팩 까기</strong><small>CLICK TO OPEN</small></span>
-        </button>
-        <p id="lobby-progress" class="progress" aria-live="polite">OPENED 0 / 3</p>
+      <section id="loading-view" class="view loading-view" aria-labelledby="loading-title">
+        <h1 id="loading-title">우리 팀을 만날 준비 중</h1>
+        <p id="loading-message" role="status">카드를 준비하고 있어요.</p>
+        <button id="retry-load" class="action-button" type="button" hidden>다시 불러오기</button>
+        <noscript>팀원 카드를 보려면 JavaScript를 켜주세요. <a href="README.md">팀 소개 읽기</a></noscript>
       </section>
 
-      <section id="opening-view" class="view center-view opening-view" aria-live="polite" hidden>
-        <p class="kicker">TEAM 5 PLAYER PICK</p>
-        <div class="opening-pack"><img src="assets/game/member-pack-v1.png" alt="" /></div>
-        <h2>PACK OPENING</h2><p>새로운 팀원이 입장하고 있습니다.</p>
+      <section id="selection-view" class="view selection-view" aria-labelledby="selection-title" hidden>
+        <h1 id="selection-title" class="scene-title">팀원 영입</h1>
+        <section id="pack-row" class="pack-row" aria-label="공개 전 미스터리 팩"></section>
+        <footer class="scene-caption">
+          <h2>팩을 하나 골라주세요.</h2>
+          <p id="selection-description">세 명의 팀원을 만나보세요.</p>
+        </footer>
       </section>
 
-      <section id="hint-view" class="view center-view hint-view" aria-live="polite" hidden>
-        <p id="hint-count" class="hint-count">HINT 01 / 03</p>
-        <div class="hint-panel"><span id="hint-label">SCHOOL</span><strong id="hint-value">TEAM 5</strong></div>
-        <p class="hint-foot">WHO IS JOINING THE TEAM?</p>
+      <section id="opening-view" class="view opening-view" aria-label="팩을 여는 중" hidden>
+        <figure class="opening-pack"><img src="assets/game/member-pack-v1.png" alt="열리고 있는 미스터리 팩" /></figure>
+        <p class="opening-caption">어떤 팀원을 만나게 될까요?</p>
       </section>
 
-      <section id="reveal-view" class="view center-view reveal-view" aria-labelledby="reveal-heading" hidden>
-        <p class="kicker">THE WALKOUT IS HERE</p><h2 id="reveal-heading">NEW TEAM MEMBER</h2>
-        <div id="reveal-card" class="card-stage"></div>
-        <button id="next-pack" class="action-button" type="button"><span>다음 팩 까기</span><small>OPEN THE SAME PACK AGAIN</small></button>
+      <section id="hint-view" class="view hint-view" aria-label="팀원 등장 힌트" hidden></section>
+
+      <section id="reveal-view" class="view reveal-view" aria-label="공개된 팀원" hidden>
+        <section id="revealed-card" class="reveal-card-slot" aria-label="팀원 카드"></section>
+        <button id="next-pack" class="action-button" type="button"><span>다음 팩 고르기</span><span aria-hidden="true">→</span></button>
       </section>
 
-      <section id="collection-view" class="view center-view collection-view" aria-labelledby="collection-heading" hidden>
-        <p class="kicker">TEAM 5 COMPLETE</p><h2 id="collection-heading">우리 팀을 소개합니다.</h2>
-        <p>세 장의 멤버 카드를 모두 공개했어요.</p>
-        <div id="collection-cards" class="collection-cards" aria-label="공개된 팀원 카드 세 장"></div>
-        <button id="restart-pack" class="action-button restart" type="button"><span>처음부터 다시</span><small>RESET MEMBER PACK</small></button>
+      <section id="collection-view" class="view collection-view" aria-labelledby="collection-title" hidden>
+        <h1 id="collection-title" class="scene-title" tabindex="-1">우리 팀을 소개합니다</h1>
+        <section id="collection-row" class="collection-row" aria-label="세 명의 팀원 카드"></section>
+        <footer class="collection-footer">
+          <p>카드를 누르면 자세한 소개를 볼 수 있어요.</p>
+          <button id="reset-deck" class="reset-button" type="button">다시 뽑기 <span aria-hidden="true">↻</span></button>
+        </footer>
       </section>
-      <p id="announcement" class="sr-only" aria-live="polite"></p>
+      <p id="announcement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
     </main>
-    <script type="module" src="script.js"></script>
+
+    <dialog id="profile-dialog" aria-labelledby="profile-title">
+      <button id="close-profile" class="close-button" type="button" aria-label="소개 닫기">×</button>
+      <p class="profile-eyebrow">TEAM 5</p>
+      <h2 id="profile-title"></h2>
+      <p id="profile-facts" class="profile-facts"></p>
+      <section id="profile-content" class="profile-content" aria-label="상세 자기소개"></section>
+    </dialog>
+
+    <template id="member-card-template">
+      <button class="member-card" type="button">
+        <span class="card-face">
+          <span class="card-top"><span><small>KAI</small><strong class="card-kai"></strong></span><span><small>MBTI</small><strong class="card-mbti"></strong></span></span>
+          <span class="card-art"><img alt="" /></span>
+          <strong class="card-name"></strong>
+          <span class="card-intro"></span>
+          <span class="card-tags"></span>
+          <span class="card-team">TEAM 5</span>
+        </span>
+      </button>
+    </template>
+    <script src="script.js" type="module"></script>
   </body>
 </html>
