@@ -8,10 +8,10 @@
     <title>TEAM 5 | OPEN THE SQUAD</title>
     <link rel="preload" href="assets/game/stadium-day-v1.png" as="image" />
     <link rel="preload" href="assets/game/member-pack-v1.png" as="image" />
-    <link rel="preload" href="assets/cards/taewoong-card.jpg" as="image" />
-    <link rel="preload" href="assets/cards/youngkwang-card.jpg" as="image" />
-    <link rel="preload" href="assets/cards/yejin-card.jpg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=pack-reveal-20260911" />
+    <link rel="preload" href="assets/cards/taewoong-card-cutout-v2.png?v=alpha-20260911" as="image" />
+    <link rel="preload" href="assets/cards/youngkwang-card-cutout-v2.png?v=alpha-20260911" as="image" />
+    <link rel="preload" href="assets/cards/yejin-card-cutout-v2.png?v=alpha-20260911" as="image" />
+    <link rel="stylesheet" href="styles.css?v=pack-reveal-20260911l" />
   </head>
   <body>
     <main id="experience" class="experience" data-scene="lobby">
@@ -22,39 +22,15 @@
         <span class="grain"></span>
       </div>
 
-      <header class="hud">
-        <button id="home-button" class="brand" type="button" aria-label="팩 선택 화면으로 돌아가기">
-          <span class="brand-mark" aria-hidden="true">5</span>
-          <span><strong>TEAM 5</strong><small>OPEN THE SQUAD</small></span>
-        </button>
-        <div class="hud-progress" aria-label="카드 공개 진행률">
-          <span id="hud-status">MEMBER PACK</span>
-          <strong id="hud-count">0 / 3</strong>
-        </div>
-      </header>
-
-      <section id="lobby-view" class="scene scene-lobby" data-view="lobby" aria-labelledby="lobby-title">
-        <div class="lobby-copy">
-          <p class="eyebrow"><span></span> TEAM 5 MEMBER PACK</p>
-          <h1 id="lobby-title">한 팀을<br /><em>여는 순간.</em></h1>
-          <p class="lobby-lead">세 개의 힌트 끝에 한 명의 팀원이 등장합니다.<br /> 첫 번째 팩을 선택해 스쿼드를 완성하세요.</p>
-          <div id="revealed-dots" class="revealed-dots" aria-label="공개된 팀원 수">
-            <span class="is-current"></span><span></span><span></span>
-          </div>
-        </div>
-
+      <section id="lobby-view" class="scene scene-lobby" data-view="lobby" aria-label="TEAM 5 멤버 팩">
         <div class="pack-zone">
           <div class="pack-spotlight" aria-hidden="true"></div>
           <div class="pack-rings" aria-hidden="true"><i></i><i></i><i></i></div>
-          <button id="open-pack" class="pack-trigger" type="button" aria-describedby="pack-instruction">
+          <button id="open-pack" class="pack-trigger" type="button" aria-label="멤버 팩 열기">
             <span class="pack-aura" aria-hidden="true"></span>
             <img src="assets/game/member-pack-v1.png" alt="TEAM 5 은빛 멤버 팩" />
-            <span class="pack-cta"><strong>팩 오픈</strong><small>PRESS TO REVEAL</small></span>
           </button>
-          <p id="pack-instruction" class="pack-instruction"><kbd>ENTER</kbd> 또는 클릭</p>
         </div>
-
-        <p class="lobby-index" aria-hidden="true">SQUAD DROP <span>—</span> 2026</p>
       </section>
 
       <section id="tunnel-view" class="scene scene-tunnel" data-view="tunnel" aria-live="polite" hidden>
@@ -67,60 +43,32 @@
           <div class="tunnel-frame frame-4"></div>
           <div class="tunnel-exit"></div>
         </div>
-        <div class="tunnel-status">
-          <p id="hint-step">SIGNAL 01 / 03</p>
-          <div class="hint-track" aria-hidden="true"><span id="hint-progress"></span></div>
-        </div>
         <article id="hint-card" class="hint-card">
-          <span id="hint-label">AFFILIATION</span>
-          <img id="hint-image" src="assets/game/team5.svg" alt="" />
           <strong id="hint-title">TEAM 5</strong>
-          <p id="hint-detail">FIVE MINDS · ONE SQUAD</p>
         </article>
         <button id="skip-reveal" class="skip-button" type="button">연출 건너뛰기 <span>→</span></button>
       </section>
 
-      <section id="reveal-view" class="scene scene-reveal" data-view="reveal" aria-labelledby="reveal-title" hidden>
+      <section id="reveal-view" class="scene scene-reveal" data-view="reveal" aria-label="공개된 팀원 카드" hidden>
         <div class="reveal-lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-        <div class="reveal-heading">
-          <p class="eyebrow"><span></span> NEW SQUAD MEMBER</p>
-          <h2 id="reveal-title">THE CARD IS YOURS</h2>
-        </div>
+        <button id="back-to-lobby" class="reveal-back" type="button">← 이전으로</button>
         <div class="reveal-composition">
-          <aside id="reveal-left" class="reveal-wing reveal-wing-left" aria-label="팀원 핵심 정보"></aside>
           <div id="reveal-card" class="reveal-card-slot"></div>
-          <aside id="reveal-right" class="reveal-wing reveal-wing-right" aria-label="팀원 태그"></aside>
         </div>
         <div class="reveal-actions">
-          <button id="next-pack" class="primary-action" type="button"><span>다음 팩 열기</span><small>NEXT MEMBER</small></button>
+          <button id="next-pack" class="primary-action" type="button">다음 팩</button>
         </div>
       </section>
 
-      <section id="collection-view" class="scene scene-collection" data-view="collection" aria-labelledby="collection-title" hidden>
-        <div class="collection-heading">
-          <p class="eyebrow"><span></span> SQUAD COMPLETE</p>
-          <h2 id="collection-title">세 장의 카드,<br />하나의 팀.</h2>
-          <p>카드를 선택해 팀원의 이야기를 확인하세요.</p>
-        </div>
-        <div class="collection-layout">
-          <div id="collection-cards" class="collection-cards" role="group" aria-label="TEAM 5 팀원 카드"></div>
-          <article id="member-detail" class="member-detail" aria-live="polite">
-            <div class="detail-number">01</div>
-            <p class="detail-kicker">SELECTED MEMBER</p>
-            <h3 id="detail-name">팀원 이름</h3>
-            <p id="detail-intro" class="detail-intro"></p>
-            <dl id="detail-meta" class="detail-meta"></dl>
-            <div id="detail-sections" class="detail-sections"></div>
-            <a id="detail-github" class="detail-link" href="#" target="_blank" rel="noreferrer" hidden>GitHub 방문 <span>↗</span></a>
-          </article>
-        </div>
-        <button id="restart-pack" class="restart-button" type="button">팩 다시 열기 <span>↻</span></button>
+      <section id="collection-view" class="scene scene-collection" data-view="collection" aria-label="공개된 팀원 카드" hidden>
+        <button id="restart-pack" class="collection-back" type="button">← 팩 선택</button>
+        <div id="collection-cards" class="collection-cards" role="group" aria-label="TEAM 5 팀원 카드"></div>
       </section>
 
       <div id="white-flash" class="white-flash" aria-hidden="true"></div>
       <p id="announcement" class="sr-only" aria-live="assertive"></p>
     </main>
 
-    <script type="module" src="script.js?v=pack-reveal-20260911"></script>
+    <script type="module" src="script.js?v=pack-reveal-20260911k"></script>
   </body>
 </html>

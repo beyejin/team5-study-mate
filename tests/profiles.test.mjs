@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { parseProfile, getHints, drawMember } from '../profiles.mjs';
 
 test('팀원 md의 KAI, MBTI, 태그와 이미지가 카드에 전달된다', async () => {
-  for (const [name, kai, mbti] of [['엄태웅', '120', 'ENTP'], ['김영광', '90', 'INFP'], ['한예진', '105', 'ENTP']]) {
+  for (const [name, kai, mbti] of [['엄태웅', '119', 'ENTP'], ['김영광', '90', 'INFP'], ['한예진', '105', 'ENTP']]) {
     const markdown = await readFile(new URL(`../team/${name}.md`, import.meta.url), 'utf8');
     const member = parseProfile(markdown, name);
     assert.equal(member.kai, kai);

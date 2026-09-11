@@ -1,11 +1,10 @@
 import { parseProfile, drawMember } from './profiles.mjs';
-import { createTunnel } from './tunnel.mjs';
 
 const members = [
   {
     id: 'taewoong',
     name: '엄태웅',
-    cardImage: 'assets/cards/taewoong-card.jpg',
+    cardImage: 'assets/cards/taewoong-card-cutout-v2.png?v=alpha-20260911',
     profilePath: 'team/엄태웅.md',
     kai: '119',
     mbti: 'ENTP',
@@ -21,7 +20,7 @@ const members = [
   {
     id: 'youngkwang',
     name: '김영광',
-    cardImage: 'assets/cards/youngkwang-card.jpg',
+    cardImage: 'assets/cards/youngkwang-card-cutout-v2.png?v=alpha-20260911',
     profilePath: 'team/김영광.md',
     kai: '90',
     mbti: 'INFP',
@@ -37,7 +36,7 @@ const members = [
   {
     id: 'yejin',
     name: '한예진',
-    cardImage: 'assets/cards/yejin-card.jpg',
+    cardImage: 'assets/cards/yejin-card-cutout-v2.png?v=alpha-20260911',
     profilePath: 'team/한예진.md',
     kai: '105',
     mbti: 'ENTP',
@@ -56,17 +55,16 @@ const experience = document.querySelector('#experience');
 const scenes = new Map([...document.querySelectorAll('[data-view]')].map((scene) => [scene.dataset.view, scene]));
 const openButton = document.querySelector('#open-pack');
 const nextButton = document.querySelector('#next-pack');
+const backButton = document.querySelector('#back-to-lobby');
 const restartButton = document.querySelector('#restart-pack');
-const homeButton = document.querySelector('#home-button');
 const skipButton = document.querySelector('#skip-reveal');
 const flash = document.querySelector('#white-flash');
 const announcement = document.querySelector('#announcement');
 const tunnelView = document.querySelector('#tunnel-view');
 const hintCard = document.querySelector('#hint-card');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const tunnel = createTunnel(document.querySelector('#tunnel-canvas'), hintCard, reducedMotion);
-const HINT_DURATION = 1400;
-const TUNNEL_DURATION = 520 + 3 * HINT_DURATION + 650;
+const TUNNEL_SETTLE_MS = 1600;
+const HINT_HOLD_MS = 3000;
 
 let remaining = [];
 let revealed = [];
@@ -80,32 +78,14 @@ const wait = (milliseconds) => new Promise((resolve) => {
 });
 
 function showScene(name) {
-  if (name !== 'tunnel') tunnel.stop();
   for (const [sceneName, scene] of scenes) scene.hidden = sceneName !== name;
   experience.dataset.scene = name;
-  document.querySelector('#hud-status').textContent = {
-    lobby: 'MEMBER PACK',
-    tunnel: 'IDENTIFYING PLAYER',
-    reveal: 'NEW MEMBER',
-    collection: 'SQUAD COMPLETE',
-  }[name];
-  homeButton.disabled = name === 'tunnel';
 }
 
 function updateProgress() {
-  document.querySelector('#hud-count').textContent = `${revealed.length} / ${members.length}`;
-  const dots = [...document.querySelectorAll('#revealed-dots span')];
-  dots.forEach((dot, index) => {
-    dot.classList.toggle('is-open', index < revealed.length);
-    dot.classList.toggle('is-current', index === revealed.length && remaining.length > 0);
-  });
-
-  const action = openButton.querySelector('.pack-cta strong');
-  action.textContent = revealed.length ? '다음 팩 오픈' : '팩 오픈';
   openButton.disabled = isOpening || remaining.length === 0;
-  document.querySelector('#pack-instruction').innerHTML = remaining.length
-    ? `<kbd>ENTER</kbd> 또는 클릭 · ${remaining.length}장 남음`
-    : '모든 카드 공개 완료';
+  nextButton.disabled = isOpening || isFinalizing;
+  openButton.setAttribute('aria-label', revealed.length ? '다음 멤버 팩 열기' : '멤버 팩 열기');
 }
 
 function restartAnimation(element, className) {
@@ -129,94 +109,40 @@ function createMemberCard(member) {
   image.decoding = 'async';
   image.draggable = false;
 
-  const shine = document.createElement('span');
-  shine.className = 'card-shine';
-  shine.setAttribute('aria-hidden', 'true');
-  card.append(image, shine);
+  card.append(image);
   return card;
 }
 
 function setHint(hint, index) {
-  document.querySelector('#hint-step').textContent = `HINT 0${index + 1} / 03`;
-  document.querySelector('#hint-progress').style.width = `${((index + 1) / 3) * 100}%`;
-  document.querySelector('#hint-label').textContent = hint.label;
   document.querySelector('#hint-title').textContent = hint.title;
-  document.querySelector('#hint-detail').textContent = hint.detail;
-
-  const image = document.querySelector('#hint-image');
-  hintCard.classList.toggle('has-image', Boolean(hint.image));
-  if (hint.image) {
-    image.src = hint.image;
-    image.alt = `${hint.title} 힌트 이미지`;
-  } else {
-    image.removeAttribute('src');
-    image.alt = '';
-  }
-
   hintCard.hidden = false;
+
   restartAnimation(hintCard, 'is-entering');
-  announcement.textContent = `${index + 1}번째 힌트, ${hint.label}: ${hint.title}`;
+  restartAnimation(tunnelView, 'is-rushing');
+  announcement.textContent = `${index + 1}번째 힌트: ${hint.title}`;
 }
 
-function fillWing(container, content) {
-  container.replaceChildren();
-  for (const item of content) {
-    const element = document.createElement(item.tag);
-    element.className = item.className;
-    if (item.className === 'wing-tags') {
-      for (const tag of item.value) {
-        const chip = document.createElement('span');
-        chip.textContent = tag;
-        element.append(chip);
-      }
-    } else if (item.className === 'wing-stat') {
-      const label = document.createElement('small');
-      const value = document.createElement('strong');
-      label.textContent = item.label;
-      value.textContent = item.value;
-      element.append(label, value);
-    } else {
-      element.textContent = item.value;
-    }
-    container.append(element);
-  }
+function clearHint() {
+  document.querySelector('#hint-title').textContent = '';
+  hintCard.hidden = true;
 }
 
 function renderReveal(member) {
   document.querySelector('#reveal-card').replaceChildren(createMemberCard(member));
-  fillWing(document.querySelector('#reveal-left'), [
-    { tag: 'p', className: 'wing-label', value: 'TEAM MEMBER' },
-    { tag: 'h3', className: 'wing-value', value: member.name },
-    { tag: 'p', className: 'wing-sub', value: `${member.signature} · TEAM 5` },
-    { tag: 'div', className: 'wing-stat', label: 'KAI', value: member.kai },
-  ]);
-  fillWing(document.querySelector('#reveal-right'), [
-    { tag: 'p', className: 'wing-label', value: 'PLAYER PROFILE' },
-    { tag: 'h3', className: 'wing-value', value: member.mbti },
-    { tag: 'p', className: 'wing-sub', value: 'SPECIAL MEMBER CARD' },
-    { tag: 'div', className: 'wing-tags', value: member.tags },
-  ]);
-
-  const label = nextButton.querySelector('span');
-  const subLabel = nextButton.querySelector('small');
-  label.textContent = remaining.length ? '다음 팩 열기' : '완성된 스쿼드 보기';
-  subLabel.textContent = remaining.length ? 'NEXT MEMBER' : 'VIEW THE COMPLETE TEAM';
+  nextButton.textContent = remaining.length ? '다음 팩' : '카드 모아보기';
 }
 
 async function finishReveal(member) {
   if (!member || isFinalizing) return;
   isFinalizing = true;
-  const run = sequenceId;
   if (!revealed.some((item) => item.id === member.id)) revealed.push(member);
   updateProgress();
   triggerFlash();
   await wait(190);
-  if (run !== sequenceId) return;
   renderReveal(member);
   showScene('reveal');
   announcement.textContent = `${member.name} 팀원 카드가 공개되었습니다.`;
   await wait(640);
-  if (run !== sequenceId) return;
   isOpening = false;
   isFinalizing = false;
   updateProgress();
@@ -227,121 +153,52 @@ async function openPack() {
   if (isOpening || isFinalizing || remaining.length === 0) return;
   isOpening = true;
   updateProgress();
-  currentMember = drawMember(remaining);
+  const selectedMember = drawMember(remaining);
+  const revealHints = selectedMember.hints.map((hint) => ({ ...hint }));
+  currentMember = selectedMember;
   const run = ++sequenceId;
+  clearHint();
   announcement.textContent = '멤버 팩이 빛나며 열립니다.';
-  hintCard.hidden = true;
-  hintCard.classList.remove('is-entering');
-  document.querySelector('#hint-progress').style.width = '0%';
 
   triggerFlash();
   await wait(190);
   if (run !== sequenceId) return;
   showScene('tunnel');
-  tunnel.start(TUNNEL_DURATION);
-  await wait(520);
+  tunnelView.classList.add('is-rushing');
+  await wait(TUNNEL_SETTLE_MS);
 
-  for (const [index, hint] of currentMember.hints.entries()) {
+  for (const [index, hint] of revealHints.entries()) {
     if (run !== sequenceId) return;
     setHint(hint, index);
-    await wait(HINT_DURATION);
+    await wait(HINT_HOLD_MS);
   }
 
   if (run !== sequenceId) return;
-  hintCard.hidden = true;
-  await wait(650);
-  if (run !== sequenceId) return;
-  await finishReveal(currentMember);
+  await wait(160);
+  await finishReveal(selectedMember);
 }
 
 async function skipReveal() {
   if (!isOpening || !currentMember || isFinalizing) return;
+  const selectedMember = currentMember;
   sequenceId += 1;
-  await finishReveal(currentMember);
-}
-
-function addMeta(label, value) {
-  const wrapper = document.createElement('div');
-  const term = document.createElement('dt');
-  const description = document.createElement('dd');
-  term.textContent = label;
-  description.textContent = value;
-  wrapper.append(term, description);
-  return wrapper;
-}
-
-function getGithub(member) {
-  return (member.profile?.sections?.GitHub ?? []).find((line) => /^https:\/\/github\.com\//i.test(line)) ?? '';
-}
-
-function selectMember(member, index) {
-  for (const button of document.querySelectorAll('.collection-card')) {
-    button.setAttribute('aria-pressed', String(button.dataset.member === member.id));
-  }
-
-  document.querySelector('.detail-number').textContent = String(index + 1).padStart(2, '0');
-  document.querySelector('#detail-name').textContent = member.name;
-  document.querySelector('#detail-intro').textContent = member.intro;
-  document.querySelector('#detail-meta').replaceChildren(
-    addMeta('KAI', member.kai),
-    addMeta('MBTI', member.mbti),
-    addMeta('SIGNATURE', member.signature),
-  );
-
-  const sectionContainer = document.querySelector('#detail-sections');
-  sectionContainer.replaceChildren();
-  const sectionNames = ['관심 분야', '요즘 배우는 것', '팀원들에게 보여주고 싶은 모습'];
-  const availableSections = sectionNames
-    .map((name) => ({ name, values: member.profile?.sections?.[name] ?? [] }))
-    .filter((section) => section.values.length > 0);
-
-  if (availableSections.length === 0) {
-    const section = document.createElement('section');
-    section.className = 'detail-section';
-    const heading = document.createElement('h4');
-    const copy = document.createElement('p');
-    heading.textContent = 'PROFILE UPDATE';
-    copy.textContent = '더 자세한 소개를 준비하고 있습니다.';
-    section.append(heading, copy);
-    sectionContainer.append(section);
-  } else {
-    for (const { name, values } of availableSections) {
-      const section = document.createElement('section');
-      section.className = 'detail-section';
-      const heading = document.createElement('h4');
-      const copy = document.createElement('p');
-      heading.textContent = name;
-      copy.textContent = values.join(' · ');
-      section.append(heading, copy);
-      sectionContainer.append(section);
-    }
-  }
-
-  const github = document.querySelector('#detail-github');
-  const githubUrl = getGithub(member);
-  github.hidden = !githubUrl;
-  if (githubUrl) github.href = githubUrl;
-  announcement.textContent = `${member.name} 팀원 정보가 선택되었습니다.`;
+  await finishReveal(selectedMember);
 }
 
 function renderCollection() {
   const container = document.querySelector('#collection-cards');
   container.replaceChildren();
-  revealed.forEach((member, index) => {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'collection-card';
-    button.dataset.member = member.id;
-    button.setAttribute('aria-pressed', String(index === 0));
-    button.setAttribute('aria-label', `${member.name} 카드 선택`);
-    button.append(createMemberCard(member));
-    button.addEventListener('click', () => selectMember(member, index));
-    container.append(button);
+  revealed.forEach((member) => {
+    const card = document.createElement('div');
+    card.className = 'collection-card';
+    card.append(createMemberCard(member));
+    container.append(card);
   });
-  selectMember(revealed[0], 0);
+  announcement.textContent = '세 장의 팀원 카드가 공개되었습니다.';
 }
 
 function nextScene() {
+  if (isOpening || isFinalizing) return;
   if (remaining.length > 0) {
     currentMember = null;
     showScene('lobby');
@@ -351,7 +208,19 @@ function nextScene() {
   }
   renderCollection();
   showScene('collection');
-  document.querySelector('.collection-card')?.focus({ preventScroll: true });
+}
+
+function returnToPreviousScene() {
+  if (isOpening || isFinalizing) return;
+  if (remaining.length === 0) {
+    renderCollection();
+    showScene('collection');
+    return;
+  }
+  currentMember = null;
+  showScene('lobby');
+  updateProgress();
+  openButton.focus({ preventScroll: true });
 }
 
 function restart() {
@@ -401,7 +270,6 @@ function enableLocalPreviewMode() {
     currentMember = previewMember;
     setHint(previewMember.hints[Number(params.get('hint') ?? 0)] ?? previewMember.hints[0], Number(params.get('hint') ?? 0));
     showScene('tunnel');
-    tunnel.preview(Math.max(0, Math.min(.9, Number(params.get('travel') ?? .25))));
   } else if (previewScene === 'reveal') {
     remaining = members.filter((member) => member.id !== previewMember.id);
     revealed = [previewMember];
@@ -430,18 +298,9 @@ function enableLocalPreviewMode() {
 
 openButton.addEventListener('click', openPack);
 nextButton.addEventListener('click', nextScene);
+backButton.addEventListener('click', returnToPreviousScene);
 restartButton.addEventListener('click', restart);
 skipButton.addEventListener('click', skipReveal);
-homeButton.addEventListener('click', () => {
-  if (isOpening || isFinalizing) return;
-  if (remaining.length === 0) {
-    renderCollection();
-    showScene('collection');
-  } else {
-    showScene('lobby');
-    updateProgress();
-  }
-});
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && experience.dataset.scene === 'tunnel') skipReveal();
 });
