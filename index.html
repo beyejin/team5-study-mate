@@ -11,7 +11,8 @@
     <link rel="preload" href="assets/cards/taewoong-card.jpg" as="image" />
     <link rel="preload" href="assets/cards/youngkwang-card.jpg" as="image" />
     <link rel="preload" href="assets/cards/yejin-card.jpg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=pack-reveal-20260911" />
+    <link rel="preload" href="assets/game/reveal-arena-v2.png" as="image" />
+    <link rel="stylesheet" href="styles.css?v=walkthrough-v2" />
   </head>
   <body>
     <main id="experience" class="experience" data-scene="lobby">
@@ -58,20 +59,12 @@
       </section>
 
       <section id="tunnel-view" class="scene scene-tunnel" data-view="tunnel" aria-live="polite" hidden>
-        <div class="tunnel" aria-hidden="true">
-          <div class="tunnel-ceiling"></div>
-          <div class="tunnel-floor"></div>
-          <div class="tunnel-frame frame-1"></div>
-          <div class="tunnel-frame frame-2"></div>
-          <div class="tunnel-frame frame-3"></div>
-          <div class="tunnel-frame frame-4"></div>
-          <div class="tunnel-exit"></div>
-        </div>
+        <canvas id="tunnel-canvas" aria-hidden="true"></canvas>
         <div class="tunnel-status">
-          <p id="hint-step">SIGNAL 01 / 03</p>
+          <p id="hint-step">HINT 01 / 03</p>
           <div class="hint-track" aria-hidden="true"><span id="hint-progress"></span></div>
         </div>
-        <article id="hint-card" class="hint-card">
+        <article id="hint-card" class="hint-card" hidden>
           <span id="hint-label">AFFILIATION</span>
           <img id="hint-image" src="assets/game/team5.svg" alt="" />
           <strong id="hint-title">TEAM 5</strong>
@@ -84,7 +77,7 @@
         <div class="reveal-lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
         <div class="reveal-heading">
           <p class="eyebrow"><span></span> NEW SQUAD MEMBER</p>
-          <h2 id="reveal-title">THE CARD IS YOURS</h2>
+          <h2 id="reveal-title">WELCOME TO TEAM 5</h2>
         </div>
         <div class="reveal-composition">
           <aside id="reveal-left" class="reveal-wing reveal-wing-left" aria-label="팀원 핵심 정보"></aside>
@@ -121,6 +114,6 @@
       <p id="announcement" class="sr-only" aria-live="assertive"></p>
     </main>
 
-    <script type="module" src="script.js?v=pack-reveal-20260911"></script>
+    <script type="module" src="script.js?v=walkthrough-v2"></script>
   </body>
 </html>

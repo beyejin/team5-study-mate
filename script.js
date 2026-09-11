@@ -1,4 +1,5 @@
 import { parseProfile, drawMember } from './profiles.mjs';
+import { createTunnel } from './tunnel.mjs';
 
 const members = [
   {
@@ -63,6 +64,9 @@ const announcement = document.querySelector('#announcement');
 const tunnelView = document.querySelector('#tunnel-view');
 const hintCard = document.querySelector('#hint-card');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const tunnel = createTunnel(document.querySelector('#tunnel-canvas'), hintCard, reducedMotion);
+const HINT_DURATION = 1400;
+const TUNNEL_DURATION = 520 + 3 * HINT_DURATION + 650;
 
 let remaining = [];
 let revealed = [];
@@ -76,6 +80,7 @@ const wait = (milliseconds) => new Promise((resolve) => {
 });
 
 function showScene(name) {
+  if (name !== 'tunnel') tunnel.stop();
   for (const [sceneName, scene] of scenes) scene.hidden = sceneName !== name;
   experience.dataset.scene = name;
   document.querySelector('#hud-status').textContent = {
@@ -132,7 +137,7 @@ function createMemberCard(member) {
 }
 
 function setHint(hint, index) {
-  document.querySelector('#hint-step').textContent = `SIGNAL 0${index + 1} / 03`;
+  document.querySelector('#hint-step').textContent = `HINT 0${index + 1} / 03`;
   document.querySelector('#hint-progress').style.width = `${((index + 1) / 3) * 100}%`;
   document.querySelector('#hint-label').textContent = hint.label;
   document.querySelector('#hint-title').textContent = hint.title;
@@ -148,8 +153,8 @@ function setHint(hint, index) {
     image.alt = '';
   }
 
+  hintCard.hidden = false;
   restartAnimation(hintCard, 'is-entering');
-  restartAnimation(tunnelView, 'is-rushing');
   announcement.textContent = `${index + 1}번째 힌트, ${hint.label}: ${hint.title}`;
 }
 
@@ -201,14 +206,17 @@ function renderReveal(member) {
 async function finishReveal(member) {
   if (!member || isFinalizing) return;
   isFinalizing = true;
+  const run = sequenceId;
   if (!revealed.some((item) => item.id === member.id)) revealed.push(member);
   updateProgress();
   triggerFlash();
   await wait(190);
+  if (run !== sequenceId) return;
   renderReveal(member);
   showScene('reveal');
   announcement.textContent = `${member.name} 팀원 카드가 공개되었습니다.`;
   await wait(640);
+  if (run !== sequenceId) return;
   isOpening = false;
   isFinalizing = false;
   updateProgress();
@@ -222,22 +230,27 @@ async function openPack() {
   currentMember = drawMember(remaining);
   const run = ++sequenceId;
   announcement.textContent = '멤버 팩이 빛나며 열립니다.';
+  hintCard.hidden = true;
+  hintCard.classList.remove('is-entering');
+  document.querySelector('#hint-progress').style.width = '0%';
 
   triggerFlash();
   await wait(190);
   if (run !== sequenceId) return;
   showScene('tunnel');
-  tunnelView.classList.add('is-rushing');
+  tunnel.start(TUNNEL_DURATION);
   await wait(520);
 
   for (const [index, hint] of currentMember.hints.entries()) {
     if (run !== sequenceId) return;
     setHint(hint, index);
-    await wait(980);
+    await wait(HINT_DURATION);
   }
 
   if (run !== sequenceId) return;
-  await wait(160);
+  hintCard.hidden = true;
+  await wait(650);
+  if (run !== sequenceId) return;
   await finishReveal(currentMember);
 }
 
@@ -388,6 +401,7 @@ function enableLocalPreviewMode() {
     currentMember = previewMember;
     setHint(previewMember.hints[Number(params.get('hint') ?? 0)] ?? previewMember.hints[0], Number(params.get('hint') ?? 0));
     showScene('tunnel');
+    tunnel.preview(Math.max(0, Math.min(.9, Number(params.get('travel') ?? .25))));
   } else if (previewScene === 'reveal') {
     remaining = members.filter((member) => member.id !== previewMember.id);
     revealed = [previewMember];

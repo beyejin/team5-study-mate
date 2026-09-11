@@ -17,14 +17,14 @@ New-Item -ItemType Directory -Path (Join-Path $distPath 'assets\cards') -Force |
 New-Item -ItemType Directory -Path (Join-Path $distPath 'assets\game') -Force | Out-Null
 New-Item -ItemType Directory -Path (Join-Path $distPath 'team') -Force | Out-Null
 
-@('index.html', 'styles.css', 'script.js', 'profiles.mjs') | ForEach-Object {
+@('index.html', 'styles.css', 'script.js', 'profiles.mjs', 'tunnel.mjs') | ForEach-Object {
     Copy-Item -LiteralPath (Join-Path $projectRoot $_) -Destination (Join-Path $distPath $_)
 }
 
 Get-ChildItem -LiteralPath (Join-Path $projectRoot 'assets\cards') -File |
     Copy-Item -Destination (Join-Path $distPath 'assets\cards')
 
-@('cocone-school.svg', 'team5.svg', 'stadium-day-v1.png', 'member-pack-v1.png') | ForEach-Object {
+@('cocone-school.svg', 'team5.svg', 'stadium-day-v1.png', 'member-pack-v1.png', 'reveal-arena-v2.png') | ForEach-Object {
     Copy-Item -LiteralPath (Join-Path $projectRoot "assets\game\$_") -Destination (Join-Path (Join-Path $distPath 'assets\game') $_)
 }
 
