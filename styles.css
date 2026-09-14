@@ -173,21 +173,21 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
   padding: 10px 18px;
   place-items: center;
   border: 0;
-  background: radial-gradient(ellipse, rgba(3, 8, 11, .36), transparent 72%);
+  background: radial-gradient(ellipse, rgba(3, 8, 18, .72), transparent 72%);
   color: var(--ivory);
   text-align: center;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, .78);
+  text-shadow: 0 4px 24px rgba(0, 0, 0, .95), 0 0 32px rgba(120, 195, 255, .48);
 }
 
 .hint-card strong {
   font-size: clamp(2.25rem, 6vw, 5.4rem);
   font-weight: 900;
-  line-height: 1;
+  line-height: 1.16;
   letter-spacing: -.06em;
   word-break: keep-all;
 }
 
-.hint-card.is-entering { animation: hint-arrive .22s cubic-bezier(.16, .8, .24, 1) both; }
+.hint-card.is-entering { animation: hint-arrive .38s cubic-bezier(.16, .8, .24, 1) both; }
 
 .skip-button,
 .reveal-back,
@@ -208,8 +208,9 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
 .skip-button:hover, .reveal-back:hover, .collection-back:hover { border-color: var(--gold-pale); color: var(--gold-pale); }
 
 @keyframes hint-arrive {
-  from { opacity: 0; transform: translateY(18px) scale(.94); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  0% { opacity: 0; transform: translateY(6px) scale(1.32); filter: blur(7px); }
+  55% { opacity: 1; transform: translateY(0) scale(.98); filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
 }
 
 .scene-reveal {

@@ -24,7 +24,7 @@ New-Item -ItemType Directory -Path (Join-Path $distPath 'team') -Force | Out-Nul
 Get-ChildItem -LiteralPath (Join-Path $projectRoot 'assets\cards') -File |
     Copy-Item -Destination (Join-Path $distPath 'assets\cards')
 
-@('cocone-school.svg', 'team5.svg', 'stadium-day-v1.png', 'member-pack-v1.png', 'reveal-arena-v2.png') | ForEach-Object {
+@('cocone-school.svg', 'team5.svg', 'stadium-day-v1.png', 'stadium-tunnel-v1.png', 'member-pack-v1.png', 'team5-intro-bg-v1.png', 'team5-kanban-snapshot-v1.svg') | ForEach-Object {
     Copy-Item -LiteralPath (Join-Path $projectRoot "assets\game\$_") -Destination (Join-Path (Join-Path $distPath 'assets\game') $_)
 }
 

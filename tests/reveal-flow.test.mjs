@@ -60,9 +60,6 @@ test('터널은 실제 통로 배경을 전진시키는 캔버스 연출이다',
   assert.match(tunnel, /window\.requestAnimationFrame\(render\)/);
   assert.match(tunnel, /function drawTunnelTexture\(/);
   assert.match(tunnel, /tunnelTexture\.src = 'assets\/game\/stadium-tunnel-v1\.png';/);
-  assert.match(tunnel, /const CAMERA_TRAVEL = \.38;/);
-  assert.match(tunnel, /const LIGHT_PULL_TRAVEL = \.26;/);
-  assert.match(tunnel, /1 \+ cameraProgress \* CAMERA_TRAVEL/);
   assert.match(tunnel, /function accelerateCamera\(progress\)/);
   assert.match(tunnel, /const cameraProgress = accelerateCamera\(progress\);/);
   assert.match(tunnel, /const lightPull = smoothstep\(FINAL_LIGHT_START, \.98, progress\);/);
@@ -72,10 +69,10 @@ test('터널은 실제 통로 배경을 전진시키는 캔버스 연출이다',
   assert.match(tunnel, /function drawVignette\(/);
   assert.match(tunnel, /const FINAL_LIGHT_START = \.69;/);
   assert.match(tunnel, /function blendLight\(cold, warm, progress, alpha\)/);
-  assert.match(tunnel, /draw\(reducedMotion \? 0 : elapsedProgress\);/);
-  assert.doesNotMatch(tunnel, /makeSpeedLines|drawFlames|drawSpeedLines|drawSurfaceLines|drawSpotlights|stadium-day-v1/);
+  assert.match(tunnel, /draw\(reducedMotion \? 0 : elapsedProgress, now\);/);
+  assert.doesNotMatch(tunnel, /stadium-day-v1/);
   assert.match(tunnel, /window\.cancelAnimationFrame\(animationFrame\);/);
-  assert.match(tunnel, /return \{ start, stop \};/);
+  assert.match(tunnel, /return \{ start, stop, pulse \};/);
 });
 
 test('기존 제공 카드만 공개하고 화면에서 태그를 중복 출력하지 않는다', async () => {

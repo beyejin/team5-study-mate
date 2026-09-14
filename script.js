@@ -1,5 +1,5 @@
 import { getHints, parseProfile, drawMember } from './profiles.mjs';
-import { createTunnel } from './tunnel.mjs?v=pack-reveal-20260914-home-v6';
+import { createTunnel } from './tunnel.mjs?v=tunnel-impact-20260914';
 
 const members = [
   {
@@ -107,6 +107,7 @@ function createMemberCard(member) {
 function setHint(title, index) {
   hintTitle.textContent = title;
   hintCard.hidden = false;
+  tunnel.pulse(index);
   restartAnimation(hintCard, 'is-entering');
   announcement.textContent = `${index + 1}번째 공개 정보: ${title}`;
 }
