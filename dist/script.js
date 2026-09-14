@@ -170,7 +170,7 @@ async function finishReveal(member) {
 
 async function openPack(immediate = false) {
   if (isOpening || isFinalizing || remaining.length === 0) return;
-  await lobbyMusic.unlockEffects();
+  void lobbyMusic.unlockEffects();
   isOpening = true;
   updateProgress();
   const selectedMember = drawMember(remaining);

@@ -22,7 +22,8 @@ test('팩 오픈은 하나의 5초 안팎 타임라인으로 진행한다', asyn
   assert.match(script, /const selectedMember = drawMember\(remaining\);/);
   assert.match(script, /const revealHints = \[\.\.\.selectedMember\.hints\];/);
   assert.match(script, /tunnel\.start\(TUNNEL_DURATION_MS\);/);
-  assert.match(script, /await lobbyMusic\.unlockEffects\(\);/);
+  assert.match(script, /void lobbyMusic\.unlockEffects\(\);/);
+  assert.doesNotMatch(script, /await lobbyMusic\.unlockEffects\(\);/);
   assert.match(script, /for \(const \[index, hint\] of revealHints\.entries\(\)\)/);
   assert.match(script, /await finishReveal\(selectedMember\);/);
   assert.match(script, /function updatePackTilt\(event\)/);
