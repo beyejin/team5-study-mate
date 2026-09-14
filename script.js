@@ -47,7 +47,6 @@ const hintTitle = document.querySelector('#hint-title');
 const revealView = document.querySelector('#reveal-view');
 const revealCard = document.querySelector('#reveal-card');
 const revealDetails = document.querySelector('#reveal-details');
-const homeMembers = document.querySelector('#home-members');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const tunnel = createTunnel(tunnelCanvas, reducedMotion);
 const packAudio = createPackAudio();
@@ -95,6 +94,24 @@ function restartAnimation(element, className) {
 
 function triggerFlash() {
   restartAnimation(flash, 'is-bursting');
+}
+
+function resetPackTilt() {
+  openButton.style.setProperty('--pack-tilt-x', '0deg');
+  openButton.style.setProperty('--pack-tilt-y', '0deg');
+  openButton.style.setProperty('--pack-glint-x', '50%');
+  openButton.style.setProperty('--pack-glint-y', '50%');
+}
+
+function updatePackTilt(event) {
+  if (reducedMotion || openButton.disabled || event.pointerType === 'touch') return;
+  const bounds = openButton.getBoundingClientRect();
+  const x = (event.clientX - bounds.left) / bounds.width - .5;
+  const y = (event.clientY - bounds.top) / bounds.height - .5;
+  openButton.style.setProperty('--pack-tilt-x', `${y * -7}deg`);
+  openButton.style.setProperty('--pack-tilt-y', `${x * 9}deg`);
+  openButton.style.setProperty('--pack-glint-x', `${(x + .5) * 100}%`);
+  openButton.style.setProperty('--pack-glint-y', `${(y + .5) * 100}%`);
 }
 
 function createMemberCard(member) {
@@ -288,25 +305,6 @@ function renderCollection() {
   announcement.textContent = '세 장의 팀원 카드가 공개되었습니다.';
 }
 
-function renderTeamFinish() {
-  homeMembers.replaceChildren();
-  for (const member of revealed) {
-    const card = document.createElement('article');
-    card.className = 'home-member';
-    card.setAttribute('role', 'listitem');
-    card.setAttribute('aria-label', `${member.name} 팀원 카드`);
-
-    const image = document.createElement('img');
-    image.src = member.cardImage;
-    image.alt = `${member.name} 팀원 카드`;
-    image.decoding = 'async';
-    image.draggable = false;
-
-    card.append(image);
-    homeMembers.append(card);
-  }
-}
-
 function nextScene() {
   if (isOpening || isFinalizing) return;
   if (remaining.length > 0) {
@@ -314,7 +312,6 @@ function nextScene() {
     void openPack(true);
     return;
   }
-  renderTeamFinish();
   showScene('home');
   announcement.textContent = '세 장의 카드가 하나의 팀으로 완성되었습니다.';
 }
@@ -322,7 +319,6 @@ function nextScene() {
 function returnToPreviousScene() {
   if (isOpening || isFinalizing) return;
   if (remaining.length === 0) {
-    renderTeamFinish();
     showScene('home');
     announcement.textContent = '세 장의 카드가 하나의 팀으로 완성되었습니다.';
     return;
@@ -342,7 +338,6 @@ function restart() {
   isFinalizing = false;
   openButton.classList.remove('is-opening');
   clearHint();
-  homeMembers.replaceChildren();
   showScene('lobby');
   updateProgress();
   announcement.textContent = '팀 5 멤버 팩이 준비되었습니다.';
@@ -365,6 +360,8 @@ async function loadProfiles() {
 }
 
 openButton.addEventListener('click', openPack);
+openButton.addEventListener('pointermove', updatePackTilt);
+openButton.addEventListener('pointerleave', resetPackTilt);
 nextButton.addEventListener('click', nextScene);
 backButton.addEventListener('click', returnToPreviousScene);
 restartButton.addEventListener('click', restart);
@@ -375,4 +372,5 @@ document.addEventListener('keydown', (event) => {
 });
 
 restart();
+resetPackTilt();
 loadProfiles();

@@ -24,6 +24,9 @@ test('팩 오픈은 하나의 5초 안팎 타임라인으로 진행한다', asyn
   assert.match(script, /tunnel\.start\(TUNNEL_DURATION_MS\);/);
   assert.match(script, /for \(const \[index, hint\] of revealHints\.entries\(\)\)/);
   assert.match(script, /await finishReveal\(selectedMember\);/);
+  assert.match(script, /function updatePackTilt\(event\)/);
+  assert.match(script, /openButton\.addEventListener\('pointermove', updatePackTilt\);/);
+  assert.match(script, /openButton\.addEventListener\('pointerleave', resetPackTilt\);/);
 });
 
 test('남은 팩이 있으면 다음 팩 버튼이 로비를 거치지 않고 바로 공개를 시작한다', async () => {
@@ -114,27 +117,20 @@ test('세 장을 뽑은 뒤 팀 작업 방식 홈으로 이동할 수 있다', a
   assert.doesNotMatch(page, /lobby-copy|lobby-title|lobby-description/);
   assert.match(page, /<span class="pack-open-label">팩을 눌러 시작<\/span>/);
   assert.match(page, /class="lobby-flow" aria-label="멤버 공개 흐름"/);
-  assert.match(page, /<section id="home-view" class="scene scene-home" data-view="home"/);
-  assert.match(page, /<h1 id="home-title">세 장의 카드가<br \/><em>하나의 팀<\/em>이 되었습니다\.<\/h1>/);
-  assert.match(page, /id="home-members" class="home-members"/);
-  assert.match(page, /aria-label="공개된 팀원 카드"/);
-  assert.doesNotMatch(page, /공개 완료|3 \/ 3 카드 공개|home-member-ordinal/);
-  assert.match(page, /우리가 맞춘 것/);
-  assert.match(page, /Markdown 원본을 같은 형식으로 맞췄습니다\./);
-  assert.match(page, /README와 GitHub Pages까지 발표 형태로 정리했습니다\./);
-  assert.match(page, /proof-card-board[\s\S]*?작업 흐름/);
+  assert.match(page, /<section id="home-view" class="scene scene-home" data-view="home" aria-label="Team 5 협업 과정"/);
+  assert.match(page, /<button id="home-restart" class="home-restart"/);
+  assert.doesNotMatch(page, /id="home-title"|id="home-members"|class="team-finish"|class="collab-proof"|proof-card|공개 완료|3 \/ 3 카드 공개/);
   assert.match(page, /class="kanban-showcase"[\s\S]*?team5-kanban-snapshot-v1\.svg/);
-  assert.match(page, /실제 GitHub 보드 보기/);
+  assert.match(page, /<h2 id="kanban-title">협업 과정<\/h2>/);
+  assert.match(page, /GitHub 보드 보기/);
   assert.match(page, /https:\/\/hanyejin\.click\//);
   assert.match(script, /nextButton\.textContent = remaining\.length \? '다음 팩' : '협업 과정 보기';/);
-  assert.match(script, /function renderTeamFinish\(\)/);
-  assert.match(script, /renderTeamFinish\(\);\s*showScene\('home'\);/);
+  assert.doesNotMatch(script, /function renderTeamFinish\(\)|homeMembers/);
   assert.match(script, /showScene\('home'\);/);
   assert.match(script, /homeRestartButton\.addEventListener\('click', restart\);/);
-  assert.match(styles, /\.team-finish \{/);
-  assert.match(styles, /\.home-members \{[\s\S]*?grid-template-columns: repeat\(3, minmax\(0, 1fr\)\);/);
-  assert.match(styles, /\.proof-grid \{[\s\S]*?grid-template-columns: repeat\(4, minmax\(0, 1fr\)\);/);
   assert.match(styles, /\.experience \{[\s\S]*?overflow: visible;/);
+  assert.match(styles, /--pack-tilt-x/);
+  assert.match(styles, /\.pack-trigger:active[\s\S]*?scale\(\.97\)/);
   assert.match(styles, /\.kanban-showcase \{[\s\S]*?grid-template-columns:/);
   assert.match(styles, /\.kanban-preview \{/);
   assert.doesNotMatch(styles, /\.kanban-sequence|\.kanban-capture|@keyframes kanban-capture-arrive/);
