@@ -1,4 +1,4 @@
-import { getHints, getProfileDetails, parseProfile, drawMember } from './profiles.mjs?v=profile-details-wide-20260915';
+import { getHints, parseProfile, drawMember } from './profiles.mjs?v=reveal-card-only-20260915';
 import { createTunnel } from './tunnel.mjs?v=tunnel-exit-20260914';
 import { createLobbyMusic } from './lobby-music.mjs?v=hint-sfx-20260914';
 import { createPackAudio } from './pack-audio.mjs?v=hint-sfx-20260914';
@@ -46,7 +46,6 @@ const hintCard = document.querySelector('#hint-card');
 const hintTitle = document.querySelector('#hint-title');
 const revealView = document.querySelector('#reveal-view');
 const revealCard = document.querySelector('#reveal-card');
-const revealDetails = document.querySelector('#reveal-details');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const tunnel = createTunnel(tunnelCanvas, reducedMotion);
 const packAudio = createPackAudio();
@@ -129,87 +128,6 @@ function createMemberCard(member) {
   return card;
 }
 
-function createProfileDetails(member) {
-  const panel = document.createElement('article');
-  panel.className = 'profile-details';
-  panel.setAttribute('aria-label', `${member.name} 상세 소개`);
-
-  const details = member.profileDetails ?? [];
-  if (!details.length) {
-    const empty = document.createElement('p');
-    empty.className = 'profile-details-empty';
-    empty.textContent = '상세 자기소개를 준비 중입니다.';
-    panel.append(empty);
-    return panel;
-  }
-
-  const detailGrid = document.createElement('div');
-  detailGrid.className = 'profile-detail-grid';
-  const longDetails = [];
-
-  for (const { label, values } of details) {
-    if (label === '한 줄 소개') {
-      const intro = document.createElement('p');
-      intro.className = 'profile-details-intro';
-      intro.textContent = values.join(' ');
-      panel.append(intro);
-      continue;
-    }
-
-    if (label === '팀원들에게 보여주고 싶은 모습') {
-      longDetails.push({ label, values });
-      continue;
-    }
-
-    const section = document.createElement('section');
-    section.className = 'profile-detail-group';
-
-    const sectionHeading = document.createElement('h3');
-    sectionHeading.textContent = label;
-    section.append(sectionHeading);
-
-    if (label === 'GitHub' && values.length === 1 && /^https?:\/\//.test(values[0])) {
-      const link = document.createElement('a');
-      link.href = values[0];
-      link.target = '_blank';
-      link.rel = 'noreferrer';
-      link.textContent = values[0].replace(/^https?:\/\//, '');
-      section.append(link);
-    } else if (values.length === 1) {
-      const text = document.createElement('p');
-      text.textContent = values[0];
-      section.append(text);
-    } else {
-      const list = document.createElement('ul');
-      for (const value of values) {
-        const item = document.createElement('li');
-        item.textContent = value;
-        list.append(item);
-      }
-      section.append(list);
-    }
-
-    detailGrid.append(section);
-  }
-
-  if (detailGrid.childElementCount) panel.append(detailGrid);
-
-  for (const { label, values } of longDetails) {
-    const disclosure = document.createElement('details');
-    disclosure.className = 'profile-detail-more';
-
-    const summary = document.createElement('summary');
-    summary.textContent = label;
-
-    const text = document.createElement('p');
-    text.textContent = values.join(' ');
-    disclosure.append(summary, text);
-    panel.append(disclosure);
-  }
-
-  return panel;
-}
-
 function setHint(title, index) {
   hintTitle.textContent = title;
   hintCard.hidden = false;
@@ -226,7 +144,6 @@ function clearHint() {
 
 function renderReveal(member) {
   revealCard.replaceChildren(createMemberCard(member));
-  revealDetails.replaceChildren(createProfileDetails(member));
   revealView.dataset.member = member.id;
   nextButton.textContent = remaining.length ? '다음 팩' : '협업 과정 보기';
 }
@@ -352,7 +269,6 @@ async function loadProfiles() {
       const profileHints = getHints(profile).map((hint) => hint.text);
       if (profileHints.length === 3) member.hints = profileHints;
       if (profile.tags.length) member.tags = profile.tags;
-      member.profileDetails = getProfileDetails(profile);
     } catch {
       // 프로필 원본을 불러올 수 없을 때는 위의 기본 정보로 진행합니다.
     }

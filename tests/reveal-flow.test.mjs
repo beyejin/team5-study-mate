@@ -103,6 +103,9 @@ test('기존 제공 카드만 공개하고 화면에서 태그를 중복 출력�
   assert.match(script, /image\.alt = `\$\{member\.name\} 팀원 카드`;/);
   assert.doesNotMatch(page, /pack-rings/);
   assert.doesNotMatch(page, /pack-aura/);
+  assert.doesNotMatch(page, /id="reveal-details"|profile-details/);
+  assert.doesNotMatch(script, /createProfileDetails|revealDetails|getProfileDetails/);
+  assert.doesNotMatch(styles, /\.profile-details/);
   const cardImageRules = styles.slice(styles.indexOf('.member-card img {'), styles.indexOf('.scene-reveal.is-arriving'));
   assert.doesNotMatch(cardImageRules, /box-shadow:/);
 });
@@ -119,10 +122,13 @@ test('세 장을 뽑은 뒤 팀 작업 방식 홈으로 이동할 수 있다', a
   assert.match(page, /class="lobby-flow" aria-label="멤버 공개 흐름"/);
   assert.match(page, /<section id="home-view" class="scene scene-home" data-view="home" aria-label="Team 5 협업 과정"/);
   assert.match(page, /<button id="home-restart" class="home-restart"/);
-  assert.doesNotMatch(page, /id="home-title"|id="home-members"|class="team-finish"|class="collab-proof"|proof-card|공개 완료|3 \/ 3 카드 공개/);
+  assert.doesNotMatch(page, /id="home-title"|id="home-members"|class="team-finish"|proof-card|공개 완료|3 \/ 3 카드 공개/);
   assert.match(page, /class="kanban-showcase"[\s\S]*?team5-kanban-snapshot-v1\.svg/);
+  assert.match(page, /class="collab-proof"/);
   assert.match(page, /<h2 id="kanban-title">협업 과정<\/h2>/);
   assert.match(page, /GitHub 보드 보기/);
+  assert.match(page, /GitHub Actions/);
+  assert.match(page, /GIT_GUIDE\.md/);
   assert.match(page, /https:\/\/hanyejin\.click\//);
   assert.match(script, /nextButton\.textContent = remaining\.length \? '다음 팩' : '협업 과정 보기';/);
   assert.doesNotMatch(script, /function renderTeamFinish\(\)|homeMembers/);
