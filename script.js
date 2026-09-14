@@ -290,15 +290,11 @@ function renderCollection() {
 
 function renderTeamFinish() {
   homeMembers.replaceChildren();
-  for (const [index, member] of revealed.entries()) {
+  for (const member of revealed) {
     const card = document.createElement('article');
     card.className = 'home-member';
     card.setAttribute('role', 'listitem');
-    card.setAttribute('aria-label', `${index + 1}번째 공개 카드: ${member.name}`);
-
-    const ordinal = document.createElement('span');
-    ordinal.className = 'home-member-ordinal';
-    ordinal.textContent = String(index + 1).padStart(2, '0');
+    card.setAttribute('aria-label', `${member.name} 팀원 카드`);
 
     const image = document.createElement('img');
     image.src = member.cardImage;
@@ -306,7 +302,7 @@ function renderTeamFinish() {
     image.decoding = 'async';
     image.draggable = false;
 
-    card.append(ordinal, image);
+    card.append(image);
     homeMembers.append(card);
   }
 }

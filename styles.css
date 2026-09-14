@@ -515,8 +515,6 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
 }
 .home-header h1 { margin: 0; font-size: clamp(2.55rem, 5vw, 5rem); line-height: .98; letter-spacing: -.075em; }
 .home-header h1 em { color: var(--gold-pale); font-style: normal; }
-.home-header > p:not(.home-kicker) { max-width: 28ch; margin: 20px 0 30px; color: #d1dad8; font-size: clamp(.92rem, 1.2vw, 1.06rem); line-height: 1.65; }
-.home-title-block > p:not(.home-kicker) { max-width: 38ch; margin: 22px 0 0; color: #d1dad8; font-size: clamp(.92rem, 1.2vw, 1.06rem); line-height: 1.6; }
 
 .home-restart {
   flex: 0 0 auto;
@@ -538,7 +536,6 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
   background: linear-gradient(180deg, rgba(3, 11, 15, .45), rgba(3, 11, 15, .12));
 }
 
-.team-finish-bar,
 .proof-heading {
   display: flex;
   align-items: baseline;
@@ -546,9 +543,7 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
   gap: 20px;
 }
 
-.team-finish-bar h2,
 .proof-heading h2 { margin: 0; color: #f7f3e7; font-size: clamp(1.1rem, 1.7vw, 1.45rem); letter-spacing: -.04em; }
-.team-finish-bar span,
 .proof-heading p { margin: 0; color: #9dd8d1; font-size: .72rem; font-weight: 900; letter-spacing: .08em; }
 
 .home-members {
@@ -575,17 +570,6 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
   height: 1px;
   content: "";
   background: linear-gradient(90deg, transparent, rgba(247, 223, 163, .65), transparent);
-}
-
-.home-member-ordinal {
-  position: absolute;
-  top: 10px;
-  left: 8px;
-  z-index: 1;
-  color: #9dd8d1;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: .68rem;
-  font-weight: 900;
 }
 
 .home-member img {
@@ -644,9 +628,7 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
   .home-shell { min-height: calc(100dvh - 36px); gap: 12px; }
   .home-kicker { margin-bottom: 9px; }
   .home-header h1 { font-size: clamp(2.35rem, 4vw, 4rem); }
-  .home-title-block > p:not(.home-kicker) { margin-top: 12px; font-size: .86rem; }
   .team-finish { padding: 10px 16px 8px; }
-  .team-finish-bar h2 { font-size: 1.05rem; }
   .home-member img { height: min(22dvh, 190px); }
   .team-mark { width: 28px; height: 28px; font-size: 1rem; }
   .team-merge-copy strong { font-size: .74rem; }

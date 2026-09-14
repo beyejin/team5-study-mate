@@ -117,7 +117,8 @@ test('세 장을 뽑은 뒤 팀 작업 방식 홈으로 이동할 수 있다', a
   assert.match(page, /<section id="home-view" class="scene scene-home" data-view="home"/);
   assert.match(page, /<h1 id="home-title">세 장의 카드가<br \/><em>하나의 팀<\/em>이 되었습니다\.<\/h1>/);
   assert.match(page, /id="home-members" class="home-members"/);
-  assert.match(page, /<h2 id="team-finish-title">공개 완료<\/h2>/);
+  assert.match(page, /aria-label="공개된 팀원 카드"/);
+  assert.doesNotMatch(page, /공개 완료|3 \/ 3 카드 공개|home-member-ordinal/);
   assert.match(page, /우리가 맞춘 것/);
   assert.match(page, /Markdown 원본을 같은 형식으로 맞췄습니다\./);
   assert.match(page, /README와 GitHub Pages까지 발표 형태로 정리했습니다\./);
