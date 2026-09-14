@@ -3,55 +3,47 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="세 장의 팩을 열어 TEAM 5 멤버를 만나는 인터랙티브 팀 소개" />
+    <meta name="description" content="팩을 열어 팀 5 멤버를 만나는 팀 소개" />
     <meta name="theme-color" content="#05070b" />
-    <title>TEAM 5 | OPEN THE SQUAD</title>
+    <title>팀 5 | 멤버 팩</title>
     <link rel="preload" href="assets/game/stadium-day-v1.png" as="image" />
+    <link rel="preload" href="assets/game/stadium-tunnel-v1.png" as="image" />
     <link rel="preload" href="assets/game/member-pack-v1.png" as="image" />
-    <link rel="preload" href="assets/cards/taewoong-card-cutout-v2.png?v=alpha-20260911" as="image" />
-    <link rel="preload" href="assets/cards/youngkwang-card-cutout-v2.png?v=alpha-20260911" as="image" />
-    <link rel="preload" href="assets/cards/yejin-card-cutout-v2.png?v=alpha-20260911" as="image" />
-    <link rel="stylesheet" href="styles.css?v=pack-reveal-20260911l" />
+    <link rel="preload" href="assets/game/team5-kanban-snapshot-v1.svg" as="image" />
+    <link rel="preload" href="assets/cards/taewoong-card-cutout-v2.png" as="image" />
+    <link rel="preload" href="assets/cards/youngkwang-card-cutout-v2.png" as="image" />
+    <link rel="preload" href="assets/cards/yejin-card-cutout-v2.png" as="image" />
+    <link rel="stylesheet" href="styles.css?v=pack-reveal-20260914-home" />
   </head>
   <body>
     <main id="experience" class="experience" data-scene="lobby">
       <div class="arena-backdrop" aria-hidden="true">
         <span class="arena-vignette"></span>
-        <span class="ambient-orb ambient-orb-left"></span>
-        <span class="ambient-orb ambient-orb-right"></span>
         <span class="grain"></span>
       </div>
 
-      <section id="lobby-view" class="scene scene-lobby" data-view="lobby" aria-label="TEAM 5 멤버 팩">
+      <section id="lobby-view" class="scene scene-lobby" data-view="lobby" aria-label="팀 5 멤버 팩">
         <div class="pack-zone">
-          <div class="pack-spotlight" aria-hidden="true"></div>
-          <div class="pack-rings" aria-hidden="true"><i></i><i></i><i></i></div>
+          <span class="pack-spotlight" aria-hidden="true"></span>
           <button id="open-pack" class="pack-trigger" type="button" aria-label="멤버 팩 열기">
-            <span class="pack-aura" aria-hidden="true"></span>
-            <img src="assets/game/member-pack-v1.png" alt="TEAM 5 은빛 멤버 팩" />
+            <img src="assets/game/member-pack-v1.png" alt="은빛 멤버 팩" />
           </button>
         </div>
       </section>
 
       <section id="tunnel-view" class="scene scene-tunnel" data-view="tunnel" aria-live="polite" hidden>
-        <div class="tunnel" aria-hidden="true">
-          <div class="tunnel-ceiling"></div>
-          <div class="tunnel-floor"></div>
-          <div class="tunnel-frame frame-1"></div>
-          <div class="tunnel-frame frame-2"></div>
-          <div class="tunnel-frame frame-3"></div>
-          <div class="tunnel-frame frame-4"></div>
-          <div class="tunnel-exit"></div>
-        </div>
-        <article id="hint-card" class="hint-card">
-          <strong id="hint-title">TEAM 5</strong>
+        <canvas id="tunnel-canvas" aria-hidden="true"></canvas>
+        <article id="hint-card" class="hint-card" hidden>
+          <strong id="hint-title"></strong>
         </article>
-        <button id="skip-reveal" class="skip-button" type="button">연출 건너뛰기 <span>→</span></button>
+        <button id="skip-reveal" class="skip-button" type="button">연출 건너뛰기</button>
       </section>
 
       <section id="reveal-view" class="scene scene-reveal" data-view="reveal" aria-label="공개된 팀원 카드" hidden>
-        <div class="reveal-lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-        <button id="back-to-lobby" class="reveal-back" type="button">← 이전으로</button>
+        <button id="back-to-lobby" class="reveal-back" type="button">← 팩 선택</button>
+        <div id="gold-burst" class="gold-burst" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
         <div class="reveal-composition">
           <div id="reveal-card" class="reveal-card-slot"></div>
         </div>
@@ -60,15 +52,66 @@
         </div>
       </section>
 
+      <section id="home-view" class="scene scene-home" data-view="home" aria-labelledby="home-title" hidden>
+        <div class="home-shell">
+          <header class="home-header">
+            <p class="home-kicker">TEAM 5 / WORKSPACE</p>
+            <h1 id="home-title">카드 다 열었으면,<br />이제 작업 얘기할 차례입니다.</h1>
+            <p>Team 5는 보드에서 할 일을 나누고, 로드맵을 보면서 과제를 준비하고 있습니다.</p>
+            <button id="home-restart" class="home-restart" type="button">← 팩 다시 열기</button>
+          </header>
+
+          <section class="kanban-sequence" aria-labelledby="kanban-title">
+            <figure class="kanban-capture">
+              <img src="assets/game/team5-kanban-snapshot-v1.svg" alt="Team 5 과제 보드 스냅샷. Backlog, Ready, In Progress, Done 상태로 작업을 관리한다." />
+              <figcaption id="kanban-title">01 / KANBAN / TEAM 5 PROJECT BOARD</figcaption>
+            </figure>
+          </section>
+
+          <div class="home-detail-grid">
+            <section class="roadmap-panel" aria-labelledby="roadmap-title">
+              <div class="section-heading">
+                <p>02 / ROADMAP</p>
+                <h2 id="roadmap-title">과제는 이렇게 정리하고 있습니다.</h2>
+              </div>
+              <ol class="roadmap-list">
+                <li><span>01</span><div><strong>자기소개 작성</strong><p>각자 템플릿으로 공개할 소개를 작성합니다.</p></div></li>
+                <li><span>02</span><div><strong>브랜치와 PR 검토</strong><p>바뀐 내용은 함께 확인하고 안전하게 합칩니다.</p></div></li>
+                <li><span>03</span><div><strong>README와 웹 반영</strong><p>팀원이 쓴 내용은 저장소와 홈페이지에서 함께 볼 수 있습니다.</p></div></li>
+                <li><span>04</span><div><strong>과제 결과물 준비</strong><p>남은 작업은 마일스톤 기준으로 보드에서 관리합니다.</p></div></li>
+              </ol>
+            </section>
+
+            <section class="git-panel" aria-labelledby="git-title">
+              <div class="section-heading">
+                <p>03 / GIT</p>
+                <h2 id="git-title">Git으로 각자 작업한 내용을 모으고, 같이 확인합니다.</h2>
+              </div>
+              <p class="git-flow">clone <i>→</i> branch <i>→</i> edit <i>→</i> status/diff <i>→</i> commit <i>→</i> push <i>→</i> Pull Request</p>
+              <dl class="git-guide-list">
+                <div><dt>Branch</dt><dd>각자 <code>intro/&lt;이름&gt;</code>에서 작업해 충돌을 줄입니다.</dd></div>
+                <div><dt>Check</dt><dd><code>git status</code>와 <code>git diff</code>로 바뀐 내용을 먼저 확인합니다.</dd></div>
+                <div><dt>Review</dt><dd>팀원이 확인하면 <code>main</code>에 반영하고 최신 내용을 받습니다.</dd></div>
+              </dl>
+            </section>
+          </div>
+
+          <footer class="home-links" aria-label="Team 5 작업 자료">
+            <a href="https://github.com/users/beyejin/projects/1" target="_blank" rel="noreferrer">Team 5 과제 보드 ↗</a>
+            <a href="https://github.com/beyejin/team5-study-mate/milestone/1" target="_blank" rel="noreferrer">과제 결과물 마일스톤 ↗</a>
+          </footer>
+        </div>
+      </section>
+
       <section id="collection-view" class="scene scene-collection" data-view="collection" aria-label="공개된 팀원 카드" hidden>
         <button id="restart-pack" class="collection-back" type="button">← 팩 선택</button>
-        <div id="collection-cards" class="collection-cards" role="group" aria-label="TEAM 5 팀원 카드"></div>
+        <div id="collection-cards" class="collection-cards" role="group" aria-label="팀 5 팀원 카드"></div>
       </section>
 
       <div id="white-flash" class="white-flash" aria-hidden="true"></div>
       <p id="announcement" class="sr-only" aria-live="assertive"></p>
     </main>
 
-    <script type="module" src="script.js?v=pack-reveal-20260911k"></script>
+    <script type="module" src="script.js?v=pack-reveal-20260914-home-v6"></script>
   </body>
 </html>

@@ -1,53 +1,30 @@
-import { parseProfile, drawMember } from './profiles.mjs';
+import { getHints, parseProfile, drawMember } from './profiles.mjs';
+import { createTunnel } from './tunnel.mjs?v=pack-reveal-20260914-home-v6';
 
 const members = [
   {
     id: 'taewoong',
     name: '엄태웅',
-    cardImage: 'assets/cards/taewoong-card-cutout-v2.png?v=alpha-20260911',
+    cardImage: 'assets/cards/taewoong-card-cutout-v2.png',
     profilePath: 'team/엄태웅.md',
-    kai: '119',
-    mbti: 'ENTP',
-    signature: 'SMILE QUOKKA',
-    intro: '웃음과 아이디어로 팀의 분위기를 움직이는 플레이어입니다.',
     tags: ['#웃음', '#여행', '#아이디어'],
-    hints: [
-      { label: 'ACADEMY', title: 'COCONE SCHOOL', detail: 'TEAM 5 CREATIVE CAMPUS', image: 'assets/game/cocone-school.svg' },
-      { label: 'MAJOR', title: '관광경영학과', detail: 'TOURISM MANAGEMENT' },
-      { label: 'SIGNATURE', title: '웃음', detail: 'POSITIVE ENERGY DETECTED' },
-    ],
+    hints: ['코코네스쿨', '관광경영학과', '웃음'],
   },
   {
     id: 'youngkwang',
     name: '김영광',
-    cardImage: 'assets/cards/youngkwang-card-cutout-v2.png?v=alpha-20260911',
+    cardImage: 'assets/cards/youngkwang-card-cutout-v2.png',
     profilePath: 'team/김영광.md',
-    kai: '90',
-    mbti: 'INFP',
-    signature: 'POSITIVE DRIVE',
-    intro: '한 번 물면 놓치지 않는 끈질김과 긍정으로 실행하는 김영광입니다.',
-    tags: ['#대구청년', '#Glory', '#초긍정'],
-    hints: [
-      { label: 'ACADEMY', title: 'COCONE SCHOOL', detail: 'TEAM 5 CREATIVE CAMPUS', image: 'assets/game/cocone-school.svg' },
-      { label: 'MAJOR', title: '인공지능전공', detail: 'ARTIFICIAL INTELLIGENCE' },
-      { label: 'SIGNATURE', title: '대구청년', detail: 'POSITIVE DRIVE DETECTED' },
-    ],
+    tags: ['#긍정', '#적극성', '#실행력'],
+    hints: ['코코네스쿨', '인공지능전공', '대구청년'],
   },
   {
     id: 'yejin',
     name: '한예진',
-    cardImage: 'assets/cards/yejin-card-cutout-v2.png?v=alpha-20260911',
+    cardImage: 'assets/cards/yejin-card-cutout-v2.png',
     profilePath: 'team/한예진.md',
-    kai: '105',
-    mbti: 'ENTP',
-    signature: 'ORCA',
-    intro: '사람들의 페인포인트를 발견하면 분석하고 기록한 뒤 직접 실행해 보는 한예진입니다.',
     tags: ['#문제관찰', '#실행력', '#감응력'],
-    hints: [
-      { label: 'ACADEMY', title: 'COCONE SCHOOL', detail: 'CREATIVE SOFTWARE CAMPUS', image: 'assets/game/cocone-school.svg' },
-      { label: 'MAJOR', title: 'SOFTWARE', detail: 'BUILDING IDEAS INTO PRODUCTS' },
-      { label: 'SIGNATURE', title: 'ORCA', detail: 'DEEP OBSERVER · FAST EXECUTOR' },
-    ],
+    hints: ['코코네스쿨', '소프트웨어전공', '범고래'],
   },
 ];
 
@@ -57,14 +34,27 @@ const openButton = document.querySelector('#open-pack');
 const nextButton = document.querySelector('#next-pack');
 const backButton = document.querySelector('#back-to-lobby');
 const restartButton = document.querySelector('#restart-pack');
+const homeRestartButton = document.querySelector('#home-restart');
 const skipButton = document.querySelector('#skip-reveal');
 const flash = document.querySelector('#white-flash');
 const announcement = document.querySelector('#announcement');
 const tunnelView = document.querySelector('#tunnel-view');
+const tunnelCanvas = document.querySelector('#tunnel-canvas');
 const hintCard = document.querySelector('#hint-card');
+const hintTitle = document.querySelector('#hint-title');
+const revealView = document.querySelector('#reveal-view');
+const revealCard = document.querySelector('#reveal-card');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const TUNNEL_SETTLE_MS = 1600;
-const HINT_HOLD_MS = 3000;
+const tunnel = createTunnel(tunnelCanvas, reducedMotion);
+
+const PACK_IGNITION_MS = 250;
+const TUNNEL_SETTLE_MS = 140;
+const HINT_HOLD_MS = 600;
+const HINT_GAP_MS = 110;
+const TUNNEL_COAST_MS = 980;
+const TUNNEL_DURATION_MS = TUNNEL_SETTLE_MS + (HINT_HOLD_MS * 3) + (HINT_GAP_MS * 2) + TUNNEL_COAST_MS;
+const FLASH_LEAD_MS = 120;
+const REVEAL_SETTLE_MS = 780;
 
 let remaining = [];
 let revealed = [];
@@ -74,10 +64,11 @@ let isOpening = false;
 let isFinalizing = false;
 
 const wait = (milliseconds) => new Promise((resolve) => {
-  window.setTimeout(resolve, reducedMotion ? Math.min(milliseconds, 90) : milliseconds);
+  window.setTimeout(resolve, reducedMotion ? Math.min(milliseconds, 80) : milliseconds);
 });
 
 function showScene(name) {
+  if (name !== 'tunnel') tunnel.stop();
   for (const [sceneName, scene] of scenes) scene.hidden = sceneName !== name;
   experience.dataset.scene = name;
 }
@@ -105,7 +96,7 @@ function createMemberCard(member) {
 
   const image = document.createElement('img');
   image.src = member.cardImage;
-  image.alt = `${member.name} 얼굴 카드, KAI ${member.kai}, MBTI ${member.mbti}`;
+  image.alt = `${member.name} 팀원 카드`;
   image.decoding = 'async';
   image.draggable = false;
 
@@ -113,38 +104,39 @@ function createMemberCard(member) {
   return card;
 }
 
-function setHint(hint, index) {
-  document.querySelector('#hint-title').textContent = hint.title;
+function setHint(title, index) {
+  hintTitle.textContent = title;
   hintCard.hidden = false;
-
   restartAnimation(hintCard, 'is-entering');
-  restartAnimation(tunnelView, 'is-rushing');
-  announcement.textContent = `${index + 1}번째 힌트: ${hint.title}`;
+  announcement.textContent = `${index + 1}번째 공개 정보: ${title}`;
 }
 
 function clearHint() {
-  document.querySelector('#hint-title').textContent = '';
+  hintTitle.textContent = '';
   hintCard.hidden = true;
 }
 
 function renderReveal(member) {
-  document.querySelector('#reveal-card').replaceChildren(createMemberCard(member));
-  nextButton.textContent = remaining.length ? '다음 팩' : '카드 모아보기';
+  revealCard.replaceChildren(createMemberCard(member));
+  revealView.dataset.member = member.id;
+  nextButton.textContent = remaining.length ? '다음 팩' : '팀 작업 방식 보기';
 }
 
 async function finishReveal(member) {
   if (!member || isFinalizing) return;
   isFinalizing = true;
-  if (!revealed.some((item) => item.id === member.id)) revealed.push(member);
-  updateProgress();
+  clearHint();
   triggerFlash();
-  await wait(190);
+  await wait(FLASH_LEAD_MS);
+  if (!revealed.some((item) => item.id === member.id)) revealed.push(member);
   renderReveal(member);
   showScene('reveal');
+  restartAnimation(revealView, 'is-arriving');
   announcement.textContent = `${member.name} 팀원 카드가 공개되었습니다.`;
-  await wait(640);
+  await wait(REVEAL_SETTLE_MS);
   isOpening = false;
   isFinalizing = false;
+  openButton.classList.remove('is-opening');
   updateProgress();
   nextButton.focus({ preventScroll: true });
 }
@@ -154,27 +146,30 @@ async function openPack() {
   isOpening = true;
   updateProgress();
   const selectedMember = drawMember(remaining);
-  const revealHints = selectedMember.hints.map((hint) => ({ ...hint }));
+  const revealHints = [...selectedMember.hints];
   currentMember = selectedMember;
   const run = ++sequenceId;
   clearHint();
-  announcement.textContent = '멤버 팩이 빛나며 열립니다.';
+  openButton.classList.add('is-opening');
+  announcement.textContent = '멤버 팩이 열립니다.';
 
-  triggerFlash();
-  await wait(190);
+  await wait(PACK_IGNITION_MS);
   if (run !== sequenceId) return;
   showScene('tunnel');
-  tunnelView.classList.add('is-rushing');
+  tunnel.start(TUNNEL_DURATION_MS);
   await wait(TUNNEL_SETTLE_MS);
 
   for (const [index, hint] of revealHints.entries()) {
     if (run !== sequenceId) return;
     setHint(hint, index);
     await wait(HINT_HOLD_MS);
+    clearHint();
+    if (index < revealHints.length - 1) await wait(HINT_GAP_MS);
   }
 
   if (run !== sequenceId) return;
-  await wait(160);
+  await wait(TUNNEL_COAST_MS);
+  if (run !== sequenceId) return;
   await finishReveal(selectedMember);
 }
 
@@ -206,15 +201,15 @@ function nextScene() {
     openButton.focus({ preventScroll: true });
     return;
   }
-  renderCollection();
-  showScene('collection');
+  showScene('home');
+  announcement.textContent = 'Team 5의 작업 방식과 로드맵을 보여줍니다.';
 }
 
 function returnToPreviousScene() {
   if (isOpening || isFinalizing) return;
   if (remaining.length === 0) {
-    renderCollection();
-    showScene('collection');
+    showScene('home');
+    announcement.textContent = 'Team 5의 작업 방식과 로드맵을 보여줍니다.';
     return;
   }
   currentMember = null;
@@ -230,9 +225,11 @@ function restart() {
   currentMember = null;
   isOpening = false;
   isFinalizing = false;
+  openButton.classList.remove('is-opening');
+  clearHint();
   showScene('lobby');
   updateProgress();
-  announcement.textContent = 'TEAM 5 멤버 팩이 준비되었습니다.';
+  announcement.textContent = '팀 5 멤버 팩이 준비되었습니다.';
 }
 
 async function loadProfiles() {
@@ -241,69 +238,24 @@ async function loadProfiles() {
       const response = await fetch(member.profilePath, { cache: 'no-cache' });
       if (!response.ok) return;
       const profile = parseProfile(await response.text(), member.name);
-      member.profile = profile;
-      if (profile.intro) member.intro = profile.intro;
-      if (profile.school) {
-        member.hints[0] = {
-          label: 'ACADEMY',
-          title: profile.school === '코코네스쿨' ? 'COCONE SCHOOL' : profile.school,
-          detail: 'TEAM 5 CREATIVE CAMPUS',
-          image: profile.schoolLogo || 'assets/game/team5.svg',
-        };
-      }
-      if (profile.major) member.hints[1] = { label: 'MAJOR', title: profile.major, detail: 'PLAYER BACKGROUND' };
-      if (profile.keyword) member.hints[2] = { label: 'SIGNATURE', title: profile.keyword, detail: 'IDENTITY CONFIRMED' };
+      const profileHints = getHints(profile).map((hint) => hint.text);
+      if (profileHints.length === 3) member.hints = profileHints;
+      if (profile.tags.length) member.tags = profile.tags;
     } catch {
-      member.profile = null;
+      // 프로필 원본을 불러올 수 없을 때는 위의 기본 정보로 진행합니다.
     }
   }));
-}
-
-function enableLocalPreviewMode() {
-  if (!['127.0.0.1', 'localhost'].includes(window.location.hostname)) return;
-  const params = new URLSearchParams(window.location.search);
-  const previewScene = params.get('scene');
-  const previewMember = members.find((member) => member.id === params.get('member')) ?? members[0];
-  if (previewScene) document.documentElement.classList.add('is-static-preview');
-
-  if (previewScene === 'tunnel') {
-    currentMember = previewMember;
-    setHint(previewMember.hints[Number(params.get('hint') ?? 0)] ?? previewMember.hints[0], Number(params.get('hint') ?? 0));
-    showScene('tunnel');
-  } else if (previewScene === 'reveal') {
-    remaining = members.filter((member) => member.id !== previewMember.id);
-    revealed = [previewMember];
-    renderReveal(previewMember);
-    showScene('reveal');
-    updateProgress();
-  } else if (previewScene === 'collection') {
-    remaining = [];
-    revealed = [...members];
-    renderCollection();
-    showScene('collection');
-    updateProgress();
-  }
-
-  if (params.get('autoplay') === 'true') {
-    remaining = [previewMember];
-    revealed = [];
-    currentMember = null;
-    isOpening = false;
-    isFinalizing = false;
-    showScene('lobby');
-    updateProgress();
-    openPack();
-  }
 }
 
 openButton.addEventListener('click', openPack);
 nextButton.addEventListener('click', nextScene);
 backButton.addEventListener('click', returnToPreviousScene);
 restartButton.addEventListener('click', restart);
+homeRestartButton.addEventListener('click', restart);
 skipButton.addEventListener('click', skipReveal);
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && experience.dataset.scene === 'tunnel') skipReveal();
 });
 
 restart();
-loadProfiles().finally(enableLocalPreviewMode);
+loadProfiles();
