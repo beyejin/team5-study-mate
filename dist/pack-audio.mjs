@@ -57,7 +57,7 @@ export function createPackAudio() {
     }
     try {
       if (!context) {
-        // Called directly from the sound-toggle gesture, never on page load.
+        // Attempted on page load and retried from a user gesture when autoplay is blocked.
         context = new AudioContextClass();
         master = context.createGain();
         master.gain.value = volume * 0.7;
@@ -162,13 +162,13 @@ export function createPackAudio() {
   function hint(index = 0) {
     if (!isEnabled || context?.state !== 'running' || document.hidden) return;
     stop();
-    const cue = createCue(0.28);
+    const cue = createCue(0.2);
     const start = cue.start;
-    const note = [523.25, 659.25, 783.99][Math.max(0, Math.min(2, Math.trunc(index)))];
-    // Each hint rises in pitch: a soft tick with a short, clear chime.
-    tone(cue, 180, start, 0.055, 0.22, 'sine', 90);
-    tone(cue, note, start + 0.008, 0.23, 0.3, 'sine', note * 1.012);
-    tone(cue, note * 2, start + 0.012, 0.14, 0.045);
+    const note = [261.63, 329.63, 392][Math.max(0, Math.min(2, Math.trunc(index)))];
+    // A short, muted scanner pulse keeps the hint audible without competing with the music.
+    tone(cue, note * 0.5, start, 0.07, 0.08, 'triangle', note * 0.42);
+    tone(cue, note, start + 0.012, 0.14, 0.16, 'triangle', note * 1.02);
+    tone(cue, note * 1.5, start + 0.035, 0.07, 0.02, 'sine', note * 1.45);
   }
 
   function reveal() {

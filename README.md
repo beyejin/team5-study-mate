@@ -1,80 +1,125 @@
-# Team 5 팀원 소개
+# TEAM 5 | 멤버 팩
 
-> Team 5의 팀원과 각자의 이야기를 소개하는 README입니다.
+> 팩을 열고 힌트를 따라가며 세 명의 팀원을 한 명씩 발견하는 인터랙티브 팀 소개 페이지입니다.
 
-## 페이지 소개
+[라이브 데모](https://hanyejin.click/) | [GitHub 저장소](https://github.com/beyejin/team5-study-mate)
 
-이번 과제에서는 Team 5 구성원 소개를 중심으로 README와 홈페이지를 구성합니다.
+![TEAM 5 멤버 팩 시작 화면](./assets/game/team5-intro-v2.png)
 
-각 팀원은 같은 템플릿으로 자기소개를 작성하고, 최종 내용을 이 README와 홈페이지에 함께 반영합니다.
+## 발표 한 문장
 
-## 팀원
+Team 5는 자기소개를 목록으로 보여주는 대신, 멤버 팩을 열고 힌트를 따라가며 팀원을 발견하는 경험으로 바꿨습니다.
 
-| 이름 | 소개 상태 |
-| --- | --- |
-| 김영광 | 자기소개 작성 예정 |
-| 엄태웅 | 자기소개 작성 예정 |
-| 한예진 | 자기소개 작성 예정 |
+## 발표 구성
 
-## 자기소개 작성 방법
+발표는 인트로 소개, 팀원별 30초 자기소개, 협업 방식 소개 순서로 진행합니다.
 
-1. 저장소를 clone합니다.
-2. `team/TEMPLATE.md`를 복사해 자신의 이름으로 파일을 만듭니다.
-3. 한 줄 소개, 관심 분야, 요즘 배우는 것, 프로젝트에서 하고 싶은 일을 작성합니다.
-4. 자신의 브랜치에 commit하고 Pull Request를 올립니다.
-5. 팀원 확인 후 내용을 README와 홈페이지에 반영합니다.
+1. **인트로 소개**: Team 5와 멤버 팩의 기획 의도를 설명합니다.
+2. **김영광 자기소개 30초**: 팩을 열고 힌트를 확인한 뒤 카드와 자기소개를 소개합니다.
+3. **엄태웅 자기소개 30초**: 다음 팩으로 바로 이어서 카드와 자기소개를 소개합니다.
+4. **한예진 자기소개 30초**: 마지막 팀원 카드와 상세 리포트를 소개합니다.
+5. **협업 방식 소개**: 세 명의 공개가 끝난 뒤 작업 보드와 Git 협업 흐름을 보여줍니다.
 
-자세한 실습 순서는 [팀원용 Git 실습 가이드](./GIT_GUIDE.md)에서 확인합니다.
-화면 캡처와 최소 실행 흐름은 [팀원 실행 및 Git 최소 흐름 안내](./RUN_GUIDE.md)에서 확인합니다.
+## 핵심 구현
+
+- 팀원 세 명을 중복 없이 한 번씩 공개합니다.
+- 세 단계 힌트를 팀원별 Markdown 원본에서 읽습니다.
+- 카드 공개 후 한 줄 소개, 관심 분야, 요즘 배우는 것, 키워드를 보여줍니다.
+- 긴 협업 소개는 `자세히 보기`로 접어 화면을 짧게 유지합니다.
+- 마지막 카드 뒤에는 세 장의 카드가 하나의 팀으로 모이는 장면과 협업 증거를 보여줍니다.
+- 첫 화면 효과음, 힌트 사운드, 카드 공개 사운드를 제공합니다.
+- `Escape`와 `연출 건너뛰기`로 공개 연출을 건너뛸 수 있습니다.
+
+## 팀원 소개
+
+| 순서 | 팀원 | 자기소개 원본 |
+| --- | --- | --- |
+| 01 | 김영광 | [김영광.md](./team/김영광.md) |
+| 02 | 엄태웅 | [엄태웅.md](./team/엄태웅.md) |
+| 03 | 한예진 | [한예진.md](./team/한예진.md) |
+
+홈페이지는 자기소개 원본을 `team/*.md`에서 읽습니다. 내용을 수정한 뒤 로컬 서버를 새로고침하면 화면에 반영됩니다.
+
+## 팀원 자기소개 작성 안내
+
+모든 팀원은 [자기소개 템플릿](./team/TEMPLATE.md)을 기준으로 자신의 Markdown 파일을 작성합니다.
 
 ```bash
-git clone https://github.com/beyejin/team5-study-mate.git
-cd team5-study-mate
 git switch -c intro/<이름>
 cp team/TEMPLATE.md team/<이름>.md
 ```
 
-작성할 때 전화번호, 개인 이메일과 같은 공개하지 않을 정보는 넣지 않습니다.
+이미 파일이 있다면 복사하지 말고 해당 파일을 열어 아래 항목을 채웁니다.
 
-## 홈페이지
+- 프로필 카드: 이미지, KAI 점수, MBTI, 태그
+- 한 줄 소개
+- 관심 분야
+- 요즘 배우는 것
+- 팀원들에게 보여주고 싶은 모습
+- 나를 표현하는 키워드
+- 공개해도 되는 GitHub 링크
 
-- [Team 5 팀원 소개 홈페이지](https://beyejin.github.io/team5-study-mate/)
-- [홈페이지 소스](./index.html)
-- [자기소개 템플릿](./team/TEMPLATE.md)
+작성 후에는 다음 순서로 팀에 공유합니다.
+
+```bash
+git add team/<이름>.md
+git commit -m "docs: 자기소개 작성"
+git push -u origin intro/<이름>
+```
+
+전화번호, 개인 이메일처럼 공개하지 않을 정보는 넣지 않습니다.
+
+## 협업 흐름
+
+```text
+Clone → Branch → Markdown 작성 → Commit → Push → Pull Request → Review → Merge
+```
+
 - [팀원용 Git 실습 가이드](./GIT_GUIDE.md)
 - [팀원 실행 및 Git 최소 흐름 안내](./RUN_GUIDE.md)
+- [화면 캡처 폴더](./docs/screenshots/)
 
-## 과제 보드
+## 발표용 실행 방법
 
-- [Team 5 과제 보드](https://github.com/users/beyejin/projects/1)
-- [과제 #3 결과물 준비 마일스톤](https://github.com/beyejin/team5-study-mate/milestone/1)
-
-보드의 상태는 `Backlog`, `Ready`, `In Progress`, `Done`으로 관리합니다.
-
-## 실행 방법
-
-정적 페이지이므로 `index.html`을 브라우저에서 열거나 간단한 서버로 실행합니다.
+Markdown 프로필을 화면에 불러오기 위해 정적 서버로 실행합니다.
 
 ```bash
 python3 -m http.server 8000
 ```
 
-브라우저에서 `http://localhost:8000`을 엽니다.
+브라우저에서 [http://localhost:8000](http://localhost:8000)을 열고 다음 순서로 시연합니다.
 
-## 프로젝트 구성
+```text
+인트로 소개 → 팩 선택 → 팀원별 30초 자기소개 → 세 명 공개 → 협업 방식 소개
+```
+
+## 사용 기술
+
+- HTML
+- CSS
+- JavaScript ES Modules
+- Markdown 기반 프로필 데이터
+- Web Audio API 기반 사운드
+- GitHub Pages와 Route 53 연결 도메인
+
+## 주요 파일
 
 ```text
 .
-├── index.html
-├── styles.css
-├── script.js
-├── GIT_GUIDE.md
-├── RUN_GUIDE.md
-├── docs/
-│   └── screenshots/
-├── team/
-│   └── TEMPLATE.md
-└── .github/
-    └── workflows/
-        └── deploy-pages.yml
+├── index.html          # 로비, 터널, 카드 공개, 작업 방식 화면
+├── styles.css          # 경기장, 터널, 카드와 스카우팅 리포트 스타일
+├── script.js           # 팩 공개 흐름과 화면 전환
+├── profiles.mjs        # 팀원 Markdown 파싱
+├── team/               # 팀원 자기소개 원본
+├── assets/             # 카드, 경기장, 사운드 자산
+├── tests/              # 프로필, 공개 흐름, 사운드 테스트
+└── dist/               # 정적 배포 산출물
 ```
+
+## 관련 링크
+
+- [발표용 라이브 페이지](https://hanyejin.click/)
+- [GitHub 저장소](https://github.com/beyejin/team5-study-mate)
+- [Team 5 과제 보드](https://github.com/users/beyejin/projects/1)
+- [과제 결과물 마일스톤](https://github.com/beyejin/team5-study-mate/milestone/1)
+- [자기소개 템플릿](./team/TEMPLATE.md)

@@ -14,7 +14,7 @@
     <link rel="preload" href="assets/cards/taewoong-card-cutout-v2.png" as="image" />
     <link rel="preload" href="assets/cards/youngkwang-card-cutout-v2.png" as="image" />
     <link rel="preload" href="assets/cards/yejin-card-cutout-v2.png" as="image" />
-    <link rel="stylesheet" href="styles.css?v=lobby-bgm-20260914" />
+    <link rel="stylesheet" href="styles.css?v=team-finish-20260915" />
   </head>
   <body>
     <main id="experience" class="experience" data-scene="lobby">
@@ -31,13 +31,19 @@
           </button>
           <svg class="music-speaker" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 8h3l4-4v12l-4-4H3Z" fill="currentColor" /><path d="M13 7a5 5 0 0 1 0 6m2-8a8 8 0 0 1 0 10" fill="none" stroke="currentColor" stroke-linecap="round" /></svg>
           <input id="music-volume" type="range" min="0" max="100" step="1" value="25" aria-label="전체 사운드 볼륨" aria-valuetext="25%" title="볼륨 25%" />
-        </div>
+      </div>
       <section id="lobby-view" class="scene scene-lobby" data-view="lobby" aria-label="팀 5 멤버 팩">
         <div class="intro-art">
           <img src="assets/game/team5-intro-bg-v1.png" alt="이 안에 3명 있음. TEAM 5 멤버 팩을 여는 소개 화면" draggable="false" />
           <button id="open-pack" class="pack-trigger" type="button" aria-label="TEAM 5 멤버 팩 열기">
             <img src="assets/game/member-pack-v1.png" alt="" draggable="false" />
+            <span class="pack-open-label">팩을 눌러 시작</span>
           </button>
+        </div>
+        <div class="lobby-flow" aria-label="멤버 공개 흐름">
+          <span><b>01</b> 팩 선택</span>
+          <span><b>02</b> 힌트 공개</span>
+          <span><b>03</b> 팀원 확인</span>
         </div>
       </section>
 
@@ -56,6 +62,7 @@
         </div>
         <div class="reveal-composition">
           <div id="reveal-card" class="reveal-card-slot"></div>
+          <div id="reveal-details" class="profile-details-slot"></div>
         </div>
         <div class="reveal-actions">
           <button id="next-pack" class="primary-action" type="button">다음 팩</button>
@@ -65,43 +72,61 @@
       <section id="home-view" class="scene scene-home" data-view="home" aria-labelledby="home-title" hidden>
         <div class="home-shell">
           <header class="home-header">
-            <p class="home-kicker">TEAM 5</p>
-            <h1 id="home-title">작업 흐름</h1>
-            <p>소개를 마친 뒤에는 보드와 Git으로 다음 과제를 정리합니다.</p>
+            <div class="home-title-block">
+              <p class="home-kicker">TEAM 5</p>
+              <h1 id="home-title">세 장의 카드가<br /><em>하나의 팀</em>이 되었습니다.</h1>
+              <p>각자의 소개를 하나의 경험으로 만들고, 함께 공개했습니다.</p>
+            </div>
             <button id="home-restart" class="home-restart" type="button">← 팩 다시 열기</button>
           </header>
 
-          <section class="kanban-sequence" aria-label="Team 5 과제 보드">
-            <figure class="kanban-capture">
-              <img src="assets/game/team5-kanban-snapshot-v1.svg" alt="Team 5 과제 보드 스냅샷. Backlog, Ready, In Progress, Done 상태로 작업을 관리한다." />
-            </figure>
+          <section class="team-finish" aria-labelledby="team-finish-title">
+            <div class="team-finish-bar">
+              <h2 id="team-finish-title">공개 완료</h2>
+              <span>3 / 3 카드 공개</span>
+            </div>
+            <div id="home-members" class="home-members" role="list" aria-label="공개된 팀원 카드"></div>
+            <div class="team-merge" aria-label="세 장의 카드가 Team 5로 모임">
+              <span class="team-merge-line" aria-hidden="true"></span>
+              <span class="team-mark" aria-hidden="true">5</span>
+              <span class="team-merge-copy"><strong>TEAM 5</strong><small>각자의 카드가 모인 결과</small></span>
+            </div>
           </section>
 
-          <div class="home-detail-grid">
-            <section class="roadmap-panel" aria-labelledby="roadmap-title">
-              <h2 id="roadmap-title">과제 진행</h2>
-              <ol class="roadmap-list">
-                <li><span>01</span><div><strong>자기소개 작성</strong><p>각자 템플릿으로 공개할 소개를 작성합니다.</p></div></li>
-                <li><span>02</span><div><strong>브랜치와 PR 검토</strong><p>바뀐 내용은 함께 확인하고 안전하게 합칩니다.</p></div></li>
-                <li><span>03</span><div><strong>README와 웹 반영</strong><p>팀원이 쓴 내용은 저장소와 홈페이지에서 함께 볼 수 있습니다.</p></div></li>
-                <li><span>04</span><div><strong>과제 결과물 준비</strong><p>남은 작업은 마일스톤 기준으로 보드에서 관리합니다.</p></div></li>
-              </ol>
-            </section>
-
-            <section class="git-panel" aria-labelledby="git-title">
-              <h2 id="git-title">함께 해 본 Git</h2>
-              <p class="git-summary">팀원 모두 <strong>commit, push, pull</strong>을 직접 해 봤습니다.</p>
-              <ul class="git-experience-list">
-                <li class="git-experience-commit"><strong>Commit</strong><p>각자 수정한 소개를 기록했습니다.</p></li>
-                <li class="git-experience-push"><strong>Push</strong><p>브랜치의 작업을 저장소에 공유했습니다.</p></li>
-                <li class="git-experience-pull"><strong>Pull</strong><p>팀원의 변경을 받아 최신 상태를 맞췄습니다.</p></li>
-              </ul>
-            </section>
-          </div>
+          <section class="collab-proof" aria-labelledby="collab-title">
+            <div class="proof-heading">
+              <h2 id="collab-title">우리가 맞춘 것</h2>
+              <p>원본에서 배포까지</p>
+            </div>
+            <div class="proof-grid">
+              <article class="proof-card proof-card-content">
+                <span>01</span>
+                <strong>내용</strong>
+                <p>Markdown 원본을 같은 형식으로 맞췄습니다.</p>
+              </article>
+              <article class="proof-card proof-card-flow">
+                <span>02</span>
+                <strong>연출</strong>
+                <p>힌트, 터널, 사운드, 카드 공개를 연결했습니다.</p>
+              </article>
+              <article class="proof-card proof-card-share">
+                <span>03</span>
+                <strong>공유</strong>
+                <p>README와 GitHub Pages까지 발표 형태로 정리했습니다.</p>
+              </article>
+              <a class="proof-card proof-card-board" href="https://github.com/users/beyejin/projects/1" target="_blank" rel="noreferrer">
+                <span>BOARD</span>
+                <strong>작업 흐름</strong>
+                <p>Backlog에서 Done까지 확인합니다.</p>
+                <small>보드 보기 ↗</small>
+              </a>
+            </div>
+          </section>
 
           <footer class="home-links" aria-label="Team 5 작업 자료">
-            <a href="https://github.com/users/beyejin/projects/1" target="_blank" rel="noreferrer">Team 5 과제 보드 ↗</a>
-            <a href="https://github.com/beyejin/team5-study-mate/milestone/1" target="_blank" rel="noreferrer">과제 결과물 마일스톤 ↗</a>
+            <a href="https://hanyejin.click/" target="_blank" rel="noreferrer">라이브 페이지 ↗</a>
+            <a href="https://github.com/beyejin/team5-study-mate" target="_blank" rel="noreferrer">GitHub 저장소 ↗</a>
+            <a href="https://github.com/beyejin/team5-study-mate/milestone/1" target="_blank" rel="noreferrer">마일스톤 ↗</a>
           </footer>
         </div>
       </section>
@@ -115,6 +140,6 @@
       <p id="announcement" class="sr-only" aria-live="assertive"></p>
     </main>
 
-    <script type="module" src="script.js?v=hint-sfx-20260914"></script>
+    <script type="module" src="script.js?v=team-finish-20260915"></script>
   </body>
 </html>

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { parseProfile, getHints, drawMember } from '../profiles.mjs';
+import { parseProfile, getHints, getProfileDetails, drawMember } from '../profiles.mjs';
 
 test('팀원 md의 KAI, MBTI, 태그와 이미지가 카드에 전달된다', async () => {
   for (const [name, kai, mbti] of [['엄태웅', '119', 'ENTP'], ['김영광', '90', 'INFP'], ['한예진', '105', 'ENTP']]) {
@@ -35,6 +35,19 @@ test('기존 두 단계와 새 세 단계 제목의 자기소개를 모두 읽�
     assert.deepEqual(member.sections['관심 분야'], ['금융', '교육']);
     assert.equal(member.sections.GitHub[0], 'https://github.com/beyejin');
   }
+});
+
+test('작성된 자기소개 상세 항목을 화면 표시 순서로 반환한다', () => {
+  const member = parseProfile(`### 한 줄 소개\n함께 만드는 걸 좋아합니다.\n### 관심 분야\n- 서비스 기획\n- AI\n### 요즘 배우는 것\n- Spring\n### 팀원들에게 보여주고 싶은 모습\n끝까지 책임지고 소통합니다.\n### 나를 표현하는 키워드\n문제 관찰 실행력\n### GitHub\nhttps://github.com/example`, '팀원');
+
+  assert.deepEqual(getProfileDetails(member), [
+    { label: '한 줄 소개', values: ['함께 만드는 걸 좋아합니다.'] },
+    { label: '관심 분야', values: ['서비스 기획', 'AI'] },
+    { label: '요즘 배우는 것', values: ['Spring'] },
+    { label: '팀원들에게 보여주고 싶은 모습', values: ['끝까지 책임지고 소통합니다.'] },
+    { label: '나를 표현하는 키워드', values: ['문제 관찰 실행력'] },
+    { label: 'GitHub', values: ['https://github.com/example'] },
+  ]);
 });
 
 test('어느 난수 경계에서도 중복 없이 세 명을 뽑는다', (t) => {

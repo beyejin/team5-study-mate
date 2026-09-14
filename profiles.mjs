@@ -1,4 +1,12 @@
 const clean = (text) => text.replace(/\*\*|`/g, '').trim();
+const PROFILE_DETAIL_LABELS = [
+  '한 줄 소개',
+  '관심 분야',
+  '요즘 배우는 것',
+  '팀원들에게 보여주고 싶은 모습',
+  '나를 표현하는 키워드',
+  'GitHub',
+];
 
 export function parseProfile(markdown, name) {
   const source = markdown.replace(/<!--[\s\S]*?-->/g, '');
@@ -44,6 +52,15 @@ export function getHints(member) {
     { kind: 'major', text: member.major },
     { kind: 'keyword', text: member.keyword },
   ].filter((hint) => hint.text);
+}
+
+export function getProfileDetails(member) {
+  return PROFILE_DETAIL_LABELS
+    .map((label) => ({
+      label,
+      values: (member.sections[label] ?? []).filter(Boolean),
+    }))
+    .filter(({ values }) => values.length > 0);
 }
 
 export function drawMember(remaining) {
