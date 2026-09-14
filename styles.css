@@ -74,46 +74,67 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
 
 .scene-lobby {
   display: grid;
+  padding: 0;
   place-items: center;
-  padding: 0 20px;
+  background: #05070b;
 }
 
-.pack-zone {
+.intro-art {
   position: relative;
-  display: grid;
-  width: min(100%, 820px);
-  min-height: min(86dvh, 840px);
-  place-items: center;
+  width: min(100vw, calc(100dvh * 16 / 9));
+  height: min(100dvh, calc(100vw * 9 / 16));
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
 }
 
-.pack-spotlight {
-  position: absolute;
-  top: 3%;
-  left: 50%;
-  width: min(58vw, 680px);
-  height: 85%;
-  opacity: .62;
-  background: conic-gradient(from 180deg at 50% 0, transparent 0 40%, rgba(255, 238, 178, .16) 46%, rgba(255, 238, 178, .3) 50%, rgba(255, 238, 178, .16) 54%, transparent 60%);
-  transform: translateX(-50%);
+.intro-art > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
 }
 
 .pack-trigger {
-  position: relative;
+  position: absolute;
+  top: 27.7%;
+  left: 61.7%;
   display: grid;
-  width: clamp(236px, 25vw, 390px);
+  width: 22%;
+  height: 58%;
   padding: 0;
   border: 0;
   place-items: center;
   background: transparent;
   cursor: pointer;
-  transition: transform .24s ease;
+  transform: translateX(-50%);
+  touch-action: manipulation;
 }
 
-.pack-trigger:hover { transform: translateY(-7px) scale(1.02); }
-.pack-trigger:active { transform: translateY(-1px) scale(.985); }
+.pack-trigger:hover { background: transparent; }
+.pack-trigger:active { transform: translateX(-50%); }
 .pack-trigger:disabled { cursor: wait; }
-.pack-trigger img { position: relative; z-index: 2; display: block; width: 100%; animation: pack-float 4.2s ease-in-out infinite; }
-.pack-trigger.is-opening img { animation: pack-ignite .25s ease-out both; }
+.pack-trigger > img {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  animation: pack-float 4.2s ease-in-out infinite;
+}
+.pack-trigger.is-opening > img { animation: pack-ignite .25s ease-out both; }
+
+@keyframes pack-float {
+  0%, 100% { transform: translateY(0) rotate(-.5deg); }
+  50% { transform: translateY(-9px) rotate(.5deg); }
+}
+
+@keyframes pack-ignite {
+  0% { transform: scale(1); opacity: 1; }
+  64% { transform: scale(1.09); opacity: 1; }
+  100% { transform: scale(1.17); opacity: 0; }
+}
 
 .white-flash {
   position: fixed;
@@ -126,17 +147,6 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
 }
 
 .white-flash.is-bursting { visibility: visible; animation: white-burst .58s cubic-bezier(.2, .72, .18, 1) both; }
-
-@keyframes pack-float {
-  0%, 100% { transform: translateY(0) rotate(-.5deg); }
-  50% { transform: translateY(-9px) rotate(.5deg); }
-}
-
-@keyframes pack-ignite {
-  0% { transform: scale(1); opacity: 1; }
-  64% { transform: scale(1.09); opacity: 1; }
-  100% { transform: scale(1.17); opacity: 0; }
-}
 
 @keyframes white-burst {
   0% { opacity: 0; }
@@ -451,9 +461,18 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
 .home-links a:hover { color: #9dd8d1; }
 
 @media (max-width: 760px) {
-  .pack-zone { min-height: 88dvh; }
-  .pack-trigger { width: min(64vw, 330px); }
-  .pack-spotlight { width: 88vw; }
+  .intro-art {
+    width: 100vw;
+    height: 100dvh;
+    aspect-ratio: auto;
+  }
+  .intro-art > img { object-position: 62% center; }
+  .pack-trigger {
+    top: 27.7%;
+    left: 61.7%;
+    width: 82%;
+    height: 58%;
+  }
   .hint-card { width: 88vw; }
   .hint-card strong { font-size: clamp(2rem, 9vw, 3.3rem); }
   .member-card { max-height: 58dvh; }
