@@ -1,4 +1,4 @@
-export function createLobbyMusic() {
+export function createLobbyMusic(effects) {
   const audio = document.querySelector('#lobby-music');
   const bar = document.querySelector('#sound-bar');
   const toggle = document.querySelector('#music-toggle');
@@ -8,13 +8,18 @@ export function createLobbyMusic() {
   let pending = false;
 
   audio.volume = Number(volume.value) / 100;
+  effects.setVolume(audio.volume);
 
   function update() {
-    const playing = !audio.paused;
-    const label = playing ? '배경음악 일시정지' : '배경음악 재생';
+    const playing = active ? !audio.paused : enabled;
+    const label = playing ? '전체 사운드 끄기' : '전체 사운드 켜기';
     toggle.setAttribute('aria-pressed', String(playing));
     toggle.setAttribute('aria-label', label);
     toggle.title = label;
+  }
+
+  function unlockEffects() {
+    if (enabled && !document.hidden) void effects.setEnabled(true);
   }
 
   async function play() {
@@ -32,11 +37,13 @@ export function createLobbyMusic() {
   }
 
   toggle.addEventListener('click', () => {
-    if (pending || !audio.paused) {
+    if (pending || !audio.paused || (!active && enabled)) {
       enabled = false;
       audio.pause();
+      void effects.setEnabled(false);
     } else {
       enabled = true;
+      unlockEffects();
       void play();
     }
     update();
@@ -44,20 +51,27 @@ export function createLobbyMusic() {
 
   volume.addEventListener('input', () => {
     audio.volume = Number(volume.value) / 100;
+    effects.setVolume(audio.volume);
     volume.setAttribute('aria-valuetext', `${volume.value}%`);
     volume.title = `볼륨 ${volume.value}%`;
   });
 
   // Keep automatic retries separate from the explicit sound controls.
   function startOnGesture(event) {
-    if (!bar.contains(event.target)) void play();
+    if (!bar.contains(event.target)) {
+      unlockEffects();
+      void play();
+    }
   }
   document.addEventListener('click', startOnGesture);
   document.addEventListener('keydown', (event) => {
     if (!event.repeat && ['Enter', ' '].includes(event.key)) startOnGesture(event);
   });
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) audio.pause();
+    if (document.hidden) {
+      audio.pause();
+      effects.stop();
+    }
     else void play();
   });
   audio.addEventListener('play', update);
@@ -69,10 +83,12 @@ export function createLobbyMusic() {
   });
 
   return {
+    unlockEffects,
     setActive(value) {
       active = value;
       if (active) void play();
       else audio.pause();
+      update();
     },
   };
 }

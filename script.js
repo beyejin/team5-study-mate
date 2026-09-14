@@ -1,6 +1,7 @@
 import { getHints, parseProfile, drawMember } from './profiles.mjs';
 import { createTunnel } from './tunnel.mjs?v=tunnel-impact-20260914';
-import { createLobbyMusic } from './lobby-music.mjs';
+import { createLobbyMusic } from './lobby-music.mjs?v=hint-sfx-20260914';
+import { createPackAudio } from './pack-audio.mjs?v=hint-sfx-20260914';
 
 const members = [
   {
@@ -47,7 +48,8 @@ const revealView = document.querySelector('#reveal-view');
 const revealCard = document.querySelector('#reveal-card');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const tunnel = createTunnel(tunnelCanvas, reducedMotion);
-const lobbyMusic = createLobbyMusic();
+const packAudio = createPackAudio();
+const lobbyMusic = createLobbyMusic(packAudio);
 
 const PACK_IGNITION_MS = 250;
 const TUNNEL_SETTLE_MS = 140;
@@ -71,6 +73,7 @@ const wait = (milliseconds) => new Promise((resolve) => {
 
 function showScene(name) {
   if (name !== 'tunnel') tunnel.stop();
+  if (name !== 'tunnel' && name !== 'reveal') packAudio.stop();
   for (const [sceneName, scene] of scenes) scene.hidden = sceneName !== name;
   experience.dataset.scene = name;
   lobbyMusic.setActive(name === 'lobby');
@@ -111,6 +114,7 @@ function setHint(title, index) {
   hintTitle.textContent = title;
   hintCard.hidden = false;
   tunnel.pulse(index);
+  packAudio.hint(index);
   restartAnimation(hintCard, 'is-entering');
   announcement.textContent = `${index + 1}번째 공개 정보: ${title}`;
 }
@@ -135,6 +139,7 @@ async function finishReveal(member) {
   if (!revealed.some((item) => item.id === member.id)) revealed.push(member);
   renderReveal(member);
   showScene('reveal');
+  packAudio.reveal();
   restartAnimation(revealView, 'is-arriving');
   announcement.textContent = `${member.name} 팀원 카드가 공개되었습니다.`;
   await wait(REVEAL_SETTLE_MS);
@@ -147,6 +152,7 @@ async function finishReveal(member) {
 
 async function openPack() {
   if (isOpening || isFinalizing || remaining.length === 0) return;
+  lobbyMusic.unlockEffects();
   isOpening = true;
   updateProgress();
   const selectedMember = drawMember(remaining);
