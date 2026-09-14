@@ -1,7 +1,7 @@
 import { getHints, parseProfile, drawMember } from './profiles.mjs?v=reveal-card-only-20260915';
 import { createTunnel } from './tunnel.mjs?v=tunnel-exit-20260914';
 import { createLobbyMusic } from './lobby-music.mjs?v=hint-sfx-20260914';
-import { createPackAudio } from './pack-audio.mjs?v=hint-sfx-20260914';
+import { createPackAudio } from './pack-audio.mjs?v=hint-sfx-audible-20260915';
 
 const members = [
   {
@@ -170,7 +170,7 @@ async function finishReveal(member) {
 
 async function openPack(immediate = false) {
   if (isOpening || isFinalizing || remaining.length === 0) return;
-  lobbyMusic.unlockEffects();
+  await lobbyMusic.unlockEffects();
   isOpening = true;
   updateProgress();
   const selectedMember = drawMember(remaining);

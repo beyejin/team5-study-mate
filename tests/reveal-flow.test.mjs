@@ -22,6 +22,7 @@ test('팩 오픈은 하나의 5초 안팎 타임라인으로 진행한다', asyn
   assert.match(script, /const selectedMember = drawMember\(remaining\);/);
   assert.match(script, /const revealHints = \[\.\.\.selectedMember\.hints\];/);
   assert.match(script, /tunnel\.start\(TUNNEL_DURATION_MS\);/);
+  assert.match(script, /await lobbyMusic\.unlockEffects\(\);/);
   assert.match(script, /for \(const \[index, hint\] of revealHints\.entries\(\)\)/);
   assert.match(script, /await finishReveal\(selectedMember\);/);
   assert.match(script, /function updatePackTilt\(event\)/);
@@ -129,6 +130,8 @@ test('세 장을 뽑은 뒤 팀 작업 방식 홈으로 이동할 수 있다', a
   assert.match(page, /GitHub 보드 보기/);
   assert.match(page, /GitHub Actions/);
   assert.match(page, /GIT_GUIDE\.md/);
+  assert.match(page, /api\.qrserver\.com\/v1\/create-qr-code/);
+  assert.match(page, /hanyejin\.click/);
   assert.match(page, /https:\/\/hanyejin\.click\//);
   assert.match(script, /nextButton\.textContent = remaining\.length \? '다음 팩' : '협업 과정 보기';/);
   assert.doesNotMatch(script, /function renderTeamFinish\(\)|homeMembers/);
