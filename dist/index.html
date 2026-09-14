@@ -14,7 +14,7 @@
     <link rel="preload" href="assets/cards/taewoong-card-cutout-v2.png" as="image" />
     <link rel="preload" href="assets/cards/youngkwang-card-cutout-v2.png" as="image" />
     <link rel="preload" href="assets/cards/yejin-card-cutout-v2.png" as="image" />
-    <link rel="stylesheet" href="styles.css?v=tunnel-impact-20260914" />
+    <link rel="stylesheet" href="styles.css?v=lobby-bgm-20260914" />
   </head>
   <body>
     <main id="experience" class="experience" data-scene="lobby">
@@ -24,6 +24,15 @@
       </div>
 
       <section id="lobby-view" class="scene scene-lobby" data-view="lobby" aria-label="팀 5 멤버 팩">
+        <audio id="lobby-music" src="assets/audio/trimmed_32s_fadeout.mp3" preload="metadata" loop></audio>
+        <div id="sound-bar" class="sound-bar" role="group" aria-label="배경음악 조절">
+          <button id="music-toggle" class="music-toggle" type="button" aria-label="배경음악 재생" aria-pressed="false" title="배경음악 재생">
+            <svg class="music-play" viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 9 6-9 6Z" fill="currentColor" /></svg>
+            <svg class="music-pause" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4v12M14 4v12" stroke="currentColor" stroke-width="3" /></svg>
+          </button>
+          <svg class="music-speaker" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 8h3l4-4v12l-4-4H3Z" fill="currentColor" /><path d="M13 7a5 5 0 0 1 0 6m2-8a8 8 0 0 1 0 10" fill="none" stroke="currentColor" stroke-linecap="round" /></svg>
+          <input id="music-volume" type="range" min="0" max="100" step="1" value="25" aria-label="배경음악 볼륨" aria-valuetext="25%" title="볼륨 25%" />
+        </div>
         <div class="intro-art">
           <img src="assets/game/team5-intro-bg-v1.png" alt="이 안에 3명 있음. TEAM 5 멤버 팩을 여는 소개 화면" draggable="false" />
           <button id="open-pack" class="pack-trigger" type="button" aria-label="TEAM 5 멤버 팩 열기">
@@ -106,6 +115,6 @@
       <p id="announcement" class="sr-only" aria-live="assertive"></p>
     </main>
 
-    <script type="module" src="script.js?v=tunnel-impact-20260914"></script>
+    <script type="module" src="script.js?v=lobby-bgm-20260914"></script>
   </body>
 </html>

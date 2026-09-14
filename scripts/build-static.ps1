@@ -15,11 +15,14 @@ if (Test-Path -LiteralPath $distPath) {
 New-Item -ItemType Directory -Path $distPath | Out-Null
 New-Item -ItemType Directory -Path (Join-Path $distPath 'assets\cards') -Force | Out-Null
 New-Item -ItemType Directory -Path (Join-Path $distPath 'assets\game') -Force | Out-Null
+New-Item -ItemType Directory -Path (Join-Path $distPath 'assets\audio') -Force | Out-Null
 New-Item -ItemType Directory -Path (Join-Path $distPath 'team') -Force | Out-Null
 
-@('index.html', 'styles.css', 'script.js', 'profiles.mjs', 'tunnel.mjs') | ForEach-Object {
+@('index.html', 'styles.css', 'script.js', 'profiles.mjs', 'tunnel.mjs', 'lobby-music.mjs') | ForEach-Object {
     Copy-Item -LiteralPath (Join-Path $projectRoot $_) -Destination (Join-Path $distPath $_)
 }
+
+Copy-Item -LiteralPath (Join-Path $projectRoot 'assets\audio\trimmed_32s_fadeout.mp3') -Destination (Join-Path $distPath 'assets\audio')
 
 Get-ChildItem -LiteralPath (Join-Path $projectRoot 'assets\cards') -File |
     Copy-Item -Destination (Join-Path $distPath 'assets\cards')

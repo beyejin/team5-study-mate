@@ -1,5 +1,6 @@
 import { getHints, parseProfile, drawMember } from './profiles.mjs';
 import { createTunnel } from './tunnel.mjs?v=tunnel-impact-20260914';
+import { createLobbyMusic } from './lobby-music.mjs';
 
 const members = [
   {
@@ -46,6 +47,7 @@ const revealView = document.querySelector('#reveal-view');
 const revealCard = document.querySelector('#reveal-card');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const tunnel = createTunnel(tunnelCanvas, reducedMotion);
+const lobbyMusic = createLobbyMusic();
 
 const PACK_IGNITION_MS = 250;
 const TUNNEL_SETTLE_MS = 140;
@@ -71,6 +73,7 @@ function showScene(name) {
   if (name !== 'tunnel') tunnel.stop();
   for (const [sceneName, scene] of scenes) scene.hidden = sceneName !== name;
   experience.dataset.scene = name;
+  lobbyMusic.setActive(name === 'lobby');
 }
 
 function updateProgress() {
