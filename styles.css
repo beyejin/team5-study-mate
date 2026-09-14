@@ -191,15 +191,15 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
   inset: 0;
   visibility: hidden;
   pointer-events: none;
-  background: #fffdf5;
+  background: #fff;
   opacity: 0;
 }
 
-.white-flash.is-bursting { visibility: visible; animation: white-burst .58s cubic-bezier(.2, .72, .18, 1) both; }
+.white-flash.is-bursting { visibility: visible; animation: white-burst .72s cubic-bezier(.08, .72, .12, 1) both; }
 
 @keyframes white-burst {
   0% { opacity: 0; }
-  15%, 35% { opacity: .98; }
+  8%, 38% { opacity: 1; }
   100% { opacity: 0; }
 }
 

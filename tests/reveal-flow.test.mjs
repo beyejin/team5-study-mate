@@ -26,6 +26,14 @@ test('팩 오픈은 하나의 5초 안팎 타임라인으로 진행한다', asyn
   assert.match(script, /await finishReveal\(selectedMember\);/);
 });
 
+test('남은 팩이 있으면 다음 팩 버튼이 로비를 거치지 않고 바로 공개를 시작한다', async () => {
+  const script = await readFile(new URL('../script.js', import.meta.url), 'utf8');
+  const nextScene = script.slice(script.indexOf('function nextScene'), script.indexOf('function returnToPreviousScene'));
+
+  assert.match(nextScene, /if \(remaining\.length > 0\) \{\s*currentMember = null;\s*void openPack\(true\);\s*return;/);
+  assert.doesNotMatch(nextScene, /showScene\('lobby'\)/);
+});
+
 test('힌트는 중앙 문구 하나만 교체하며 최종 화면에 남지 않는다', async () => {
   const [page, script] = await Promise.all([
     readFile(new URL('../index.html', import.meta.url), 'utf8'),
@@ -67,8 +75,11 @@ test('터널은 실제 통로 배경을 전진시키는 캔버스 연출이다',
   assert.match(tunnel, /drawLightGrade\(finalLight, lightPull\);/);
   assert.match(tunnel, /function drawLightGrade\(/);
   assert.match(tunnel, /function drawVignette\(/);
-  assert.match(tunnel, /const FINAL_LIGHT_START = \.69;/);
+  assert.match(tunnel, /const FINAL_LIGHT_START = \.55;/);
+  assert.match(tunnel, /const FULL_SCREEN_LIGHT_START = \.62;/);
   assert.match(tunnel, /function blendLight\(cold, warm, progress, alpha\)/);
+  assert.match(tunnel, /function drawFinalWash\(lightPull\)/);
+  assert.match(tunnel, /drawFinalWash\(lightPull\);/);
   assert.match(tunnel, /draw\(reducedMotion \? 0 : elapsedProgress, now\);/);
   assert.doesNotMatch(tunnel, /stadium-day-v1/);
   assert.match(tunnel, /window\.cancelAnimationFrame\(animationFrame\);/);

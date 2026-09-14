@@ -1,5 +1,5 @@
 import { getHints, parseProfile, drawMember } from './profiles.mjs';
-import { createTunnel } from './tunnel.mjs?v=tunnel-impact-20260914';
+import { createTunnel } from './tunnel.mjs?v=tunnel-exit-20260914';
 import { createLobbyMusic } from './lobby-music.mjs?v=hint-sfx-20260914';
 import { createPackAudio } from './pack-audio.mjs?v=hint-sfx-20260914';
 
@@ -150,7 +150,7 @@ async function finishReveal(member) {
   nextButton.focus({ preventScroll: true });
 }
 
-async function openPack() {
+async function openPack(immediate = false) {
   if (isOpening || isFinalizing || remaining.length === 0) return;
   lobbyMusic.unlockEffects();
   isOpening = true;
@@ -163,8 +163,10 @@ async function openPack() {
   openButton.classList.add('is-opening');
   announcement.textContent = '멤버 팩이 열립니다.';
 
-  await wait(PACK_IGNITION_MS);
-  if (run !== sequenceId) return;
+  if (!immediate) {
+    await wait(PACK_IGNITION_MS);
+    if (run !== sequenceId) return;
+  }
   showScene('tunnel');
   tunnel.start(TUNNEL_DURATION_MS);
   await wait(TUNNEL_SETTLE_MS);
@@ -206,9 +208,7 @@ function nextScene() {
   if (isOpening || isFinalizing) return;
   if (remaining.length > 0) {
     currentMember = null;
-    showScene('lobby');
-    updateProgress();
-    openButton.focus({ preventScroll: true });
+    void openPack(true);
     return;
   }
   showScene('home');

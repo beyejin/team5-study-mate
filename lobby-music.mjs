@@ -6,6 +6,9 @@ export function createLobbyMusic(effects) {
   let active = false;
   let enabled = true;
   let pending = false;
+  let entryEffectPlayed = false;
+  let entryEffectPending = false;
+  let unlockPromise = null;
 
   audio.volume = Number(volume.value) / 100;
   effects.setVolume(audio.volume);
@@ -19,7 +22,30 @@ export function createLobbyMusic(effects) {
   }
 
   function unlockEffects() {
-    if (enabled && !document.hidden) void effects.setEnabled(true);
+    if (!enabled || document.hidden) return Promise.resolve(false);
+    if (!unlockPromise) {
+      unlockPromise = Promise.resolve(effects.setEnabled(true)).finally(() => {
+        unlockPromise = null;
+      });
+    }
+    return unlockPromise;
+  }
+
+  async function playEntryEffect() {
+    if (entryEffectPlayed || entryEffectPending || !enabled || document.hidden || typeof effects.opening !== 'function') return false;
+    entryEffectPending = true;
+    try {
+      if (await unlockEffects()) {
+        effects.opening();
+        entryEffectPlayed = true;
+        return true;
+      }
+    } catch {
+      return false;
+    } finally {
+      entryEffectPending = false;
+    }
+    return false;
   }
 
   async function play() {
@@ -59,7 +85,7 @@ export function createLobbyMusic(effects) {
   // Keep automatic retries separate from the explicit sound controls.
   function startOnGesture(event) {
     if (!bar.contains(event.target)) {
-      unlockEffects();
+      void playEntryEffect();
       void play();
     }
   }
@@ -72,7 +98,10 @@ export function createLobbyMusic(effects) {
       audio.pause();
       effects.stop();
     }
-    else void play();
+    else {
+      void playEntryEffect();
+      void play();
+    }
   });
   audio.addEventListener('play', update);
   audio.addEventListener('pause', update);
@@ -86,8 +115,10 @@ export function createLobbyMusic(effects) {
     unlockEffects,
     setActive(value) {
       active = value;
-      if (active) void play();
-      else audio.pause();
+      if (active) {
+        void playEntryEffect();
+        void play();
+      } else audio.pause();
       update();
     },
   };

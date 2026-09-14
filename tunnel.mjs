@@ -1,8 +1,9 @@
 const clamp = (value, minimum, maximum) => Math.min(Math.max(value, minimum), maximum);
 
 const CAMERA_TRAVEL = 1.05;
-const FINAL_LIGHT_START = .69;
-const LIGHT_PULL_TRAVEL = .48;
+const FINAL_LIGHT_START = .55;
+const FULL_SCREEN_LIGHT_START = .62;
+const LIGHT_PULL_TRAVEL = .72;
 const IMPACT_DURATION_MS = 520;
 
 function smoothstep(start, end, value) {
@@ -72,6 +73,7 @@ export function createTunnel(canvas, reducedMotion) {
     const imageY = (height - imageHeight) / 2 + height * (cameraProgress * .055 + lightPull * .04);
 
     context.save();
+    context.globalAlpha = 1 - smoothstep(.1, 1, lightPull) * .76;
     context.imageSmoothingQuality = 'high';
     context.drawImage(tunnelTexture, imageX, imageY, imageWidth, imageHeight);
     context.restore();
@@ -152,18 +154,26 @@ export function createTunnel(canvas, reducedMotion) {
   }
 
   function drawLightGrade(finalLight, lightPull) {
+    const shadowFade = 1 - lightPull * .94;
     const shade = context.createLinearGradient(0, 0, 0, height);
-    shade.addColorStop(0, `rgba(1, 7, 11, ${.3 - lightPull * .2})`);
-    shade.addColorStop(.56, `rgba(2, 8, 11, ${.06 - lightPull * .04})`);
-    shade.addColorStop(1, `rgba(1, 5, 8, ${.36 - lightPull * .22})`);
+    shade.addColorStop(0, `rgba(1, 7, 11, ${.3 * shadowFade})`);
+    shade.addColorStop(.56, `rgba(2, 8, 11, ${.06 * shadowFade})`);
+    shade.addColorStop(1, `rgba(1, 5, 8, ${.36 * shadowFade})`);
     context.fillStyle = shade;
     context.fillRect(0, 0, width, height);
 
-    const exitLight = context.createRadialGradient(width / 2, height * .49, 0, width / 2, height * .49, width * (.26 + lightPull * .82));
-    exitLight.addColorStop(0, blendLight([48, 129, 126], [255, 245, 211], finalLight, .08 + finalLight * .26 + lightPull * .58));
-    exitLight.addColorStop(.3, blendLight([16, 76, 78], [255, 233, 179], finalLight, .02 + lightPull * .34));
+    const exitLight = context.createRadialGradient(width / 2, height * .49, 0, width / 2, height * .49, Math.hypot(width, height) * (.12 + lightPull * 1.45));
+    exitLight.addColorStop(0, blendLight([48, 129, 126], [255, 245, 211], finalLight, .1 + finalLight * .3 + lightPull * .55));
+    exitLight.addColorStop(.3, blendLight([16, 76, 78], [255, 233, 179], finalLight, .04 + lightPull * .45));
     exitLight.addColorStop(1, 'rgba(5, 10, 13, 0)');
     context.fillStyle = exitLight;
+    context.fillRect(0, 0, width, height);
+  }
+
+  function drawFinalWash(lightPull) {
+    const fullScreenLight = smoothstep(FULL_SCREEN_LIGHT_START, 1, lightPull);
+    if (fullScreenLight === 0) return;
+    context.fillStyle = `rgba(255, 253, 241, ${fullScreenLight * .96})`;
     context.fillRect(0, 0, width, height);
   }
 
@@ -201,6 +211,7 @@ export function createTunnel(canvas, reducedMotion) {
       drawImpact(impactProgress, impactStrength);
     }
     drawVignette(lightPull);
+    drawFinalWash(lightPull);
     context.restore();
   }
 
