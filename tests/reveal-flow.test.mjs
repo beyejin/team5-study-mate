@@ -123,6 +123,8 @@ test('세 장을 뽑은 뒤 팀 작업 방식 홈으로 이동할 수 있다', a
   assert.match(page, /Markdown 원본을 같은 형식으로 맞췄습니다\./);
   assert.match(page, /README와 GitHub Pages까지 발표 형태로 정리했습니다\./);
   assert.match(page, /proof-card-board[\s\S]*?작업 흐름/);
+  assert.match(page, /class="kanban-showcase"[\s\S]*?team5-kanban-snapshot-v1\.svg/);
+  assert.match(page, /실제 GitHub 보드 보기/);
   assert.match(page, /https:\/\/hanyejin\.click\//);
   assert.match(script, /nextButton\.textContent = remaining\.length \? '다음 팩' : '협업 과정 보기';/);
   assert.match(script, /function renderTeamFinish\(\)/);
@@ -132,5 +134,8 @@ test('세 장을 뽑은 뒤 팀 작업 방식 홈으로 이동할 수 있다', a
   assert.match(styles, /\.team-finish \{/);
   assert.match(styles, /\.home-members \{[\s\S]*?grid-template-columns: repeat\(3, minmax\(0, 1fr\)\);/);
   assert.match(styles, /\.proof-grid \{[\s\S]*?grid-template-columns: repeat\(4, minmax\(0, 1fr\)\);/);
+  assert.match(styles, /\.experience \{[\s\S]*?overflow: visible;/);
+  assert.match(styles, /\.kanban-showcase \{[\s\S]*?grid-template-columns:/);
+  assert.match(styles, /\.kanban-preview \{/);
   assert.doesNotMatch(styles, /\.kanban-sequence|\.kanban-capture|@keyframes kanban-capture-arrive/);
 });

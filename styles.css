@@ -13,6 +13,7 @@
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
 html, body { min-width: 320px; min-height: 100%; margin: 0; background: var(--ink); }
 body { overflow-x: hidden; color: var(--ivory); }
 button { color: inherit; font: inherit; }
@@ -34,7 +35,7 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
   position: relative;
   min-height: 100dvh;
   isolation: isolate;
-  overflow: hidden;
+  overflow: visible;
   background: var(--ink);
 }
 
@@ -471,7 +472,7 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
 .scene-home {
   min-height: 100dvh;
   padding: clamp(30px, 4vw, 54px) clamp(18px, 5vw, 80px) 26px;
-  overflow-x: hidden;
+  overflow: visible;
   background:
     linear-gradient(180deg, rgba(5, 14, 17, .94), rgba(5, 14, 17, .7) 48%, rgba(5, 14, 17, .94)),
     url("assets/game/stadium-tunnel-v1.png") center / cover no-repeat;
@@ -494,8 +495,9 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
   width: min(1320px, 100%);
   min-height: calc(100dvh - clamp(56px, 8vw, 92px));
   margin: 0 auto;
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
-  gap: clamp(18px, 2.5vh, 34px);
+  grid-template-rows: auto;
+  align-content: start;
+  gap: clamp(34px, 5vw, 72px);
 }
 
 .home-header {
@@ -619,13 +621,55 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
 .proof-card-share > span { color: #7db9d6; }
 .proof-card-board > span { color: var(--gold-pale); }
 
+.kanban-showcase {
+  display: grid;
+  grid-template-columns: minmax(220px, .46fr) minmax(0, 1.54fr);
+  gap: clamp(24px, 5vw, 76px);
+  align-items: center;
+  padding-top: clamp(28px, 4vw, 54px);
+  border-top: 1px solid rgba(226, 239, 234, .24);
+}
+
+.kanban-copy { max-width: 340px; }
+.section-kicker {
+  margin: 0 0 16px;
+  color: #9dd8d1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .68rem;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+.kanban-copy h2 { margin: 0; color: #f7f3e7; font-size: clamp(1.7rem, 3vw, 3rem); line-height: 1.04; letter-spacing: -.07em; text-wrap: balance; }
+.kanban-copy h2 em { color: var(--gold-pale); font-style: normal; }
+.kanban-copy > p:not(.section-kicker) { margin: 22px 0 26px; color: #c5d0cd; font-size: .9rem; line-height: 1.65; }
+.kanban-link { color: var(--gold-pale); font-size: .82rem; font-weight: 900; text-underline-offset: 5px; }
+
+.kanban-preview {
+  position: relative;
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(247, 223, 163, .48);
+  background: #060b0f;
+  box-shadow: 0 28px 64px rgba(1, 5, 8, .36);
+  color: var(--ivory);
+  text-decoration: none;
+  transition: border-color .24s ease, transform .24s ease, box-shadow .24s ease;
+}
+.kanban-preview::after { position: absolute; inset: 0; content: ""; pointer-events: none; background: linear-gradient(180deg, transparent 58%, rgba(2, 7, 10, .7)); }
+.kanban-preview img { display: block; width: 100%; height: auto; transition: transform .4s ease; }
+.kanban-preview span { position: absolute; right: 18px; bottom: 16px; z-index: 1; color: #f7dfa3; font-size: .74rem; font-weight: 900; letter-spacing: .04em; }
+.kanban-preview:hover { border-color: rgba(247, 223, 163, .9); box-shadow: 0 34px 76px rgba(1, 5, 8, .5); transform: translateY(-3px); }
+.kanban-preview:hover img { transform: scale(1.015); }
+.proof-card:focus-visible, .kanban-link:focus-visible, .kanban-preview:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
+
 .home-links { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 22px; align-self: end; padding-top: 22px; border-top: 1px solid rgba(226, 239, 234, .24); }
 .home-links a { color: #d1dad8; font-size: .82rem; font-weight: 800; text-underline-offset: 5px; }
 .home-links a:hover { color: #9dd8d1; }
 
 @media (min-width: 901px) and (max-height: 800px) {
   .scene-home { padding-top: 22px; padding-bottom: 14px; }
-  .home-shell { min-height: calc(100dvh - 36px); gap: 12px; }
+  .home-shell { min-height: calc(100dvh - 36px); gap: 28px; }
   .home-kicker { margin-bottom: 9px; }
   .home-header h1 { font-size: clamp(2.35rem, 4vw, 4rem); }
   .team-finish { padding: 10px 16px 8px; }
@@ -645,7 +689,7 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
   .scene-home {
     min-height: 100dvh;
     padding: 42px 24px 28px;
-    overflow-y: auto;
+    overflow: visible;
   }
 
   .home-shell {
@@ -658,12 +702,14 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
     align-items: start;
   }
 
-  .home-header, .collab-proof, .home-links { grid-column: 1; grid-row: auto; }
+  .home-header, .collab-proof, .kanban-showcase, .home-links { grid-column: 1; grid-row: auto; }
   .home-header { align-items: start; }
   .home-title-block { max-width: 36rem; }
   .team-finish { padding-right: 14px; padding-left: 14px; }
   .collab-proof { grid-template-columns: 1fr; gap: 16px; }
   .proof-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kanban-showcase { grid-template-columns: 1fr; gap: 24px; }
+  .kanban-copy { max-width: 38rem; }
   .home-links { margin-top: 0; align-self: auto; }
 }
 
@@ -703,6 +749,8 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
   .home-member img { height: min(34dvh, 230px); }
   .collab-proof { display: block; }
   .proof-heading { margin-bottom: 16px; }
+  .kanban-showcase { display: block; }
+  .kanban-copy { max-width: 32rem; margin-bottom: 22px; }
   .home-links { margin-top: 42px; }
 }
 
