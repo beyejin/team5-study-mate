@@ -313,11 +313,11 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
 
 .scene-home {
   min-height: 100dvh;
-  padding: clamp(64px, 9vw, 126px) clamp(18px, 5vw, 80px) 48px;
+  padding: clamp(38px, 5vw, 76px) clamp(18px, 5vw, 80px) 32px;
   overflow-x: hidden;
   background:
-    linear-gradient(160deg, rgba(14, 43, 49, .78), rgba(7, 21, 27, .86)),
-    #05090d;
+    linear-gradient(90deg, rgba(5, 14, 17, .96) 0 38%, rgba(5, 14, 17, .72) 66%, rgba(5, 14, 17, .56)),
+    url("assets/game/stadium-tunnel-v1.png") center / cover no-repeat;
 }
 
 .scene-home::before {
@@ -325,26 +325,32 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
   inset: 0;
   content: "";
   pointer-events: none;
-  background:
-    radial-gradient(ellipse at 85% 8%, rgba(82, 173, 163, .12), transparent 34%),
-    linear-gradient(90deg, rgba(255, 242, 199, .04) 1px, transparent 1px),
-    linear-gradient(rgba(255, 242, 199, .035) 1px, transparent 1px);
-  background-size: auto, 72px 72px, 72px 72px;
-  mask-image: linear-gradient(to bottom, black, transparent 80%);
+  background: linear-gradient(180deg, rgba(3, 9, 12, .1), rgba(3, 9, 12, .64));
 }
 
-.home-shell { position: relative; z-index: 1; width: min(1240px, 100%); margin: 0 auto; }
+.home-shell {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: min(1320px, 100%);
+  min-height: calc(100dvh - clamp(70px, 9vw, 108px));
+  margin: 0 auto;
+  grid-template-columns: minmax(245px, .58fr) minmax(0, 1.42fr);
+  grid-template-rows: 1fr auto;
+  column-gap: clamp(42px, 8vw, 150px);
+  align-items: center;
+}
 
-.home-header { max-width: 760px; margin-bottom: clamp(48px, 7vw, 88px); }
-.home-kicker, .section-heading > p {
-  margin: 0 0 12px;
-  color: #82c9c1;
-  font-size: .76rem;
+.home-header { max-width: 360px; margin: 0; }
+.home-kicker {
+  margin: 0 0 18px;
+  color: #9dd8d1;
+  font-size: .74rem;
   font-weight: 900;
-  letter-spacing: .16em;
+  letter-spacing: .12em;
 }
-.home-header h1 { margin: 0; font-size: clamp(2.7rem, 6vw, 5.8rem); line-height: .98; letter-spacing: -.065em; text-wrap: balance; }
-.home-header > p:not(.home-kicker) { max-width: 48ch; margin: 22px 0 26px; color: #c0c8c8; line-height: 1.7; }
+.home-header h1 { margin: 0; font-size: clamp(2.4rem, 4.2vw, 4.7rem); line-height: 1; letter-spacing: -.065em; }
+.home-header > p:not(.home-kicker) { max-width: 28ch; margin: 20px 0 30px; color: #d1dad8; font-size: clamp(.92rem, 1.2vw, 1.06rem); line-height: 1.65; }
 
 .home-restart {
   padding: 0 0 7px;
@@ -357,11 +363,7 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
 }
 .home-restart:hover { border-color: var(--gold-pale); color: var(--gold-pale); }
 
-.roadmap-panel, .git-panel {
-  border-top: 1px solid rgba(230, 241, 237, .2);
-  background: rgba(8, 18, 23, .56);
-}
-.section-heading h2 { max-width: 28ch; margin: 0; font-size: clamp(1.35rem, 2.5vw, 2.25rem); line-height: 1.15; letter-spacing: -.045em; }
+.roadmap-panel h2, .git-panel h2 { margin: 0; color: #f7f3e7; font-size: clamp(1.35rem, 2vw, 2rem); line-height: 1.15; letter-spacing: -.05em; }
 
 .kanban-sequence {
   position: fixed;
@@ -395,19 +397,10 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
   display: block;
   width: 100%;
   border: 1px solid rgba(218, 237, 232, .5);
-  border-radius: clamp(14px, 2vw, 28px);
+  border-radius: 4px;
   background: #0b1116;
   box-shadow: 0 28px 90px rgba(1, 9, 12, .45);
   filter: brightness(1.5) saturate(1.05) contrast(.94);
-}
-
-.kanban-capture figcaption {
-  margin-top: 16px;
-  color: rgba(239, 244, 232, .88);
-  font-size: clamp(.66rem, 1.1vw, .82rem);
-  font-weight: 900;
-  letter-spacing: .18em;
-  text-align: center;
 }
 
 .scene-home:not([hidden]) .kanban-sequence { animation: kanban-overlay 4.6s ease both; }
@@ -426,26 +419,36 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
   100% { opacity: 0; transform: perspective(1400px) translate3d(0, -36px, 180px) scale(1.13) rotateX(-3deg); filter: blur(4px); }
 }
 
-.home-detail-grid { display: grid; grid-template-columns: minmax(0, .86fr) minmax(0, 1.14fr); gap: 1px; margin-top: 1px; background: rgba(230, 241, 237, .13); }
-.roadmap-panel, .git-panel { padding: clamp(24px, 3vw, 40px); border-top: 0; }
-.roadmap-list { display: grid; gap: 0; padding: 0; margin: 32px 0 0; list-style: none; }
-.roadmap-list li { display: grid; grid-template-columns: 36px 1fr; gap: 14px; padding: 17px 0; border-top: 1px solid rgba(230, 241, 237, .12); }
-.roadmap-list li:first-child { border-top: 0; padding-top: 0; }
-.roadmap-list span { color: #90cec8; font-size: .78rem; font-variant-numeric: tabular-nums; }
-.roadmap-list strong { color: #f4efe0; }
-.roadmap-list p { margin: 6px 0 0; color: #abb7b6; font-size: .91rem; line-height: 1.55; }
+.home-detail-grid {
+  display: grid;
+  grid-column: 2;
+  grid-row: 1;
+  grid-template-columns: minmax(0, 1.15fr) minmax(250px, .85fr);
+  gap: clamp(36px, 6vw, 92px);
+  align-items: start;
+}
 
-.git-flow { margin: 32px 0 28px; color: #f6efdb; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: clamp(.8rem, 1.4vw, 1rem); line-height: 1.9; word-spacing: .08em; }
-.git-flow i { color: #84cbc3; font-style: normal; }
-.git-guide-list { display: grid; gap: 16px; margin: 0; }
-.git-guide-list div { display: grid; grid-template-columns: 82px 1fr; gap: 12px; padding-top: 16px; border-top: 1px solid rgba(230, 241, 237, .12); }
-.git-guide-list dt { color: #91cec8; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .76rem; font-weight: 800; }
-.git-guide-list dd { margin: 0; color: #c6cfcd; line-height: 1.55; }
-.git-guide-list code { color: #f6efdb; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .82em; }
+.roadmap-panel, .git-panel { min-width: 0; }
+.roadmap-list { display: grid; gap: 20px; padding: 0; margin: 30px 0 0; list-style: none; }
+.roadmap-list li { display: grid; grid-template-columns: 28px 1fr; gap: 14px; }
+.roadmap-list span { color: #9dd8d1; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .74rem; font-variant-numeric: tabular-nums; }
+.roadmap-list strong { color: #f7f3e7; font-size: 1rem; }
+.roadmap-list p { margin: 5px 0 0; color: #c5d0cd; font-size: .9rem; line-height: 1.55; }
 
-.home-links { display: flex; flex-wrap: wrap; gap: 24px; padding: 26px 2px 0; }
-.home-links a { color: #b5c4c1; font-size: .9rem; font-weight: 800; text-underline-offset: 5px; }
-.home-links a:hover { color: var(--gold-pale); }
+.git-summary { max-width: 25ch; margin: 30px 0 24px; color: #d1dad8; font-size: .95rem; line-height: 1.65; }
+.git-summary strong { color: #f7f3e7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .88em; }
+.git-experience-list { display: grid; gap: 18px; padding: 0; margin: 0; list-style: none; }
+.git-experience-list li { position: relative; padding-left: 15px; }
+.git-experience-list li::before { position: absolute; top: .42em; left: 0; width: 5px; height: 5px; content: ""; background: currentColor; border-radius: 50%; }
+.git-experience-list strong { display: block; color: currentColor; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .78rem; }
+.git-experience-list p { margin: 5px 0 0; color: #c5d0cd; font-size: .9rem; line-height: 1.55; }
+.git-experience-commit { color: #9de7df; }
+.git-experience-push { color: #69d1d3; }
+.git-experience-pull { color: #7db9d6; }
+
+.home-links { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 22px; align-self: end; padding-top: 22px; border-top: 1px solid rgba(226, 239, 234, .24); }
+.home-links a { color: #d1dad8; font-size: .82rem; font-weight: 800; text-underline-offset: 5px; }
+.home-links a:hover { color: #9dd8d1; }
 
 @media (max-width: 760px) {
   .pack-zone { min-height: 88dvh; }
@@ -457,8 +460,12 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
   .member-card img { max-height: 58dvh; }
   .collection-cards { grid-template-columns: 1fr; max-width: 400px; }
   .collection-card .member-card, .collection-card .member-card img { max-height: none; }
-  .scene-home { padding-top: 58px; }
-  .home-detail-grid { grid-template-columns: 1fr; }
+  .scene-home { padding: 42px 20px 28px; }
+  .home-shell { display: block; min-height: 0; }
+  .home-header { max-width: 32rem; margin-bottom: 56px; }
+  .home-header h1 { font-size: clamp(2.35rem, 12vw, 3.6rem); }
+  .home-detail-grid { display: grid; grid-template-columns: 1fr; gap: 48px; }
+  .home-links { margin-top: 48px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -472,11 +479,17 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
     position: relative;
     z-index: auto;
     inset: auto;
+    grid-column: 1 / -1;
+    grid-row: 1;
     min-height: auto;
     padding: 0 0 40px;
     opacity: 1;
     background: transparent;
   }
+
+  .home-header { grid-column: 1; grid-row: 2; }
+  .home-detail-grid { grid-column: 2; grid-row: 2; }
+  .home-links { grid-row: 3; }
 
   .scene-home:not([hidden]) .kanban-sequence,
   .scene-home:not([hidden]) .kanban-capture { animation: none !important; }

@@ -104,15 +104,19 @@ test('세 장을 뽑은 뒤 팀 작업 방식 홈으로 이동할 수 있다', a
   ]);
 
   assert.match(page, /<section id="home-view" class="scene scene-home" data-view="home"/);
-  assert.match(page, /TEAM 5 \/ WORKSPACE/);
+  assert.match(page, /<h1 id="home-title">작업 흐름<\/h1>/);
   assert.match(page, /team5-kanban-snapshot-v1\.svg/);
   assert.doesNotMatch(page, /class="kanban-board"|class="kanban-column"/);
-  assert.match(page, /clone <i>→<\/i> branch[\s\S]*?Pull Request/);
+  assert.match(page, /팀원 모두 <strong>commit, push, pull<\/strong>을 직접 해 봤습니다\./);
+  assert.match(page, /git-experience-commit[\s\S]*?git-experience-push[\s\S]*?git-experience-pull/);
   assert.match(page, /Team 5 과제 보드 ↗/);
   assert.match(script, /nextButton\.textContent = remaining\.length \? '다음 팩' : '팀 작업 방식 보기';/);
   assert.match(script, /showScene\('home'\);/);
   assert.match(script, /homeRestartButton\.addEventListener\('click', restart\);/);
   assert.match(styles, /\.scene-home:not\(\[hidden\]\) \.kanban-capture \{ animation: kanban-capture-arrive 4\.6s/);
   assert.match(styles, /@keyframes kanban-capture-arrive/);
-  assert.match(styles, /\.home-detail-grid \{[\s\S]*?grid-template-columns: minmax\(0, \.86fr\) minmax\(0, 1\.14fr\);/);
+  assert.match(styles, /\.home-detail-grid \{[\s\S]*?grid-template-columns: minmax\(0, 1\.15fr\) minmax\(250px, \.85fr\);/);
+  assert.match(styles, /\.git-experience-commit \{ color: #9de7df; \}/);
+  assert.match(styles, /\.git-experience-push \{ color: #69d1d3; \}/);
+  assert.match(styles, /\.git-experience-pull \{ color: #7db9d6; \}/);
 });
