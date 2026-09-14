@@ -120,7 +120,7 @@ test('세 장을 뽑은 뒤 팀 작업 방식 홈으로 이동할 수 있다', a
 
   assert.doesNotMatch(page, /lobby-copy|lobby-title|lobby-description/);
   assert.match(page, /<span class="pack-open-label">팩을 눌러 시작<\/span>/);
-  assert.match(page, /class="lobby-flow" aria-label="멤버 공개 흐름"/);
+  assert.doesNotMatch(page, /lobby-flow|팩 선택\s*<\/span>|힌트 공개|팀원 확인/);
   assert.match(page, /<section id="home-view" class="scene scene-home" data-view="home" aria-label="Team 5 협업 과정"/);
   assert.match(page, /<button id="home-restart" class="home-restart"/);
   assert.doesNotMatch(page, /id="home-title"|id="home-members"|class="team-finish"|proof-card|공개 완료|3 \/ 3 카드 공개/);
