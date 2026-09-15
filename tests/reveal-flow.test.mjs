@@ -133,8 +133,8 @@ test('세 장을 뽑은 뒤 팀 작업 방식 홈으로 이동할 수 있다', a
   assert.match(page, /GitHub Actions/);
   assert.match(page, /GIT_GUIDE\.md/);
   assert.match(page, /api\.qrserver\.com\/v1\/create-qr-code/);
-  assert.match(page, /hanyejin\.click/);
-  assert.match(page, /https:\/\/hanyejin\.click\//);
+  assert.match(page, /beyejin\.github\.io\/team5-study-mate/);
+  assert.match(page, /https:\/\/beyejin\.github\.io\/team5-study-mate\//);
   assert.match(script, /nextButton\.textContent = remaining\.length \? '다음 팩' : '협업 과정 보기';/);
   assert.doesNotMatch(script, /function renderTeamFinish\(\)|homeMembers/);
   assert.match(script, /showScene\('home'\);/);

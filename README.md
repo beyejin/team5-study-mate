@@ -2,7 +2,7 @@
 
 > 팩을 열고 힌트를 따라가며 세 명의 팀원을 한 명씩 발견하는 인터랙티브 팀 소개 페이지입니다.
 
-[라이브 데모](https://hanyejin.click/) | [GitHub 저장소](https://github.com/beyejin/team5-study-mate)
+[GitHub Pages 데모](https://beyejin.github.io/team5-study-mate/) | [GitHub 저장소](https://github.com/beyejin/team5-study-mate)
 
 ![TEAM 5 멤버 팩 시작 화면](./assets/game/team5-intro-v2.png)
 
@@ -100,7 +100,7 @@ python3 -m http.server 8000
 - JavaScript ES Modules
 - Markdown 기반 프로필 데이터
 - Web Audio API 기반 사운드
-- GitHub Pages와 Route 53 연결 도메인
+- GitHub Pages
 
 ## 주요 파일
 
@@ -118,7 +118,7 @@ python3 -m http.server 8000
 
 ## 관련 링크
 
-- [발표용 라이브 페이지](https://hanyejin.click/)
+- [발표용 GitHub Pages](https://beyejin.github.io/team5-study-mate/)
 - [GitHub 저장소](https://github.com/beyejin/team5-study-mate)
 - [Team 5 과제 보드](https://github.com/users/beyejin/projects/1)
 - [과제 결과물 마일스톤](https://github.com/beyejin/team5-study-mate/milestone/1)
