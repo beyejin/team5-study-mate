@@ -18,7 +18,7 @@ New-Item -ItemType Directory -Path (Join-Path $distPath 'assets\game') -Force | 
 New-Item -ItemType Directory -Path (Join-Path $distPath 'assets\audio') -Force | Out-Null
 New-Item -ItemType Directory -Path (Join-Path $distPath 'team') -Force | Out-Null
 
-@('index.html', 'styles.css', 'script.js', 'profiles.mjs', 'tunnel.mjs', 'lobby-music.mjs', 'pack-audio.mjs') | ForEach-Object {
+@('index.html', 'styles.css', 'script.js', 'profiles.mjs', 'tunnel.mjs', 'lobby-music.mjs', 'pack-audio.mjs', 'kanban.mjs') | ForEach-Object {
     Copy-Item -LiteralPath (Join-Path $projectRoot $_) -Destination (Join-Path $distPath $_)
 }
 
