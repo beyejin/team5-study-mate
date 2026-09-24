@@ -2,7 +2,6 @@ import { getHints, parseProfile, drawMember } from './profiles.mjs?v=reveal-card
 import { createTunnel } from './tunnel.mjs?v=tunnel-exit-20260914';
 import { createLobbyMusic } from './lobby-music.mjs?v=hint-sfx-20260914';
 import { createPackAudio } from './pack-audio.mjs?v=hint-sfx-audible-20260915';
-import { loadKanbanBoard } from './kanban.mjs?v=supabase-kanban-20260924';
 
 const members = [
   {
@@ -291,4 +290,3 @@ document.addEventListener('keydown', (event) => {
 restart();
 resetPackTilt();
 loadProfiles();
-loadKanbanBoard();

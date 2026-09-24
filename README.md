@@ -4,8 +4,6 @@
 
 [GitHub Pages 데모](https://beyejin.github.io/team5-study-mate/) | [GitHub 저장소](https://github.com/beyejin/team5-study-mate)
 
-> **DB 과제 제출 문서**: [TEAM 5 Kanban DB 보기](docs/kanban-db-project.md) · [개념 ERD](docs/kanban-erd.md)
-
 ![TEAM 5 멤버 팩 시작 화면](./assets/game/team5-intro-v2.png)
 
 ## 발표 한 문장
