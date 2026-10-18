@@ -1,0 +1,40 @@
+name: Assignment 7 Python CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/ttodo/**"
+      - "tests/test_kanban_*.py"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/assignment-7-ci.yml"
+  pull_request:
+    paths:
+      - "src/ttodo/**"
+      - "tests/test_kanban_*.py"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/assignment-7-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install uv
+        run: python -m pip install --disable-pip-version-check uv
+      - name: Install locked dependencies
+        run: uv sync --locked --no-editable
+      - name: Lint
+        run: uv run ruff check src tests
+      - name: Test
+        run: uv run pytest
+      - name: CLI help smoke check
+        run: uv run ttodo --help

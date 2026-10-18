@@ -1,0 +1,41 @@
+[project]
+name = "ttodo"
+version = "0.1.0"
+description = "Team 5 kanban API and CLI"
+readme = "README.md"
+authors = [
+    { name = "Glorykim03", email = "326288087+Glorykim03@users.noreply.github.com" }
+]
+requires-python = ">=3.11, <3.13"
+dependencies = [
+    "fastapi>=0.146.0",
+    "httpx>=0.28.1",
+    "python-dotenv>=1.2.4",
+    "typer>=0.27.3",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[project.scripts]
+ttodo = "ttodo.cli:app"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["B008"] # FastAPI dependencies and request metadata use declaration-time defaults.
+
+[build-system]
+requires = ["uv_build>=0.13.0,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.17.1",
+]

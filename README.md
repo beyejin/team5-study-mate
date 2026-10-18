@@ -79,6 +79,60 @@ Clone → Branch → Markdown 작성 → Commit → Push → Pull Request → Re
 - [팀원 실행 및 Git 최소 흐름 안내](./RUN_GUIDE.md)
 - [화면 캡처 폴더](./docs/screenshots/)
 
+## 과제 #7: 칸반 백엔드와 CLI
+
+기존 Team 5 Supabase 업무 DB(`issues`, `statuses`, `users`, `labels`)를 FastAPI와 Typer CLI로 사용합니다. API는 로컬에서만 실행하고, Supabase 서버 키는 백엔드 `.env`에만 둡니다.
+
+### 준비
+
+Python 3.11과 [`uv`](https://docs.astral.sh/uv/)를 설치한 다음 PowerShell에서 실행합니다.
+
+```powershell
+uv sync --locked --no-editable
+Copy-Item .env.example .env
+```
+
+`.env`의 `SUPABASE_URL`과 `SUPABASE_SECRET_KEY`를 본인 Supabase 프로젝트 값으로 채웁니다. 새 Secret Key를 권장하며, 이전 프로젝트의 `service_role` 키를 쓰면 변수명을 `SUPABASE_SERVICE_ROLE_KEY`로 설정할 수 있습니다. 이 파일을 Git에 커밋하거나 메신저/발표 화면에 공유하지 않습니다.
+
+### API와 CLI 실행
+
+터미널 하나에서 API를 실행합니다.
+
+```powershell
+uv run uvicorn ttodo.api:app --app-dir src --host 127.0.0.1 --port 8000
+```
+
+`http://127.0.0.1:8000/docs`에서 Swagger UI를 열 수 있습니다. 다른 터미널에서 CLI를 사용합니다.
+
+```powershell
+uv run ttodo statuses
+uv run ttodo board
+uv run ttodo show <issue-id> --json
+uv run ttodo add "과제 #7 API 구현" --status Ready --assignee "한예진" --due-date 2026-10-20 --priority high --label assignment-7
+uv run ttodo move <issue-id> "In Progress"
+uv run ttodo update <issue-id> --title "업무 제목 수정"
+uv run ttodo list --status "In Progress" --json
+uv run ttodo delete <issue-id>
+```
+
+모든 조회 명령은 `--json`을 지원합니다. 업데이트/이동/삭제 시 실행 주체는 `TTODO_ACTOR` 환경변수로 지정할 수 있으며 기본 이름은 `Codex`입니다.
+
+### 문서와 검증
+
+- [요구사항](./docs/PRD.md)
+- [기술 명세](./docs/TSD.md)
+- [DB 명세와 보안 상태](./docs/DATABASE.md)
+- [테스트 케이스](./docs/TEST_CASE.md)
+- [3분 발표 흐름](./docs/ASSIGNMENT_7_PRESENTATION.md)
+- [Codex 칸반 등록 스킬](./.agents/skills/team-kanban/SKILL.md)
+
+```powershell
+uv run ruff check src tests
+uv run pytest
+```
+
+이 과제 DB는 현재 로그인과 RLS 정책이 설정되어 있지 않습니다. 따라서 API를 공용 네트워크에 배포하지 말고 로컬에서만 실행합니다. RLS 경고와 공개 배포 전 필요한 결정은 [보안 검토](./docs/SECURITY_REVIEW.md)에 기록했습니다.
+
 ## 발표용 실행 방법
 
 Markdown 프로필을 화면에 불러오기 위해 정적 서버로 실행합니다.
@@ -101,6 +155,7 @@ python3 -m http.server 8000
 - Markdown 기반 프로필 데이터
 - Web Audio API 기반 사운드
 - GitHub Pages
+- 과제 #7: Python 3.11, FastAPI, Typer, Supabase PostgREST
 
 ## 주요 파일
 
@@ -111,6 +166,9 @@ python3 -m http.server 8000
 ├── script.js           # 팩 공개 흐름과 화면 전환
 ├── profiles.mjs        # 팀원 Markdown 파싱
 ├── team/               # 팀원 자기소개 원본
+├── src/ttodo/          # 과제 #7 API와 CLI
+├── supabase/           # 과제 #7 상태/우선순위 시드 migration
+├── .agents/skills/     # Codex 작업 등록 스킬
 ├── assets/             # 카드, 경기장, 사운드 자산
 ├── tests/              # 프로필, 공개 흐름, 사운드 테스트
 └── dist/               # 정적 배포 산출물
